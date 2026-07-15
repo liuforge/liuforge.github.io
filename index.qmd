@@ -1,0 +1,257 @@
+---
+title: "刘俊言"
+description: "刘俊言的个人主页。"
+page-layout: full
+toc: false
+---
+
+::: {.page-shell}
+::: {.hero-band}
+![](images/junyan-portrait.png){.hero-portrait fig-alt="刘俊言个人照片"}
+
+::: {.eyebrow}
+刘俊言 · 算法工程师
+:::
+
+::: {.research-direction}
+研究方向：Agentic Research 与大模型后训练，关注检索增强生成、多轮工具调用智能体的训练与评测。
+:::
+
+::: {.hero-actions}
+[教育背景](#education){.text-link}
+[实习经历](#internships){.text-link}
+[项目时间轴](#projects){.text-link}
+:::
+:::
+
+::: {.writing-board}
+::: {.cell-header}
+::: {.cell-title}
+::: {.cell-dot}
+:::
+
+Markdown Cell
+:::
+
+::: {.cell-tabs}
+<button class="cell-tab is-active" type="button" data-mode="edit" aria-pressed="true">写 MD</button>
+<button class="cell-tab" type="button" data-mode="preview" aria-pressed="false">Preview</button>
+:::
+:::
+
+::: {.cell-body}
+<textarea id="markdown-cell" aria-label="Markdown 书写板" spellcheck="false"># 今天想记录什么？
+
+- 写一个项目想法
+- 记一个实验结论
+- 留一段给未来的自己
+</textarea>
+
+<div id="markdown-preview" class="cell-preview is-hidden"></div>
+:::
+:::
+
+<script>
+(() => {
+  const input = document.getElementById("markdown-cell");
+  const preview = document.getElementById("markdown-preview");
+  const tabs = Array.from(document.querySelectorAll(".cell-tab"));
+  if (!input || !preview) return;
+
+  const escapeHtml = (value) => value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+
+  const renderMarkdown = (value) => {
+    const lines = escapeHtml(value).split("\n");
+    const html = [];
+    let inList = false;
+
+    for (const line of lines) {
+      if (/^###\s+/.test(line)) {
+        if (inList) html.push("</ul>");
+        inList = false;
+        html.push(`<h3>${line.replace(/^###\s+/, "")}</h3>`);
+      } else if (/^##\s+/.test(line)) {
+        if (inList) html.push("</ul>");
+        inList = false;
+        html.push(`<h2>${line.replace(/^##\s+/, "")}</h2>`);
+      } else if (/^#\s+/.test(line)) {
+        if (inList) html.push("</ul>");
+        inList = false;
+        html.push(`<h1>${line.replace(/^#\s+/, "")}</h1>`);
+      } else if (/^-\s+/.test(line)) {
+        if (!inList) html.push("<ul>");
+        inList = true;
+        html.push(`<li>${line.replace(/^-\s+/, "")}</li>`);
+      } else if (line.trim()) {
+        if (inList) html.push("</ul>");
+        inList = false;
+        html.push(`<p>${line}</p>`);
+      } else if (inList) {
+        html.push("</ul>");
+        inList = false;
+      }
+    }
+
+    if (inList) html.push("</ul>");
+    preview.innerHTML = html.join("");
+  };
+
+  input.value = localStorage.getItem("junyan-markdown-cell") || input.value;
+  input.addEventListener("input", () => {
+    localStorage.setItem("junyan-markdown-cell", input.value);
+    renderMarkdown(input.value);
+  });
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const showPreview = tab.dataset.mode === "preview";
+      input.classList.toggle("is-hidden", showPreview);
+      preview.classList.toggle("is-hidden", !showPreview);
+      tabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      if (showPreview) renderMarkdown(input.value);
+    });
+  });
+  renderMarkdown(input.value);
+})();
+</script>
+
+## 教育背景 {#education}
+
+::: {.info-grid}
+::: {.info-card}
+::: {.info-label}
+2025.09 - 2028.06
+:::
+
+### 华南农业大学
+
+计算机技术硕士，电子科技大学联合培养。
+:::
+
+::: {.info-card}
+::: {.info-label}
+2021.09 - 2025.06
+:::
+
+### 佛山大学
+
+数据科学与大数据技术本科。
+:::
+:::
+
+## 实习经历 {#internships}
+
+::: {.detail-stack}
+::: {.detail-card}
+::: {.detail-year}
+2026.04 - 至今
+:::
+
+### [文德数惠 - 大模型应用算法实习生](internships/wendeshuhui.html){.detail-title-link}
+
+参与企业级知识库 Agent 平台建设，负责知识接入、Agentic Retrieval、Trace 评测与工具服务化。
+
+- 面向 PDF、Office、图片、音频等 7 类数据构建统一知识接入链路
+- 搭建全文检索 + 向量召回 + Rerank 的多路融合链路
+- 记录 query、工具调用、候选证据与最终引用，形成可回放 Trace 和回归评测集
+:::
+
+::: {.detail-card}
+::: {.detail-year}
+2026.01 - 2026.04
+:::
+
+### [创维AI研究院 - 算法实习生](internships/skyworth-ai.html){.detail-title-link}
+
+参与业务预测策略优化链路，负责时序大模型预测增强、相似案例召回与 GRPO 修正策略训练。
+
+- 面向 3000+ 自有机型销量预测场景统一状态特征
+- 引入历史销量 embedding、傅里叶周期性与趋势变化，提升预测准确率
+- 基于 Qwen2.5-3B + LoRA 训练预测修正策略模型
+:::
+:::
+
+## 项目时间轴 {#projects}
+
+::: {.section-note}
+按时间去重后的项目鱼骨图。这里只保留标题、类型、时间与一句话简介，点击节点进入详情。
+:::
+
+::: {.fishbone}
+::: {.fishbone-item .fishbone-right}
+::: {.fishbone-date}
+2026.06 - 2026.07
+:::
+
+[金融长文本证据推理与评测 Harness](projects/afac2026.html){.fishbone-card}
+
+::: {.project-type}
+Agent Harness / 金融长文本推理
+:::
+
+面向财报、监管规则与保险条款构建可追踪取证和评测闭环。
+:::
+
+::: {.fishbone-item .fishbone-left}
+::: {.fishbone-date}
+2026.05 - 2026.06
+:::
+
+[MR-Search Agentic RL 搜索智能体](projects/mr-search.html){.fishbone-card}
+
+::: {.project-type}
+Agentic RL / 运维 SaaS 问答
+:::
+
+把复杂问答拆成多轮搜索、证据阅读、反思与停止决策。
+:::
+
+::: {.fishbone-item .fishbone-right}
+::: {.fishbone-date}
+2026.05 - 2026.06
+:::
+
+[NanoChat-zh-d22 中文 BabyLM](projects/nanochat-zh.html){.fishbone-card}
+
+::: {.project-type}
+中文小模型 / 预训练与后训练
+:::
+
+在受限中文语料下训练与评测小型 decoder-only 基座模型。
+:::
+
+::: {.fishbone-item .fishbone-left}
+::: {.fishbone-date}
+2025.11 - 2025.12
+:::
+
+[小红书美食内容分析引擎](projects/xiaohongshu-food.html){.fishbone-card}
+
+::: {.project-type}
+Multi-Agent 应用 / 推荐系统
+:::
+
+用多 Agent 流水线过滤营销噪音，生成更可信的本地餐厅推荐。
+:::
+
+::: {.fishbone-item .fishbone-right}
+::: {.fishbone-date}
+2025.09 - 2025.10
+:::
+
+[中文病历代谢疾病用药推荐](projects/medical-recommendation.html){.fishbone-card}
+
+::: {.project-type}
+医疗 NLP / LLM 微调
+:::
+
+面向中文病历构建可解释的代谢疾病出院带药推荐系统。
+:::
+:::
+:::

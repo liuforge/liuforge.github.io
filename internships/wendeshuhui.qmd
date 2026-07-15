@@ -1,0 +1,32 @@
+---
+title: "文德数惠 - 大模型应用算法实习生"
+description: "刘俊言在文德数惠的大模型应用算法实习经历。"
+page-layout: full
+toc: false
+---
+
+::: {.page-shell}
+::: {.project-intro}
+::: {.detail-year}
+2026.04 - 至今
+:::
+
+# 文德数惠 - 大模型应用算法实习生
+
+::: {.project-type}
+企业知识库 Agent / Agentic Retrieval / Trace 评测
+:::
+
+参与企业级知识库 Agent 平台建设，负责知识接入、Agentic Retrieval、Trace 评测与工具服务化。
+:::
+
+::: {.project-detail-card}
+## 工作内容
+
+- 面向 PDF、Office、图片、音频等 7 类数据构建统一知识接入链路。
+- 搭建全文检索 + 向量召回 + Rerank 的多路融合链路。
+- 记录 query、工具调用、候选证据与最终引用，形成可回放 Trace 和回归评测集。
+:::
+
+[返回首页](../index.html#internships){.text-link}
+:::

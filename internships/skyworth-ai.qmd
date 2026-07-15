@@ -1,0 +1,32 @@
+---
+title: "创维AI研究院 - 算法实习生"
+description: "刘俊言在创维AI研究院的算法实习经历。"
+page-layout: full
+toc: false
+---
+
+::: {.page-shell}
+::: {.project-intro}
+::: {.detail-year}
+2026.01 - 2026.04
+:::
+
+# 创维AI研究院 - 算法实习生
+
+::: {.project-type}
+时序预测 / 相似案例召回 / GRPO 修正策略
+:::
+
+参与业务预测策略优化链路，负责时序大模型预测增强、相似案例召回与 GRPO 修正策略训练。
+:::
+
+::: {.project-detail-card}
+## 工作内容
+
+- 面向 3000+ 自有机型销量预测场景统一状态特征。
+- 引入历史销量 embedding、傅里叶周期性与趋势变化，提升预测准确率。
+- 基于 Qwen2.5-3B + LoRA 训练预测修正策略模型。
+:::
+
+[返回首页](../index.html#internships){.text-link}
+:::

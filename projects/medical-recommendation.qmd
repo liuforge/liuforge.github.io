@@ -1,0 +1,32 @@
+---
+title: "中文病历代谢疾病用药推荐"
+description: "刘俊言的中文病历用药推荐项目。"
+page-layout: full
+toc: false
+---
+
+::: {.page-shell}
+::: {.project-intro}
+::: {.detail-year}
+2025.09 - 2025.10
+:::
+
+# 中文病历代谢疾病用药推荐
+
+::: {.project-type}
+医疗 NLP / LLM 微调 / 阿里天池
+:::
+
+面向中文病历下的代谢疾病出院带药推荐，结合模型微调、知识增强与推理链优化提升推荐准确性和可解释性。
+:::
+
+::: {.project-detail-card}
+## 核心工作
+
+- 基于 GLM-4-9B、Qwen3-4B 等模型进行 SFT、LoRA 与推理优化。
+- 引入 DeepSeek-R1 few-shot 蒸馏与 DPO 对齐，改善中成药幻觉和格式问题。
+- 通过置信度过滤、禁忌症规则与显式推理链提升用药安全性。
+:::
+
+[返回项目总览](../projects.html){.text-link}
+:::

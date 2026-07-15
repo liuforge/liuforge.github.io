@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="刘俊言的 AFAC2026 金融长文本推理项目。">
+
+<title>AFAC2026 金融长文本 QA 项目报告 – 刘俊言</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<link href="../images/site-logo.png" rel="icon" type="image/png">
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-9cfd1dd1f7f4a79f2b208a20d47a483d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">刘俊言</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">首页</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">项目</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">AFAC2026 金融长文本 QA 项目报告</h1>
+</div>
+
+<div>
+  <div class="description">
+    刘俊言的 AFAC2026 金融长文本推理项目。
+  </div>
+</div>
+
+
+<div class="quarto-title-meta column-page">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="page-shell">
+<div class="report-layout">
+<div class="report-sidebar">
+<div class="eyebrow">
+<p>Project Report</p>
+</div>
+<section id="目录" class="level3">
+<h3 class="anchored" data-anchor-id="目录">目录</h3>
+<div class="section-nav">
+<p><a href="#summary">1 摘要</a> <a href="#data">2 数据</a> <a href="#architecture">3 架构</a> <a href="#solution">4 分层</a> <a href="#rationale">5 选择理由</a> <a href="#flow">6 数据流</a> <a href="#tricks">7 Trick</a> <a href="#metrics">8 演进</a> <a href="#demo">9 Demo</a> <a href="#risk">10 风险</a></p>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>AFAC2026 的核心不是把文档塞进更长上下文，而是让证据短、准、可追踪，并把题型分流、结构化取证、答案聚合和回归评测拆成可以独立诊断的层。</p>
+</div>
+</div>
+</div>
+<div class="meta-row">
+<p><span class="pill">金融合同 / 财报 / 保险 / 法规 / 研报</span> <span class="pill">agent harness / trace review</span> <span class="pill">candidate token 327,052</span> <span class="pill">官网分 86.2732</span></p>
+</div>
+</section>
+</div>
+<div class="report-main">
+<div class="project-hero">
+<div class="eyebrow">
+<p>Project Report</p>
+</div>
+<section id="afac2026-金融长文本-qa-项目报告" class="level1">
+<h1>AFAC2026 金融长文本 QA 项目报告</h1>
+<p class="lead">
+AFAC2026 的核心不是把文档塞进更长上下文，而是让证据短、准、可追踪，并把题型分流、结构化取证、答案聚合和回归评测拆成可以独立诊断的层。
+</p>
+<div class="kpi-grid">
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Best Baseline</p>
+</div>
+<div class="kpi-value">
+<p>88/100</p>
+</div>
+<div class="kpi-note">
+<p>V9 / V11 对应官网分 86.2732，是最高已验证主基线。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Candidate Window</p>
+</div>
+<div class="kpi-value">
+<p>88-90</p>
+</div>
+<div class="kpi-note">
+<p>当前候选区间，仍需要官网提交确认。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Token Budget</p>
+</div>
+<div class="kpi-value">
+<p>327,052</p>
+</div>
+<div class="kpi-note">
+<p>prompt 290,900 + completion 36,152。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Early Exit Gain</p>
+</div>
+<div class="kpi-value">
+<p>11.33%</p>
+</div>
+<div class="kpi-note">
+<p>deterministic early exit 带来的 token 节省，无答案漂移。</p>
+</div>
+</div>
+</div>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">1. 执行摘要</h2>
+<div class="project-section">
+<div class="ok callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>当前工程结论：</strong> 不要把 live Agent 机制探索路线与提交候选路线混在一起。提交候选来自“可信历史答案快照 + 残差安全修正”；live Qwen/检索推理路线适合继续做机制研究，但在银标对比上仍需通过 badcase 回归逐步吸收。</p>
+</div>
+</div>
+</div>
+<div class="panel-grid cols-4">
+<section id="最高已验证基线" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="最高已验证基线">最高已验证基线</h3>
+<p>88/100</p>
+</section>
+<section id="当前候选区间" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="当前候选区间">当前候选区间</h3>
+<p>88-90</p>
+</section>
+<section id="候选-token" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="候选-token">候选 token</h3>
+<p>327,052</p>
+</section>
+<section id="早停-token-优化" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="早停-token-优化">早停 token 优化</h3>
+<p>11.33%</p>
+</section>
+</div>
+</div>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">2. 赛题与数据特征</h2>
+<div class="project-section">
+<p class="section-lead">
+赛题四要求回答金融长文本选择题，覆盖金融合同、财报、保险条款、监管法规与行业研报。真正难的不是题量，而是证据口径、条款条件、数值单位和文档实体绑定。
+</p>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+领域
+</th>
+<th>
+题号前缀
+</th>
+<th>
+主要难点
+</th>
+<th>
+处理策略
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+金融合同
+</td>
+<td>
+<code>fc_a_*</code>
+</td>
+<td>
+条款条件、主体动作、期限金额、否定限制
+</td>
+<td>
+条款六元组、关系槽位覆盖、反证保留
+</td>
+</tr>
+<tr>
+<td>
+财务报告
+</td>
+<td>
+<code>fin_a_*</code>
+</td>
+<td>
+表格口径、年度/季度、单位换算、同比计算
+</td>
+<td>
+表格行结构化、受限计算 DSL、口径校验
+</td>
+</tr>
+<tr>
+<td>
+保险条款
+</td>
+<td>
+<code>ins_a_*</code>
+</td>
+<td>
+产品混淆、等待期、责任免除、情景约束
+</td>
+<td>
+产品实体绑定、scenario + exclusion 判断
+</td>
+</tr>
+<tr>
+<td>
+监管法规
+</td>
+<td>
+<code>reg_a_*</code>
+</td>
+<td>
+应当/不得/无需、例外、期限、主体对象
+</td>
+<td>
+clause matcher、polarity、义务主体比对
+</td>
+</tr>
+<tr>
+<td>
+行业研报
+</td>
+<td>
+<code>res_a_*</code>
+</td>
+<td>
+图表恢复、指标趋势、公司/行业实体绑定
+</td>
+<td>
+图表文本恢复、数值端点绑定、文档级导航
+</td>
+</tr>
+</tbody>
+</table>
+<div class="warn callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>很多错误不是模型“不会推理”，而是关键证据没有进入最终 evidence ledger，或者表格行/条款上下文被切碎。因此项目核心不是堆长上下文，而是让证据短、准、可追踪。</p>
+</div>
+</div>
+</div>
+<section id="数据文件形态" class="level3">
+<h3 class="anchored" data-anchor-id="数据文件形态">2.1 数据文件形态</h3>
+<pre class="code-shell">public_dataset_upload/
+  raw/
+    financial_contracts/*.pdf
+    financial_reports/*.pdf
+    insurance/*.pdf
+    regulatory/*.pdf
+    research/*.pdf
+  questions/group_a/*.json
+
+outputs/
+  answer.csv
+  answer_results.jsonl
+  evidence.json
+  token_usage.json
+  run_manifest.json
+  trace.json</pre>
+</section>
+<section id="题目-json-提交-csv" class="level3">
+<h3 class="anchored" data-anchor-id="题目-json-提交-csv">2.2 题目 JSON / 提交 CSV</h3>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+字段
+</th>
+<th>
+示例
+</th>
+<th>
+说明
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+qid
+</td>
+<td>
+<code>reg_a_001</code>
+</td>
+<td>
+题目 ID
+</td>
+</tr>
+<tr>
+<td>
+answer_format
+</td>
+<td>
+<code>multi</code>
+</td>
+<td>
+单选 / 多选 / 判断
+</td>
+</tr>
+<tr>
+<td>
+prompt_tokens
+</td>
+<td>
+<code>290900</code>
+</td>
+<td>
+整批候选的 prompt 开销
+</td>
+</tr>
+<tr>
+<td>
+completion_tokens
+</td>
+<td>
+<code>36152</code>
+</td>
+<td>
+整批候选的 completion 开销
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+</section>
+<section id="architecture" class="level2">
+<h2 class="anchored" data-anchor-id="architecture">3. 总体架构</h2>
+<div class="project-section">
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>双路线：</strong> 一条是 live Agent 机制探索路线，负责检索、证据选择和题型分流实验；另一条是提交候选路线，负责基于可信官网历史快照进行残差修正与提交复现。</p>
+</div>
+</div>
+</div>
+<div class="panel-grid cols-3">
+<section id="文档处理层" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="文档处理层">文档处理层</h3>
+<p>把 PDF/HTML/TXT 转成稳定的结构化语料，保留页码、章节、表格口径和条款号。</p>
+</section>
+<section id="检索规划层" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="检索规划层">检索规划层</h3>
+<p>先判断题型，再生成短 query 和 must-have 关系槽位，避免全题统一检索。</p>
+</section>
+<section id="证据工程层" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="证据工程层">证据工程层</h3>
+<p>把候选证据整理成支持、反证、未发现三类片段 atom，并记录缺失槽位。</p>
+</section>
+<section id="推理工具层" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="推理工具层">推理工具层</h3>
+<p>数值比较、条款匹配、保险责任校验优先走确定性函数，Qwen 只处理压缩后的模糊语义判断。</p>
+</section>
+<section id="答案聚合层" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="答案聚合层">答案聚合层</h3>
+<p>单选按完整性与冲突度排序，多选保留未选理由，避免 over-select。</p>
+</section>
+<section id="评估回归层" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="评估回归层">评估回归层</h3>
+<p>银标、badcase、trace 和 token A/B 分开记录，一次修改必须能归因到具体模块。</p>
+</section>
+</div>
+<div class="flow-strip">
+<div class="flow-step">
+Question<small>题型分流</small>
+</div>
+<div class="flow-step">
+QueryPlan<small>短 query</small>
+</div>
+<div class="flow-step">
+Retrieval<small>BM25F / 结构导航</small>
+</div>
+<div class="flow-step">
+Evidence<small>atom 化</small>
+</div>
+<div class="flow-step">
+Tools<small>规则优先</small>
+</div>
+<div class="flow-step">
+Aggregate<small>多选/单选聚合</small>
+</div>
+<div class="flow-step">
+Validate<small>trace / token / CSV</small>
+</div>
+</div>
+<section id="模块级技术设计" class="level3">
+<h3 class="anchored" data-anchor-id="模块级技术设计">3.1 模块级技术设计</h3>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+子模块
+</th>
+<th>
+输入
+</th>
+<th>
+技术
+</th>
+<th>
+输出
+</th>
+<th>
+验收
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+文档处理层
+</td>
+<td>
+原始 PDF / HTML / TXT
+</td>
+<td>
+页章节锚点、表格行抽取、条款号识别
+</td>
+<td>
+<code>chunks</code>、<code>table_rows</code>
+</td>
+<td>
+单位/年份/章节不丢失
+</td>
+</tr>
+<tr>
+<td>
+检索规划层
+</td>
+<td>
+题干、选项、候选文档
+</td>
+<td>
+题型分流、option-aware rewrite、slot 抽取
+</td>
+<td>
+<code>QueryPlan</code>
+</td>
+<td>
+query 必须短
+</td>
+</tr>
+<tr>
+<td>
+证据工程层
+</td>
+<td>
+候选证据
+</td>
+<td>
+BM25F、read_chunk、evidence ledger
+</td>
+<td>
+<code>EvidenceAtom[]</code>
+</td>
+<td>
+每个选项覆盖核心槽位
+</td>
+</tr>
+<tr>
+<td>
+推理工具层
+</td>
+<td>
+证据 atom、表格行、条款六元组
+</td>
+<td>
+compare_numeric_rows / match_clause_condition / insurance_liability_check
+</td>
+<td>
+<code>ToolFact[]</code>
+</td>
+<td>
+能确定的先由函数处理
+</td>
+</tr>
+<tr>
+<td>
+答案聚合层
+</td>
+<td>
+逐选项 verdict
+</td>
+<td>
+单选冲突排序、多选保守聚合
+</td>
+<td>
+<code>AnswerResult</code>
+</td>
+<td>
+防止过选
+</td>
+</tr>
+<tr>
+<td>
+评估回归层
+</td>
+<td>
+答案、trace、银标
+</td>
+<td>
+EM、token A/B、badcase 分层归因
+</td>
+<td>
+评估报告
+</td>
+<td>
+候选输出可复现
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+</section>
+<section id="solution" class="level2">
+<h2 class="anchored" data-anchor-id="solution">4. 解决方案分层设计</h2>
+<div class="project-section">
+<div class="panel-grid cols-3">
+<section id="题型分流" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="题型分流">题型分流</h3>
+<p>财报走 table/numeric extractor；监管走 clause matcher；保险走 product + scenario + exclusion。</p>
+</section>
+<section id="关系级证据覆盖" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="关系级证据覆盖">关系级证据覆盖</h3>
+<p>不是关键词覆盖，而是 subject/action/object/condition/deadline/exception 逐项覆盖。</p>
+</section>
+<section id="证据契约" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="证据契约">证据契约</h3>
+<p>中间态稳定，trace 才能 review，badcase 才能归因。</p>
+</section>
+<section id="答案级门禁" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="答案级门禁">答案级门禁</h3>
+<p>单选多 supported 时按完整性和冲突度排序；多选保留未选原因。</p>
+</section>
+<section id="受限计算" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="受限计算">受限计算</h3>
+<p>表格题优先走确定性计算，避免大模型做口径漂移。</p>
+</section>
+<section id="回归闭环" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="回归闭环">回归闭环</h3>
+<p>错误必须回流到正确层，而不是一股脑塞回训练集。</p>
+</section>
+</div>
+<section id="数据契约" class="level3">
+<h3 class="anchored" data-anchor-id="数据契约">4.1 数据契约</h3>
+<pre class="code-shell">{
+  "QuestionProfile": {"qid": "reg_a_001", "domain": "regulatory", "answer_format": "multi"},
+  "QueryPlan": ["受益所有人 识别 存量 高风险 6个月"],
+  "EvidenceAtom": {"subject": "金融机构", "action": "完成识别核实", "deadline": "施行之日起6个月内"},
+  "ToolFact": "选项 C 的主体、条件、期限与证据一致",
+  "OptionJudgement": {"C": "supported"},
+  "AnswerResult": {"answer": "ACD", "validated": true}
+}</pre>
+</section>
+<section id="按题型分流" class="level3">
+<h3 class="anchored" data-anchor-id="按题型分流">4.2 按题型分流</h3>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+题型
+</th>
+<th>
+优先工具链
+</th>
+<th>
+模型介入点
+</th>
+<th>
+防错点
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+财报表格比较题
+</td>
+<td>
+表格行抽取 -&gt; 指标/年份/单位绑定 -&gt; 数值比较
+</td>
+<td>
+只解释计算结论
+</td>
+<td>
+单位、口径、合并/母公司
+</td>
+</tr>
+<tr>
+<td>
+监管条款题
+</td>
+<td>
+条款召回 -&gt; 六元组抽取 -&gt; polarity 比对
+</td>
+<td>
+处理“除外、仅、无需”等边界
+</td>
+<td>
+主体、动作、对象、期限不能缺槽
+</td>
+</tr>
+<tr>
+<td>
+保险情景题
+</td>
+<td>
+产品绑定 -&gt; scenario 解析 -&gt; exclusion 校验
+</td>
+<td>
+判断情景是否命中责任或免责条件
+</td>
+<td>
+等待期、责任免除、合同生效日
+</td>
+</tr>
+<tr>
+<td>
+金融合同题
+</td>
+<td>
+条款定位 -&gt; 条件链还原 -&gt; 反证收集
+</td>
+<td>
+合并跨条款条件并判断过度概括
+</td>
+<td>
+应当/可以/不得、金额阈值、期限触发
+</td>
+</tr>
+<tr>
+<td>
+行业研报题
+</td>
+<td>
+章节导航 -&gt; 图表文本恢复 -&gt; 指标端点绑定
+</td>
+<td>
+判断趋势描述与图表/段落是否一致
+</td>
+<td>
+公司实体、行业口径、时间区间
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+</section>
+<section id="rationale" class="level2">
+<h2 class="anchored" data-anchor-id="rationale">5. 为什么选这个架构</h2>
+<div class="project-section">
+<div class="panel-grid cols-2">
+<section id="赛题约束决定不能走通用向量-rag" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="赛题约束决定不能走通用向量-rag">赛题约束决定不能走通用向量 RAG</h3>
+<p>比赛明确禁止 embedding，且在线模型限制为 Qwen 系列，所以检索层选择 BM25F、结构导航与规则化表格/条款抽取。</p>
+</section>
+<section id="长上下文不是收益单调的" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="长上下文不是收益单调的">长上下文不是收益单调的</h3>
+<p>V2 的高召回让正确题数增加，但 token 暴涨导致综合分下降，说明“更多上下文”会引入干扰。</p>
+</section>
+<section id="多选题需要证据隔离与聚合策略" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="多选题需要证据隔离与聚合策略">多选题需要证据隔离与聚合策略</h3>
+<p>多选不是逐项支持就结束，还要处理反证、未发现、完整性和选项间冲突。</p>
+</section>
+<section id="官网反馈可转化为约束" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="官网反馈可转化为约束">官网反馈可转化为约束</h3>
+<p>单次提交只返回总分，但多版本快照可以形成 0-1 整数约束，排除不可能答案。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="flow" class="level2">
+<h2 class="anchored" data-anchor-id="flow">6. 数据流与产物流</h2>
+<div class="project-section">
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>trace 不只记录最终答案，而是把每道题从题型识别到检索、取证、工具计算、选项判断和聚合的中间状态全部落盘。</p>
+</div>
+</div>
+</div>
+<div class="flow-strip">
+<div class="flow-step">
+Parse<small>结构化文档</small>
+</div>
+<div class="flow-step">
+Profile<small>题型识别</small>
+</div>
+<div class="flow-step">
+Retrieve<small>短 query</small>
+</div>
+<div class="flow-step">
+Ledger<small>证据账本</small>
+</div>
+<div class="flow-step">
+Tools<small>确定性函数</small>
+</div>
+<div class="flow-step">
+Aggregate<small>答案聚合</small>
+</div>
+<div class="flow-step">
+Validate<small>CSV / token / SHA</small>
+</div>
+</div>
+<section id="提交候选数据流" class="level3">
+<h3 class="anchored" data-anchor-id="提交候选数据流">6.1 提交候选数据流</h3>
+<pre class="code-shell">leaderboard_answer_snapshot.csv
+  -&gt; 取已验证历史列作为 baseline
+  -&gt; safe_gain_review_config.json
+  -&gt; residual_candidate_builder
+  -&gt; submission_exporter
+  -&gt; answer.csv / answer_results.jsonl / evidence.json / token_usage.json
+  -&gt; SHA-256 与正式产物校验</pre>
+</section>
+<section id="trace-轨迹" class="level3">
+<h3 class="anchored" data-anchor-id="trace-轨迹">6.2 Trace 轨迹</h3>
+<div class="trace-grid cols-2">
+<div class="trace-card">
+<p><strong>1. profiler</strong> 识别为财报、监管条款、保险情景或研报指标题，决定后续工具链。</p>
+</div>
+<div class="trace-card">
+<p><strong>2. retrieval</strong> 记录 query、top chunks、doc scope、补检索触发条件和召回来源。</p>
+</div>
+<div class="trace-card">
+<p><strong>3. evidence ledger</strong> 把证据整理成片段 atom，保留支持、反证、未发现和缺失槽位。</p>
+</div>
+<div class="trace-card">
+<p><strong>4. tool results</strong> 保存数值比较、条款六元组、保险责任校验等确定性结论。</p>
+</div>
+<div class="trace-card">
+<p><strong>5. judge_option</strong> 逐选项输出 supported / contradicted / not_found 及引用证据。</p>
+</div>
+<div class="trace-card">
+<p><strong>6. aggregate</strong> 单选按完整性和冲突度排序，多选保留未选原因，避免泛化过选。</p>
+</div>
+<div class="trace-card">
+<p><strong>7. validation</strong> 校验答案格式、token 汇总、引用完整性和 qid 覆盖。</p>
+</div>
+<div class="trace-card">
+<p><strong>8. badcase</strong> 将错误归因到检索、取证、工具、judge 或聚合层，形成回归集。</p>
+</div>
+</div>
+</section>
+</div>
+</section>
+<section id="tricks" class="level2">
+<h2 class="anchored" data-anchor-id="tricks">7. 关键 Trick 与工程经验</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+Trick
+</th>
+<th>
+解决的问题
+</th>
+<th>
+效果 / 注意点
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+题型分流
+</td>
+<td>
+所有题走同一 judge 会混淆
+</td>
+<td>
+按财报、监管、保险、合同、研报分流
+</td>
+</tr>
+<tr>
+<td>
+关系级 evidence coverage
+</td>
+<td>
+关键词覆盖不等于关系覆盖
+</td>
+<td>
+按 subject/action/object/condition/deadline/exception 检查
+</td>
+</tr>
+<tr>
+<td>
+表格结构化抽取
+</td>
+<td>
+财报表格行被切碎，年度/单位/口径丢失
+</td>
+<td>
+抽出 metric/year/value/unit，并用受限计算函数比较
+</td>
+</tr>
+<tr>
+<td>
+deterministic early exit
+</td>
+<td>
+很多题已可确定
+</td>
+<td>
+节省 104,101 token，降幅 11.33%
+</td>
+</tr>
+<tr>
+<td>
+答案聚合 guard
+</td>
+<td>
+单选多 supported、多选过选/漏选
+</td>
+<td>
+按完整性、冲突度、目标文档匹配度排序
+</td>
+</tr>
+<tr>
+<td>
+Leaderboard constraints
+</td>
+<td>
+官网只给总分，没有 ground truth
+</td>
+<td>
+可信提交快照要变成硬约束，避免把语义真值越层当隐藏标签
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="metrics" class="level2">
+<h2 class="anchored" data-anchor-id="metrics">8. 版本演进与指标</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+版本
+</th>
+<th>
+核心变化
+</th>
+<th>
+Token
+</th>
+<th>
+正确题数
+</th>
+<th>
+官网分
+</th>
+<th>
+结论
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+V1
+</td>
+<td>
+财报指标行、受限计算、答案级门禁
+</td>
+<td>
+1,030,141
+</td>
+<td>
+62
+</td>
+<td>
+58.1679
+</td>
+<td>
+结构化财务事实有效
+</td>
+</tr>
+<tr>
+<td>
+V2
+</td>
+<td>
+文档级高召回、反证审计
+</td>
+<td>
+2,292,333
+</td>
+<td>
+67
+</td>
+<td>
+57.7848
+</td>
+<td>
+召回提升但 token 失控
+</td>
+</tr>
+<tr>
+<td>
+V3
+</td>
+<td>
+原子谓词、真实值查询、保守融合
+</td>
+<td>
+377,650
+</td>
+<td>
+未确认
+</td>
+<td>
+66.2592
+</td>
+<td>
+证据密度明显改善
+</td>
+</tr>
+<tr>
+<td>
+V4
+</td>
+<td>
+确定性 PDF 版面与表格增量索引
+</td>
+<td>
+312,541
+</td>
+<td>
+70
+</td>
+<td>
+68.6873
+</td>
+<td>
+表格结构恢复带来收益
+</td>
+</tr>
+<tr>
+<td>
+V5
+</td>
+<td>
+结构导航、文档绑定、逐项真值组装
+</td>
+<td>
+315,727
+</td>
+<td>
+82
+</td>
+<td>
+80.4466
+</td>
+<td>
+从 V4 净增 12 题
+</td>
+</tr>
+<tr>
+<td>
+V6
+</td>
+<td>
+证据契约、事实账本、口径门禁
+</td>
+<td>
+326,076
+</td>
+<td>
+85
+</td>
+<td>
+83.33
+</td>
+<td>
+充分性优先于扩大召回
+</td>
+</tr>
+<tr>
+<td>
+V7
+</td>
+<td>
+题干范围门禁、法规字面规则复核
+</td>
+<td>
+327,052
+</td>
+<td>
+86
+</td>
+<td>
+84.3124
+</td>
+<td>
+范围门禁需限制触发
+</td>
+</tr>
+<tr>
+<td>
+V8
+</td>
+<td>
+显式蕴含门禁
+</td>
+<td>
+328,445
+</td>
+<td>
+85
+</td>
+<td>
+83.3249
+</td>
+<td>
+证伪
+</td>
+</tr>
+<tr>
+<td>
+V9
+</td>
+<td>
+官网整数约束、六题残差候选
+</td>
+<td>
+327,052
+</td>
+<td>
+88
+</td>
+<td>
+86.2732
+</td>
+<td>
+主基线
+</td>
+</tr>
+<tr>
+<td>
+V10
+</td>
+<td>
+二态分差反演
+</td>
+<td>
+327,052
+</td>
+<td>
+87
+</td>
+<td>
+85.2928
+</td>
+<td>
+证伪
+</td>
+</tr>
+<tr>
+<td>
+V11
+</td>
+<td>
+三态约束诊断
+</td>
+<td>
+327,052
+</td>
+<td>
+88
+</td>
+<td>
+86.2732
+</td>
+<td>
+诊断版本
+</td>
+</tr>
+<tr>
+<td>
+V12
+</td>
+<td>
+条件标签覆盖
+</td>
+<td>
+327,052
+</td>
+<td>
+85
+</td>
+<td>
+83.3320
+</td>
+<td>
+证伪
+</td>
+</tr>
+<tr>
+<td>
+Candidate
+</td>
+<td>
+可信快照 + 两处无下行修正
+</td>
+<td>
+327,052
+</td>
+<td>
+88-90
+</td>
+<td>
+待提交
+</td>
+<td>
+当前候选
+</td>
+</tr>
+</tbody>
+</table>
+<div class="panel-grid cols-3">
+<div class="kpi-card">
+<div class="kpi-label">
+<p>V1 -&gt; V9 Correct</p>
+</div>
+<div class="kpi-value">
+<p>+26</p>
+</div>
+<div class="kpi-note">
+<p>62/100 到 88/100。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>V1 -&gt; V9 Token</p>
+</div>
+<div class="kpi-value">
+<p>-68.3%</p>
+</div>
+<div class="kpi-note">
+<p>1,030,141 到 327,052。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>V4 -&gt; V5 Net Gain</p>
+</div>
+<div class="kpi-value">
+<p>+12</p>
+</div>
+<div class="kpi-note">
+<p>token 仅增加约 1.0%。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="demo" class="level2">
+<h2 class="anchored" data-anchor-id="demo">9. Demo：两题残差修正</h2>
+<div class="project-section">
+<p class="section-lead">
+当前候选不重新跑 100 题推理，而是针对可信历史约束证明的两道残差题修改答案。旧答案已被历史约束排除，新答案只可能是增益或双错，因此不会低于 V9。
+</p>
+<div class="panel-grid cols-2">
+<section id="reg_a_004" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="reg_a_004"><code>reg_a_004</code></h3>
+<p>V9: <code>AC</code><br> 候选: <code>ABC</code></p>
+<p>约束结论：旧答案必错；新答案为增益或双错。</p>
+</section>
+<section id="res_a_011" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="res_a_011"><code>res_a_011</code></h3>
+<p>V9: <code>ABC</code><br> 候选: <code>ABCD</code></p>
+<p>约束结论：旧答案必错；新答案为增益或双错。</p>
+</section>
+</div>
+<pre class="code-shell">python scripts/run_candidate_engineered.py \
+  --run-name 20260707_submission_candidate_rebuild</pre>
+<table class="project-table">
+<tbody>
+<tr>
+<th>
+changed_count
+</th>
+<td>
+2
+</td>
+</tr>
+<tr>
+<th>
+token_usage
+</th>
+<td>
+prompt 290,900 / completion 36,152 / total 327,052
+</td>
+</tr>
+<tr>
+<th>
+answer.csv SHA-256
+</th>
+<td>
+<code>7390fd5f15555f2ac519305016ae61950203f8293e8c01ffca3d07622386ac08</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="risk" class="level2">
+<h2 class="anchored" data-anchor-id="risk">10. 风险与后续计划</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+风险
+</th>
+<th>
+表现
+</th>
+<th>
+控制策略
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+过度硬融银标
+</td>
+<td>
+agent 追候选答案而不是追证据
+</td>
+<td>
+银标只做回归对比；修改必须落到机制层
+</td>
+</tr>
+<tr>
+<td>
+证据漂移
+</td>
+<td>
+候选证据换文档或换口径后答案仍被支持
+</td>
+<td>
+实体绑定、doc scope、关系槽位覆盖、引用校验
+</td>
+</tr>
+<tr>
+<td>
+多选过选
+</td>
+<td>
+supported 过宽导致 ABCD 泛化
+</td>
+<td>
+反证保留、限制词 guard、单选/多选分聚合
+</td>
+</tr>
+<tr>
+<td>
+表格口径错误
+</td>
+<td>
+季度/全年、母公司/合并、单位混淆
+</td>
+<td>
+<code>bind_metric_year_value</code> + <code>validate_unit_and_scale</code>
+</td>
+</tr>
+<tr>
+<td>
+token 成本反弹
+</td>
+<td>
+补检索和二次 judge 全题触发
+</td>
+<td>
+渐进式披露，只对缺槽 not_found 定向补检索
+</td>
+</tr>
+</tbody>
+</table>
+<section id="短期里程碑" class="level3">
+<h3 class="anchored" data-anchor-id="短期里程碑">短期里程碑</h3>
+<ol type="1">
+<li>提交或确认当前候选，获得 88/89/90 的官网反馈。</li>
+<li>将反馈作为新硬约束，更新 residual candidate 搜索空间。</li>
+<li>live Agent 侧继续做局部机制验证，但不与提交主线混跑。</li>
+</ol>
+<p><a href="../projects.html" class="text-link">返回项目总览</a></p>
+</section>
+</div>
+</section>
+</section>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/liuforge\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>刘俊言 · Algorithm Engineer<br></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Made with <a href="https://quarto.org/">Quarto</a><br></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

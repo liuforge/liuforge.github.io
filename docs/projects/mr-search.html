@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="刘俊言的 MR-Search Agentic RL 项目。">
+
+<title>MR-Search 项目 SOP、Badcase 与解决方案沉淀 – 刘俊言</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<link href="../images/site-logo.png" rel="icon" type="image/png">
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-9cfd1dd1f7f4a79f2b208a20d47a483d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">刘俊言</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">首页</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">项目</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">MR-Search 项目 SOP、Badcase 与解决方案沉淀</h1>
+</div>
+
+<div>
+  <div class="description">
+    刘俊言的 MR-Search Agentic RL 项目。
+  </div>
+</div>
+
+
+<div class="quarto-title-meta column-page">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="page-shell">
+<div class="report-layout">
+<div class="report-sidebar">
+<div class="eyebrow">
+<p>Project Report</p>
+</div>
+<section id="目录" class="level3">
+<h3 class="anchored" data-anchor-id="目录">目录</h3>
+<div class="section-nav">
+<p><a href="#overview">00 概览</a> <a href="#architecture">01 架构</a> <a href="#runbook">02 SOP</a> <a href="#metrics">03 指标</a> <a href="#badcases">04 Badcase</a> <a href="#query">05 策略</a> <a href="#reward">06 Reward</a> <a href="#insights">07 原则</a></p>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>search-reason-answer loop 是这页的主线：先搜、再读、再反思、最后稳定落到 grounded final answer。</p>
+</div>
+</div>
+</div>
+<div class="meta-row">
+<p><span class="pill">Agentic RL / 运维 SaaS 问答</span> <span class="pill">Qwen2.5-7B + LoRA-GRPO</span> <span class="pill">retrieval 8001-8004 × 2 hosts</span> <span class="pill">outcome 主导 reward</span></p>
+</div>
+</section>
+</div>
+<div class="report-main">
+<div class="project-hero">
+<div class="eyebrow">
+<p>Project Report</p>
+</div>
+<section id="mr-search-项目-sopbadcase-与解决方案沉淀" class="level1">
+<h1>MR-Search 项目 SOP、Badcase 与解决方案沉淀</h1>
+<p class="lead">
+MR-Search 训练的是 search-reason-answer loop：模型不仅要会搜，还要会读、会反思、会停，并把证据真正转成 grounded final answer。
+</p>
+<div class="kpi-grid">
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Search Loop</p>
+</div>
+<div class="kpi-value">
+<p>60.10%</p>
+</div>
+<div class="kpi-note">
+<p>评测集 F1，证明搜证闭环已能跑通。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Retrieval Hit</p>
+</div>
+<div class="kpi-value">
+<p>66.25%</p>
+</div>
+<div class="kpi-note">
+<p>retrieval hit 指标，说明 query 与证据链已显著改善。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Behavior Gain</p>
+</div>
+<div class="kpi-value">
+<p>+15pp</p>
+</div>
+<div class="kpi-note">
+<p>相较 baseline 的提升，来自 stop gate 与证据使用优化。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Rollout Scale</p>
+</div>
+<div class="kpi-value">
+<p>2万+</p>
+</div>
+<div class="kpi-note">
+<p>多轮 rollout 样本量，支撑后训练与 badcase 回流。</p>
+</div>
+</div>
+</div>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">00 项目概览</h2>
+<div class="project-section">
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>一句话定义</strong> MR-Search 训练的不是单轮回答，而是 search-reason-answer loop。模型要学会什么时候搜、搜什么、怎么用证据、什么时候停，以及如何避免无证据乱答。</p>
+</div>
+</div>
+</div>
+<div class="panel-grid cols-3">
+<section id="search" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="search">Search</h3>
+<p>生成可检索 query，避免长问题噪声和重复搜索。</p>
+</section>
+<section id="evidence" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="evidence">Evidence</h3>
+<p>把 retrieval hit 转成模型真正可用的上下文证据。</p>
+</section>
+<section id="answer" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="answer">Answer</h3>
+<p>搜到后正确抽取答案，而不是在 final 阶段破坏答案。</p>
+</section>
+</div>
+<div class="ok callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>当前阶段已经不是“环境是否能跑通”，而是“检索增强如何真正转成 answer correctness”。后续优化不能只看 recall 或 search count，而要拆成 query、retrieval、context、answer、reward 五条链路逐项诊断。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="architecture" class="level2">
+<h2 class="anchored" data-anchor-id="architecture">01 系统架构</h2>
+<div class="project-section">
+<div class="panel-grid cols-3">
+<section id="training1" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="training1">training1</h3>
+<p>负责 VERL/PPO-GRPO 主训练、actor update、checkpoint、SwanLab、eval 启动和主控调度。</p>
+</section>
+<section id="synthetic-data" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="synthetic-data">synthetic-data</h3>
+<p>负责 vLLM rollout，并承载一组 SQLite FTS5/BM25 retrieval endpoint。</p>
+</section>
+<section id="insight" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="insight">insight</h3>
+<p>负责 SQLite FTS5/BM25 retrieval，当前承载 8001-8004 四个检索端口。</p>
+</section>
+</div>
+<div class="flow-strip">
+<div class="flow-step">
+Question<small>多跳问题</small>
+</div>
+<div class="flow-step">
+Policy<small>&lt;search&gt;</small>
+</div>
+<div class="flow-step">
+Rewrite<small>first-hop / candidates</small>
+</div>
+<div class="flow-step">
+Retrieval<small>FTS5/BM25</small>
+</div>
+<div class="flow-step">
+Evidence<small>formatter / pack</small>
+</div>
+<div class="flow-step">
+Reflection<small>继续搜或停止</small>
+</div>
+<div class="flow-step">
+Answer<small>reward / diagnostics</small>
+</div>
+</div>
+<div class="panel-grid cols-2">
+<section id="端到端数据流" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="端到端数据流">端到端数据流</h3>
+<p class="mini">
+<code>train.parquet</code> / <code>test.parquet</code> 提供 question、gold answer、alias/evidence 监督信号。训练时每个 question 会展开为多条 rollout sample，最终由 reward manager 聚合 outcome 与轻量 process reward。
+</p>
+</section>
+<section id="检索端口" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="检索端口">检索端口</h3>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+机器
+</th>
+<th>
+端口
+</th>
+<th>
+角色
+</th>
+<th>
+关键参数
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+insight
+</td>
+<td>
+8001-8004
+</td>
+<td>
+SQLite FTS5/BM25 retrieval
+</td>
+<td>
+<code>topk=3</code> / <code>pack_candidates=50</code>
+</td>
+</tr>
+<tr>
+<td>
+synthetic-data
+</td>
+<td>
+8001-8004
+</td>
+<td>
+SQLite FTS5/BM25 retrieval
+</td>
+<td>
+<code>fusion_max_variants=10</code> / <code>expand_title_chunks=12</code>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+</div>
+</section>
+<section id="runbook" class="level2">
+<h2 class="anchored" data-anchor-id="runbook">02 Runbook SOP</h2>
+<div class="project-section">
+<div class="panel-grid cols-2">
+<section id="环境与进程检查" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="环境与进程检查">0. 环境与进程检查</h3>
+<ul>
+<li>conda 环境是 <code>verl-sglang</code></li>
+<li>没有遗留 <code>main_ppo</code>、旧 eval、旧训练进程</li>
+<li>checkpoint 路径存在，且本轮是否只加载 model 已明确</li>
+<li>SwanLab 模式清晰：正式训练必须可记录</li>
+</ul>
+<pre class="code-shell">ps -ef | grep -E '[m]ain_ppo|[r]un_train|[r]un_eval'
+conda env list | grep verl-sglang</pre>
+</section>
+<section id="eval-gate" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="eval-gate">1. Eval Gate</h3>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+阶段
+</th>
+<th>
+目的
+</th>
+<th>
+决策规则
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+quick32
+</td>
+<td>
+快速判断方向是否崩坏
+</td>
+<td>
+只看方向，不做最终决策
+</td>
+</tr>
+<tr>
+<td>
+quick128
+</td>
+<td>
+做可比决策
+</td>
+<td>
+quick32 正确再跑
+</td>
+</tr>
+<tr>
+<td>
+分段 eval
+</td>
+<td>
+判断训练曲线与漂移
+</td>
+<td>
+比较 stepN 的 EM/F1/hit/search/final_worse
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+<div class="warn callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>通过标准必须看到 <code>status=ok</code>、<code>role=fts5-bm25-retrieval</code>、<code>topk=3</code>、<code>fusion_max_variants=10</code>、<code>pack_candidates=50</code>。如果本轮实验用 query group，还要确认 <code>group_fusion_enabled=true</code>。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="metrics" class="level2">
+<h2 class="anchored" data-anchor-id="metrics">03 诊断指标</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+指标
+</th>
+<th>
+含义
+</th>
+<th>
+异常时优先排查
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>final_em / final_f1</code>
+</td>
+<td>
+最终答案质量
+</td>
+<td>
+只能说明结果，不能单独解释原因
+</td>
+</tr>
+<tr>
+<td>
+<code>retrieval_alias_hit_rate</code>
+</td>
+<td>
+证据中是否包含 gold alias
+</td>
+<td>
+低：query/retrieval；高但 F1 低：answer extraction
+</td>
+</tr>
+<tr>
+<td>
+<code>no_hit_and_wrong_count</code>
+</td>
+<td>
+没搜到且答错
+</td>
+<td>
+query rewrite、retrieval ranking、recall、evidence selection
+</td>
+</tr>
+<tr>
+<td>
+<code>hit_but_wrong_count</code>
+</td>
+<td>
+搜到了但答错
+</td>
+<td>
+evidence 使用、answer span extraction、final answer prompt
+</td>
+</tr>
+<tr>
+<td>
+<code>final_worse_after_retry_count</code>
+</td>
+<td>
+retry/reflection 后最终答案变差
+</td>
+<td>
+reflection loop、stop gate、answer preservation
+</td>
+</tr>
+<tr>
+<td>
+<code>mean_search_count</code>
+</td>
+<td>
+平均搜索次数
+</td>
+<td>
+高但 hit 不高是无效搜索；高且 final_worse 高是过度 search
+</td>
+</tr>
+<tr>
+<td>
+<code>repeated_query_rate</code>
+</td>
+<td>
+重复 query 比例
+</td>
+<td>
+query rewrite、hard stop repeated query、loop gate
+</td>
+</tr>
+<tr>
+<td>
+<code>finished_rate</code>
+</td>
+<td>
+是否正常输出 answer
+</td>
+<td>
+format、termination、force final answer、预算耗尽行为
+</td>
+</tr>
+</tbody>
+</table>
+<div class="panel-grid cols-2">
+<section id="trace-归因字段" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="trace-归因字段">Trace 归因字段</h3>
+<ul>
+<li>Query: <code>raw_search_query</code>, <code>cleaned_query</code>, <code>first_hop_query</code>, <code>search_queries</code></li>
+<li>Retrieval: <code>retrieval_docs</code>, <code>retrieval_scores</code>, <code>retrieval_alias_hit</code>, <code>query_gold_hit</code></li>
+<li>Context: <code>selected_evidence</code>, <code>evidence_gold_hit</code>, <code>state_tokens</code>, <code>clip_ratio</code></li>
+<li>Loop: <code>search_count</code>, <code>repeated_queries</code>, <code>hard_blocks</code>, <code>final_worse_after_retry</code></li>
+</ul>
+</section>
+<section id="判断原则" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="判断原则">判断原则</h3>
+<p>如果 <code>no_hit_wrong</code> 多，不要主要惩罚 answer；如果 <code>hit_but_wrong</code> 多，不要继续堆 retrieval；如果 <code>final_worse</code> 多，不要鼓励更多 reflection；如果 <code>finished</code> 低，先修 termination。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="badcases" class="level2">
+<h2 class="anchored" data-anchor-id="badcases">04 Badcase Playbook</h2>
+<div class="project-section">
+<div class="badcase-grid cols-2">
+<section id="query-too-broad" class="level3 badcase-card">
+<h3 class="anchored" data-anchor-id="query-too-broad">Query Too Broad</h3>
+<div class="mini">
+raw query 噪声
+</div>
+<p>raw query 太长，混合多个 clue，BM25 被干扰。解决方式是 single-rewrite v2 first-hop 更稳；multi-candidate 只能做 fallback，不应主导排序。</p>
+</section>
+<section id="rewrite-drops-constraint" class="level3 badcase-card">
+<h3 class="anchored" data-anchor-id="rewrite-drops-constraint">Rewrite Drops Constraint</h3>
+<div class="mini">
+裁剪丢约束
+</div>
+<p>first-hop hit 提高，但裁掉了关键 disambiguation clue。要保留 raw fallback，但 fallback 只补充低置信场景。</p>
+</section>
+<section id="hit-but-wrong" class="level3 badcase-card">
+<h3 class="anchored" data-anchor-id="hit-but-wrong">Hit But Wrong</h3>
+<div class="mini">
+搜到但答错
+</div>
+<p><code>retrieval_alias_hit=true</code>，但 final answer 错。这不是召回问题，而是 evidence 使用或答案抽取问题。</p>
+</section>
+<section id="candidate-correct-final-wrong" class="level3 badcase-card">
+<h3 class="anchored" data-anchor-id="candidate-correct-final-wrong">Candidate Correct Final Wrong</h3>
+<div class="mini">
+final 破坏答案
+</div>
+<p>candidate/evidence 中有正确答案，final 阶段却改坏。优先做 deterministic extraction 诊断，再改 answer prompt。</p>
+</section>
+<section id="no-hit-wrong" class="level3 badcase-card">
+<h3 class="anchored" data-anchor-id="no-hit-wrong">No Hit Wrong</h3>
+<div class="mini">
+没搜到且错
+</div>
+<p><code>no_hit_and_wrong_count</code> 高，说明 query/retrieval 没把答案带进 context。先改 query rewrite、retrieval ranking、evidence selection。</p>
+</section>
+<section id="over-search-repeat" class="level3 badcase-card">
+<h3 class="anchored" data-anchor-id="over-search-repeat">Over Search / Repeat</h3>
+<div class="mini">
+过度搜索
+</div>
+<p><code>mean_search_count</code>、<code>repeated_query_rate</code> 或 <code>final_worse_after_retry</code> 高。hard gate 优先：max search count、repeated query block、retrieval hit 后 answer。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="query" class="level2">
+<h2 class="anchored" data-anchor-id="query">05 Query 与 Retrieval</h2>
+<div class="project-section">
+<div class="panel-grid cols-2">
+<section id="query-rewrite-结论" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="query-rewrite-结论">Query Rewrite 结论</h3>
+<p>single-rewrite v2 最稳。raw query 太长会把多个 clue 混在一起，BM25 容易返回主题相近但不含答案的文档。</p>
+</section>
+<section id="关键补充" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="关键补充">关键补充</h3>
+<p>multi-candidate / group fusion 可用，但不能把多候选做成无条件并列融合；上下文管理必须独立优化。</p>
+</section>
+</div>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+策略
+</th>
+<th>
+问题
+</th>
+<th>
+结论
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+raw query
+</td>
+<td>
+太长、太噪声
+</td>
+<td>
+只作 fallback
+</td>
+</tr>
+<tr>
+<td>
+first-hop rewrite
+</td>
+<td>
+可能裁掉约束
+</td>
+<td>
+保守保留关键 clue
+</td>
+</tr>
+<tr>
+<td>
+multi-candidate fusion
+</td>
+<td>
+容易并列过宽
+</td>
+<td>
+不作为长训主线
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="reward" class="level2">
+<h2 class="anchored" data-anchor-id="reward">06 Reward Design</h2>
+<div class="project-section">
+<div class="panel-grid cols-2">
+<section id="保留" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="保留">保留</h3>
+<ul>
+<li>主 reward：EM/F1 outcome</li>
+<li>轻量 repeated/search penalty</li>
+<li>hit 后正确使用证据的 diagnostic/reward</li>
+</ul>
+</section>
+<section id="避免" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="避免">避免</h3>
+<ul>
+<li>不要让 evidence overlap 文本分数主导 reward</li>
+<li>不要把“少搜”做成强 reward</li>
+<li>不要用 reward 代替 hard gate</li>
+</ul>
+</section>
+</div>
+<div class="ok callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>当前 reward 方向应回到 outcome 主导。process reward 可以有，但必须轻约束，不能把“少搜”变成主要目标。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="insights" class="level2">
+<h2 class="anchored" data-anchor-id="insights">07 核心原则</h2>
+<div class="project-section">
+<div class="panel-grid cols-2">
+<section id="训练不是越久越好" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="训练不是越久越好">训练不是越久越好</h3>
+<p>如果 query、context 或 reward 归因错了，继续长训只会把错误行为强化。</p>
+</section>
+<section id="召回不是最终目标" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="召回不是最终目标">召回不是最终目标</h3>
+<p>真正要优化的是“搜到正确证据”能否稳定转成“最终答案正确”。</p>
+</section>
+<section id="搜索控制应优先机制化" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="搜索控制应优先机制化">搜索控制应优先机制化</h3>
+<p>重复搜、过度搜、不及时 stop 更适合用 hard gate，而不是强 reward 惩罚。</p>
+</section>
+<section id="reward-要做归因" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="reward-要做归因">Reward 要做归因</h3>
+<p>no-hit wrong、hit-but-wrong、candidate-correct-final-wrong、final-worse-after-retry 应该落到不同修法。</p>
+</section>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>一句话总结：MR-Search 的关键不是继续压缩 search count，而是把“搜到正确证据”稳定转成“最终答案正确”。</p>
+</div>
+</div>
+</div>
+</div>
+<section id="下一步计划" class="level3 project-section">
+<h3 class="anchored" data-anchor-id="下一步计划">下一步计划</h3>
+<ol type="1">
+<li>以当前 single-rewrite v2 和 hard gate 作为主线，继续做 fixed regression。</li>
+<li>每次机制变更先跑 30/100 题全量，再看 EM/F1、hit、final_worse、search_count。</li>
+<li>badcase 只回流到对应层：检索、query、证据、reward、SOP。</li>
+</ol>
+<p><a href="../projects.html" class="text-link">返回项目总览</a></p>
+</section>
+</section>
+</section>
+</div>
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/liuforge\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>刘俊言 · Algorithm Engineer<br></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Made with <a href="https://quarto.org/">Quarto</a><br></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
