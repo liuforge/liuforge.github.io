@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="刘俊言的中文病历用药推荐项目。">
+<meta name="description" content="基于 GLM-4-9B、RAG、CoT 蒸馏与安全闭环的中文病历代谢疾病用药推荐项目。">
 
-<title>中文病历代谢疾病用药推荐 – 刘俊言</title>
+<title>中文病历代谢疾病用药推荐系统 – 刘俊言</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9cfd1dd1f7f4a79f2b208a20d47a483d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-80fce76f0f0fead5ded888acc3df0889.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -56,6 +56,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -101,12 +104,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">中文病历代谢疾病用药推荐</h1>
+<h1 class="title">中文病历代谢疾病用药推荐系统</h1>
 </div>
 
 <div>
   <div class="description">
-    刘俊言的中文病历用药推荐项目。
+    基于 GLM-4-9B、RAG、CoT 蒸馏与安全闭环的中文病历代谢疾病用药推荐项目。
   </div>
 </div>
 
@@ -124,27 +127,825 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="page-shell">
-<div class="project-intro">
-<div class="detail-year">
-<p>2025.09 - 2025.10</p>
+<div class="report-layout">
+<div class="report-sidebar">
+<div class="eyebrow">
+<p>Project Report</p>
 </div>
-<section id="中文病历代谢疾病用药推荐" class="level1">
-<h1>中文病历代谢疾病用药推荐</h1>
-<div class="project-type">
-<p>医疗 NLP / LLM 微调 / 阿里天池</p>
+<section id="目录" class="level3">
+<h3 class="anchored" data-anchor-id="目录">目录</h3>
+<div class="section-nav">
+<p><a href="#summary">00 摘要</a> <a href="#tech">技术主线</a> <a href="#problem">01 问题</a> <a href="#architecture">02 架构</a> <a href="#rag">03 知识增强</a> <a href="#finetune">04 微调</a> <a href="#reasoning">05 推理链</a> <a href="#safety">06 安全</a> <a href="#loop">07 验证闭环</a> <a href="#risk">08 风险计划</a></p>
 </div>
-<p>面向中文病历下的代谢疾病出院带药推荐，结合模型微调、知识增强与推理链优化提升推荐准确性和可解释性。</p>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>这页想讲的不是“我用了哪些模型和模块”，而是为什么这个系统必须先收口候选集、先绑定证据、先设安全门，再谈推荐效果。技术方案服务于这个判断，不是判断本身。</p>
+</div>
+</div>
+</div>
+<div class="meta-row">
+<p><span class="pill">2025.09 - 2025.10</span> <span class="pill">医疗 NLP / LLM 微调</span> <span class="pill">阿里天池竞赛</span> <span class="pill">GLM-4-9B + RAG + CoT</span></p>
+</div>
 </section>
 </div>
-<section id="核心工作" class="level2 project-detail-card">
-<h2 class="anchored" data-anchor-id="核心工作">核心工作</h2>
-<ul>
-<li>基于 GLM-4-9B、Qwen3-4B 等模型进行 SFT、LoRA 与推理优化。</li>
-<li>引入 DeepSeek-R1 few-shot 蒸馏与 DPO 对齐，改善中成药幻觉和格式问题。</li>
-<li>通过置信度过滤、禁忌症规则与显式推理链提升用药安全性。</li>
-</ul>
+<div class="report-main">
+<div class="project-hero">
+<div class="eyebrow">
+<p>Medical Recommendation</p>
+</div>
+<section id="中文病历代谢疾病用药推荐系统" class="level1">
+<h1>中文病历代谢疾病用药推荐系统</h1>
+<p class="lead">
+面向中文病历中的代谢疾病出院带药推荐，我把问题拆成三个判断：先看模型是否会越界，再看证据是否能把推荐约束住，最后看这条链能不能通过回流持续变好。GLM-4-9B、RAG、CoT 蒸馏和安全规则都只是服务这三个判断的组件。
+</p>
+<div class="kpi-grid">
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Ranking</p>
+</div>
+<div class="kpi-value">
+<p>Top 5%</p>
+</div>
+<div class="kpi-note">
+<p>竞赛阶段进入 500+ 队伍前列，PPT 记录名次为 25 名。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>AVG_P</p>
+</div>
+<div class="kpi-value">
+<p>0.6693</p>
+</div>
+<div class="kpi-note">
+<p>以候选药物推荐准确性为核心的竞赛指标。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>F1 Score</p>
+</div>
+<div class="kpi-value">
+<p>0.527</p>
+</div>
+<div class="kpi-note">
+<p>接近 PPT 中对比的 SOTA 0.543，后续重点是 badcase 归因。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Drug Space</p>
+</div>
+<div class="kpi-value">
+<p>651</p>
+</div>
+<div class="kpi-note">
+<p>所有输出必须约束在候选药物清单内，降低幻觉风险。</p>
+</div>
+</div>
+</div>
 </section>
+</div>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">00 执行摘要</h2>
+<div class="project-section">
+<div class="ok callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>一句话定义</strong> 这个项目不是单纯生成“可能用药”，而是把中文病历结构化、医学知识检索、推理链解释和安全门控串成闭环，让推荐结果可以被验证、被追踪、被迭代。</p>
+</div>
+</div>
+</div>
+<div class="panel-grid cols-3">
+<section id="先收口" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="先收口">先收口</h3>
+<p>中文病历、诊断、检验指标、过敏史、既往用药和出院场景，先转成模型可读的医学决策上下文，但输出必须被候选集和规则门槛收住。</p>
+</section>
+<section id="先证据" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="先证据">先证据</h3>
+<p>模型按“诊断理解、药物匹配、安全检查、处方输出”四段式推理，目的是让每个结论都能回到证据，而不是回到语言流畅度。</p>
+</section>
+<section id="先闭环" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="先闭环">先闭环</h3>
+<p>给出候选药物列表、推荐理由、置信度和安全提示，并把低置信样本送入人工复核与 badcase 池。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="tech" class="level2">
+<h2 class="anchored" data-anchor-id="tech">技术主线</h2>
+<div class="project-section">
+<p class="section-lead">
+这个系统的关键不是“会不会推荐”，而是“会不会在复杂共病、清单外药物和相互作用风险面前收住”。因此技术栈的每一层都在回答：如何约束、如何解释、如何回流。
+</p>
+<div class="panel-grid cols-3">
+<section id="为什么先约束再生成" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么先约束再生成">为什么先约束再生成</h3>
+<p>RAG 不只是召回知识，而是把疾病、适应症、禁忌症、药物相互作用和中成药别名同时压进证据链；四段式 CoT 负责把“诊断理解 -&gt; 用药匹配 -&gt; 安全审查 -&gt; 处方输出”拆成可复核步骤。</p>
+</section>
+<section id="为什么先对齐再微调" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么先对齐再微调">为什么先对齐再微调</h3>
+<p>GLM-4-9B 使用 4-bit NF4 + LoRA(rank=16, alpha=32) 进行微调，训练集 3602 条，验证集 10%，cutoff 14k、generation 6k，3 epochs、lr 5e-4、batch 1、grad accum 8。</p>
+</section>
+<section id="为什么要把安全做成门槛" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么要把安全做成门槛">为什么要把安全做成门槛</h3>
+<p>SwanLab 跟踪训练漂移，推理显存约 6GB，首 token 延迟 &lt;300ms，吞吐提升 2-3x；候选输出始终被 651 药物白名单和 0.6 置信度门控卡住。</p>
+</section>
+</div>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+环节
+</th>
+<th>
+技术选择
+</th>
+<th>
+卡点
+</th>
+<th>
+处理方式
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+证据召回
+</td>
+<td>
+Neo4j + FAISS/Milvus + BGE-M3/M3E + reranker
+</td>
+<td>
+检索噪声和别名覆盖不均衡
+</td>
+<td>
+按病历字段定向召回，再做重排和白名单过滤
+</td>
+</tr>
+<tr>
+<td>
+推理生成
+</td>
+<td>
+GLM-4-9B + CoT 蒸馏
+</td>
+<td>
+链路漂亮但可能偏离医学事实
+</td>
+<td>
+把每一步绑定到证据和规则
+</td>
+</tr>
+<tr>
+<td>
+偏好对齐
+</td>
+<td>
+DPO chosen/rejected
+</td>
+<td>
+清单外药物和中成药幻觉
+</td>
+<td>
+badcase 回流做偏好对齐
+</td>
+</tr>
+<tr>
+<td>
+安全门控
+</td>
+<td>
+置信度阈值 + DDI + 白名单
+</td>
+<td>
+阈值过高会误杀，过低会放险药
+</td>
+<td>
+人工复核队列校准阈值
+</td>
+</tr>
+</tbody>
+</table>
+<div class="panel-grid cols-2">
+<section id="最危险的不是答错" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="最危险的不是答错">最危险的不是答错</h3>
+<p>医疗推荐里最危险的错误是“看起来合理但清单外、禁忌、相互作用或特殊人群不适用”。所以系统不能只优化 AVG_P / F1，还要把清单外药物、低置信答案、冲突证据和安全告警单独拉出来看。</p>
+</section>
+<section id="为什么保留人工复核" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么保留人工复核">为什么保留人工复核</h3>
+<p>人工复核不是为了替代模型，而是给阈值、DPO 负样本和知识库缺口提供校准信号。低置信样本进入复核队列后，可以反向更新别名、禁忌规则、提示词和偏好数据，形成真正的医疗安全闭环。</p>
+</section>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>这套系统的叙事重点是“把生成能力关进医学边界里”：RAG 给证据，LoRA 让模型贴合任务，CoT 让理由可检查，安全门控决定哪些答案不能交出去。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem" class="level2">
+<h2 class="anchored" data-anchor-id="problem">01 问题与约束</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+难点
+</th>
+<th>
+具体表现
+</th>
+<th>
+系统策略
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+代谢疾病共病复杂
+</td>
+<td>
+糖尿病、甲状腺、血脂、肝肾功能等信息交织，单个诊断无法决定用药。
+</td>
+<td>
+先做结构化抽取，再把诊断、指标、禁忌和既往用药一起送入推理。
+</td>
+</tr>
+<tr>
+<td>
+651 种候选药物
+</td>
+<td>
+输出空间大，且中西药命名、别名和适应症覆盖不均衡。
+</td>
+<td>
+候选药物白名单、别名规范化、RAG 补足说明书和指南知识。
+</td>
+</tr>
+<tr>
+<td>
+中成药幻觉
+</td>
+<td>
+模型容易生成清单外药物或把相似功效药混淆。
+</td>
+<td>
+候选集约束、置信度阈值、规则校验和 DPO 偏好数据回流。
+</td>
+</tr>
+<tr>
+<td>
+医疗安全要求高
+</td>
+<td>
+推荐不仅要命中，还要解释为什么可用、为什么不能用。
+</td>
+<td>
+加入禁忌症、相互作用、特殊人群和低置信拒答门控。
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="architecture" class="level2">
+<h2 class="anchored" data-anchor-id="architecture">02 系统架构</h2>
+<div class="project-section">
+<div class="flow-strip">
+<div class="flow-step">
+Record<small>中文病历</small>
+</div>
+<div class="flow-step">
+Normalize<small>实体/指标抽取</small>
+</div>
+<div class="flow-step">
+Retrieve<small>指南/说明书</small>
+</div>
+<div class="flow-step">
+Reason<small>四段式 CoT</small>
+</div>
+<div class="flow-step">
+Recommend<small>候选药物</small>
+</div>
+<div class="flow-step">
+Safety Gate<small>规则/置信度</small>
+</div>
+<div class="flow-step">
+Feedback<small>badcase 回流</small>
+</div>
+</div>
+<section id="系统架构图" class="level3 diagram-panel">
+<h3 class="anchored" data-anchor-id="系统架构图">系统架构图</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+  user["医生/竞赛样本"] --&gt; ingest["病历解析与结构化抽取"]
+  ingest --&gt; context["患者上下文&lt;br/&gt;诊断/检验/既往用药"]
+  drugList["651 候选药物清单"] --&gt; gate["候选集白名单"]
+  kb["指南/说明书/文献知识库"] --&gt; retrieve["RAG 检索与重排"]
+  kg["疾病-药物-禁忌知识图谱"] --&gt; safety["安全规则引擎"]
+  context --&gt; prompt["医学推荐 Prompt Pack"]
+  retrieve --&gt; prompt
+  gate --&gt; prompt
+  prompt --&gt; llm["GLM-4-9B&lt;br/&gt;4-bit LoRA"]
+  llm --&gt; cot["四段式 CoT&lt;br/&gt;诊断/用药/安全/处方"]
+  cot --&gt; safety
+  safety --&gt; output["推荐药物列表&lt;br/&gt;理由/置信度/告警"]
+  output --&gt; audit["审计日志与人工复核"]
+  audit --&gt; feedback["SFT/DPO/KG 更新"]
+  feedback -.-&gt; llm
+  feedback -.-&gt; kg
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<div class="panel-grid cols-2">
+<section id="数据层" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="数据层">数据层</h3>
+<p>原始中文病历 JSON、651 种候选药物清单、疾病指南、药品说明书、文献摘要和人工整理知识共同构成输入。训练集约 3602 条，验证集占 10%，用于做推荐指标与格式稳定性评估。</p>
+</section>
+<section id="模型层" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="模型层">模型层</h3>
+<p>基座使用 GLM-4-9B，采用 4-bit NF4 量化和 LoRA 训练约 5000 万参数，冻结主体模型参数，在有限 GPU 资源下保留长上下文能力。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="rag" class="level2">
+<h2 class="anchored" data-anchor-id="rag">03 RAG 知识增强</h2>
+<div class="project-section">
+<div class="panel-grid cols-3">
+<section id="knowledge-graph" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="knowledge-graph">Knowledge Graph</h3>
+<p>用 Neo4j 组织疾病、症状、检验指标、药品、适应症、禁忌症和相互作用，让系统能做结构化安全检查。</p>
+</section>
+<section id="vector-retrieval" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="vector-retrieval">Vector Retrieval</h3>
+<p>用 BGE-M3 / M3E 向量化指南、说明书和文献片段，FAISS 或 Milvus 负责召回，BGE-Reranker 做二次排序。</p>
+</section>
+<section id="prompt-packing" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="prompt-packing">Prompt Packing</h3>
+<p>只把与当前病历诊断、指标异常和候选药物相关的知识打包进上下文，避免长文本噪声稀释关键证据。</p>
+</section>
+</div>
+<div class="warn callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>RAG 在这里的角色不是“让模型知道更多”，而是把模型的每个推荐约束到可追溯证据上。后续评估需要单独统计检索命中、证据使用和最终推荐命中，不能只看最终 F1。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="finetune" class="level2">
+<h2 class="anchored" data-anchor-id="finetune">04 微调与训练配置</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+模块
+</th>
+<th>
+配置
+</th>
+<th>
+作用
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Base Model
+</td>
+<td>
+GLM-4-9B
+</td>
+<td>
+承担中文医疗长文本理解与推荐生成。
+</td>
+</tr>
+<tr>
+<td>
+Quantization
+</td>
+<td>
+4-bit NF4
+</td>
+<td>
+降低显存占用，PPT 记录推理显存约 6GB。
+</td>
+</tr>
+<tr>
+<td>
+LoRA
+</td>
+<td>
+rank=16, alpha=32
+</td>
+<td>
+只训练少量适配参数，保持主模型稳定。
+</td>
+</tr>
+<tr>
+<td>
+Context
+</td>
+<td>
+cutoff 14k, generation 6k
+</td>
+<td>
+容纳长病历、检索证据和推理链。
+</td>
+</tr>
+<tr>
+<td>
+Training
+</td>
+<td>
+3 epochs, lr 5e-4, batch 1, grad accum 8
+</td>
+<td>
+在小样本竞赛数据上做稳态 SFT。
+</td>
+</tr>
+<tr>
+<td>
+Observation
+</td>
+<td>
+SwanLab
+</td>
+<td>
+记录 loss、验证指标、样本输出和训练漂移。
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="reasoning" class="level2">
+<h2 class="anchored" data-anchor-id="reasoning">05 推理链蒸馏与偏好对齐</h2>
+<div class="project-section">
+<div class="panel-grid cols-2">
+<section id="deepseek-r1-cot-蒸馏" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="deepseek-r1-cot-蒸馏">DeepSeek-R1 CoT 蒸馏</h3>
+<p>用强推理模型生成 few-shot 思维链，把“诊断判断、药物匹配、安全审查、处方输出”拆成可读步骤，再蒸馏给较小模型，提升解释性和复杂共病处理能力。</p>
+</section>
+<section id="dpo-badcase-对齐" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="dpo-badcase-对齐">DPO Badcase 对齐</h3>
+<p>把“清单外药物、错误中成药、忽略禁忌、格式不合法”等样本构造成 chosen / rejected 对，后续用于 DPO 或规则偏好训练，让模型明确学习什么答案不可接受。</p>
+</section>
+</div>
+<pre class="code-shell">诊断理解 -&gt; 匹配适应症 -&gt; 检查禁忌/相互作用 -&gt; 输出候选药物与理由
+低置信度或安全冲突 -&gt; 进入人工复核队列，而不是强行生成处方</pre>
+</div>
+</section>
+<section id="safety" class="level2">
+<h2 class="anchored" data-anchor-id="safety">06 安全门控</h2>
+<div class="project-section">
+<div class="panel-grid cols-4">
+<section id="白名单" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="白名单">白名单</h3>
+<p>输出药物必须命中 651 候选清单或规范别名。</p>
+</section>
+<section id="置信度" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="置信度">置信度</h3>
+<p>PPT 中设定阈值为 0.6，低于阈值触发保守输出。</p>
+</section>
+<section id="ddi" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="ddi">DDI</h3>
+<p>检测药物相互作用、禁忌症和重复用药风险。</p>
+</section>
+<section id="审计" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="审计">审计</h3>
+<p>保存病历摘要、证据片段、推理链和最终药物列表。</p>
+</section>
+</div>
+<div class="bad callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>本页描述的是竞赛与工程原型系统，不构成医疗建议。真实临床落地必须经过医生复核、伦理审查和持续安全验证。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="loop" class="level2">
+<h2 class="anchored" data-anchor-id="loop">07 验证与闭环设计</h2>
+<div class="project-section">
+<div class="flow-strip">
+<div class="flow-step">
+Predict<small>推荐列表</small>
+</div>
+<div class="flow-step">
+Compare<small>Gold 药物</small>
+</div>
+<div class="flow-step">
+Audit<small>证据/安全</small>
+</div>
+<div class="flow-step">
+Bucket<small>badcase 分类</small>
+</div>
+<div class="flow-step">
+Annotate<small>人工复核</small>
+</div>
+<div class="flow-step">
+Update<small>SFT/DPO/KG</small>
+</div>
+<div class="flow-step">
+Regress<small>回归评测</small>
+</div>
+</div>
+<section id="数据流水线与验证闭环" class="level3 diagram-panel">
+<h3 class="anchored" data-anchor-id="数据流水线与验证闭环">数据流水线与验证闭环</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  raw["原始病历 JSON"] --&gt; clean["清洗/字段归一"]
+  clean --&gt; ner["医学实体与指标抽取"]
+  ner --&gt; sample["训练样本构造"]
+  sample --&gt; sft["SFT/LoRA 训练"]
+  sample --&gt; evalSet["验证集"]
+  sft --&gt; infer["批量推理"]
+  evalSet --&gt; compare["Gold 对比"]
+  infer --&gt; compare
+  compare --&gt; metrics["AVG_P/F1/Top-K&lt;br/&gt;格式合法率"]
+  compare --&gt; badcase["badcase 池&lt;br/&gt;幻觉/禁忌/漏药"]
+  badcase --&gt; review["人工复核与标注"]
+  review --&gt; dpo["chosen/rejected 偏好对"]
+  review --&gt; rules["规则库与知识图谱修订"]
+  dpo --&gt; sft
+  rules --&gt; infer
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+闭环指标
+</th>
+<th>
+为什么需要
+</th>
+<th>
+回流动作
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+AVG_P / F1 / Top-K
+</td>
+<td>
+衡量推荐列表与 gold medication 的匹配程度。
+</td>
+<td>
+定位召回不足、排序错误或共病理解错误。
+</td>
+</tr>
+<tr>
+<td>
+格式合法率
+</td>
+<td>
+医疗推荐必须稳定输出可解析列表。
+</td>
+<td>
+加入格式修复样本和解码约束。
+</td>
+</tr>
+<tr>
+<td>
+清单外幻觉率
+</td>
+<td>
+直接衡量模型是否生成候选集外药物。
+</td>
+<td>
+强化白名单校验和 rejected DPO 样本。
+</td>
+</tr>
+<tr>
+<td>
+禁忌/相互作用告警率
+</td>
+<td>
+不能只追求命中率，需要识别风险输出。
+</td>
+<td>
+更新知识图谱、规则库和安全提示模板。
+</td>
+</tr>
+<tr>
+<td>
+低置信复核率
+</td>
+<td>
+用人工审核承接模型不确定样本。
+</td>
+<td>
+沉淀成高价值标注样本，进入下一轮训练。
+</td>
+</tr>
+</tbody>
+</table>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>补齐后的项目闭环是：每次预测都保留“病历摘要、检索证据、推理链、规则检查、最终列表、gold 对比和人工判断”。这样可以把一次竞赛模型扩展成可持续迭代的医疗推荐系统原型。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="risk" class="level2">
+<h2 class="anchored" data-anchor-id="risk">08 风险与下一步</h2>
+<div class="project-section">
+<div class="badcase-grid cols-2">
+<div class="badcase-card">
+<section id="rag-覆盖不足" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="rag-覆盖不足">RAG 覆盖不足</h3>
+<p><span>Knowledge Gap</span></p>
+</section>
+<div class="badcase-body">
+<p>指南、说明书和真实临床路径覆盖不完整时，模型会把语言模式误当医学证据。下一步需要补充高质量来源，并在评测中拆分检索召回和答案正确性。</p>
+</div>
+</div>
+<div class="badcase-card">
+<section id="中成药与别名混淆" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="中成药与别名混淆">中成药与别名混淆</h3>
+<p><span>Alias Risk</span></p>
+</section>
+<div class="badcase-body">
+<p>中成药功效描述相近，且别名、商品名、通用名混用。需要药品别名库、候选集归一化和清单外强拒绝共同处理。</p>
+</div>
+</div>
+<div class="badcase-card">
+<section id="过度依赖-cot" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="过度依赖-cot">过度依赖 CoT</h3>
+<p><span>Reasoning Risk</span></p>
+</section>
+<div class="badcase-body">
+<p>推理链看起来合理不等于推荐正确。需要把每一步绑定到检索证据和规则检查，而不是只评估最终文本流畅度。</p>
+</div>
+</div>
+<div class="badcase-card">
+<section id="临床落地边界" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="临床落地边界">临床落地边界</h3>
+<p><span>Clinical Boundary</span></p>
+</section>
+<div class="badcase-body">
+<p>真实部署前必须引入医生审核、审计日志、版本化规则库和灰度验证。本项目阶段定位为竞赛系统与工程原型。</p>
+</div>
+</div>
+</div>
+<section id="choice" class="level2">
+<h2 class="anchored" data-anchor-id="choice">09 技术选型与卡点</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+选择
+</th>
+<th>
+为什么这么选
+</th>
+<th>
+卡点
+</th>
+<th>
+回路
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+GLM-4-9B + 4-bit LoRA
+</td>
+<td>
+在小团队和有限显存下保留中文长文本能力。
+</td>
+<td>
+容易过拟合小样本、长上下文下会漂移。
+</td>
+<td>
+用验证集、SwanLab 和 badcase 回流控制。
+</td>
+</tr>
+<tr>
+<td>
+RAG + 知识图谱
+</td>
+<td>
+让推荐依赖外部医学证据而不是只靠参数记忆。
+</td>
+<td>
+检索噪声、证据切片和别名覆盖不足。
+</td>
+<td>
+按病历字段定向检索，并将漏召回样本回填知识库。
+</td>
+</tr>
+<tr>
+<td>
+CoT 蒸馏 + DPO
+</td>
+<td>
+把医学推理过程拆成可解释链条，并约束错误答案。
+</td>
+<td>
+思维链漂亮但可能不正确。
+</td>
+<td>
+把思维链绑定到证据与安全规则，错误样本做偏好对。
+</td>
+</tr>
+<tr>
+<td>
+置信度门控
+</td>
+<td>
+医疗场景宁可保守，也不能输出不安全推荐。
+</td>
+<td>
+阈值过高会误杀可用药物。
+</td>
+<td>
+用人工复核队列动态校准阈值。
+</td>
+</tr>
+</tbody>
+</table>
+<div class="warn callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>这个项目最难的不是把模型跑起来，而是把“推荐正确”和“推荐安全”同时做成闭环。只要一个环节失真，后面再好的生成能力都会被安全门挡住。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="assets" class="level2">
+<h2 class="anchored" data-anchor-id="assets">10 项目资料</h2>
+<div class="project-section">
+<section id="本地-ppt-原稿" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="本地-ppt-原稿">本地 PPT 原稿</h3>
+<p><a href="../assets/projects/medical-recommendation.pptx">面向中文病历代谢疾病用药推荐系统.pptx</a></p>
+<p>用于本地审阅的原始汇报材料。</p>
+</section>
+</div>
 <p><a href="../projects.html" class="text-link">返回项目总览</a></p>
+</section>
+</div>
+</section>
+</div>
+</div>
 </div>
 
 

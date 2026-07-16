@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="刘俊言的 NanoChat 中文 BabyLM 项目。">
+<meta name="description" content="中文 BabyLM 小型基座模型：自训 tokenizer、从零预训练、表示层选择与官方评测闭环。">
 
 <title>NanoChat-zh-d22 中文 BabyLM – 刘俊言</title>
 <style>
@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9cfd1dd1f7f4a79f2b208a20d47a483d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-80fce76f0f0fead5ded888acc3df0889.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -56,6 +56,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -106,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    刘俊言的 NanoChat 中文 BabyLM 项目。
+    中文 BabyLM 小型基座模型：自训 tokenizer、从零预训练、表示层选择与官方评测闭环。
   </div>
 </div>
 
@@ -124,27 +127,665 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="page-shell">
-<div class="project-intro">
-<div class="detail-year">
-<p>2026.05 - 2026.06</p>
+<div class="report-layout">
+<div class="report-sidebar">
+<div class="eyebrow">
+<p>Project Report</p>
+</div>
+<section id="目录" class="level3">
+<h3 class="anchored" data-anchor-id="目录">目录</h3>
+<div class="section-nav">
+<p><a href="#summary">00 摘要</a> <a href="#tech">技术主线</a> <a href="#constraints">01 约束</a> <a href="#architecture">02 架构</a> <a href="#tokenizer">03 Tokenizer</a> <a href="#pretrain">04 预训练</a> <a href="#representation">05 表示层</a> <a href="#evaluation">06 评测</a> <a href="#loop">07 闭环</a> <a href="#risk">08 风险</a></p>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>这页把 BabyLM 项目写成一条判断链：先判断中文 tokenizer 是否真的提高了信息密度，再判断小型基座能否在受限语料下稳定收敛，最后用表示层和评测结果决定这条路值不值得继续走。</p>
+</div>
+</div>
+</div>
+<div class="meta-row">
+<p><span class="pill">2026.05 - 2026.06</span> <span class="pill">中文小模型 / 预训练与后训练</span> <span class="pill">NLPCC BabyLM</span> <span class="pill">2 x RTX 5090</span></p>
+</div>
+</section>
+</div>
+<div class="report-main">
+<div class="project-hero">
+<div class="eyebrow">
+<p>BabyLM Base Model</p>
 </div>
 <section id="nanochat-zh-d22-中文-babylm" class="level1">
 <h1>NanoChat-zh-d22 中文 BabyLM</h1>
-<div class="project-type">
-<p>中文小模型 / 预训练与后训练 / NLPCC BabyLM</p>
+<p class="lead">
+面向受限中文语料的 BabyLM 目标，先判断 tokenizer 是否真正贴合中文分布，再决定预训练、表示层选择和评测怎么展开。这里的主线不是“训一个小模型”，而是让固定上下文窗口尽可能装进更多中文有效信息。
+</p>
+<div class="kpi-grid">
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Tokenizer Compression</p>
 </div>
-<p>面向 100M 中文 token 训练约束，搭建中文小型基座模型训练、表示层选择与官方评测流程。</p>
+<div class="kpi-value">
+<p>4.98</p>
+</div>
+<div class="kpi-note">
+<p>训练语料上的 bytes/token，显著优于通用 tokenizer。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Validation Compression</p>
+</div>
+<div class="kpi-value">
+<p>4.81</p>
+</div>
+<div class="kpi-note">
+<p>验证语料上的 bytes/token，说明泛化仍然保持较好。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Vocab Size</p>
+</div>
+<div class="kpi-value">
+<p>32768</p>
+</div>
+<div class="kpi-note">
+<p>和 BabyLM 目标对齐的中文 BPE 词表规模。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Tokenizer Train</p>
+</div>
+<div class="kpi-value">
+<p>176.31s</p>
+</div>
+<div class="kpi-note">
+<p>在有限数据与约束下完成 tokenizer 训练。</p>
+</div>
+</div>
+</div>
 </section>
 </div>
-<section id="核心工作" class="level2 project-detail-card">
-<h2 class="anchored" data-anchor-id="核心工作">核心工作</h2>
-<ul>
-<li>在单张 RTX 5090 上训练 22 层 decoder-only 模型，并自训练 32K 中文 BPE tokenizer。</li>
-<li>针对 fMRI 相关任务扫描第 4/8/12/16/20 层表示，选择更适合神经拟合任务的表示层。</li>
-<li>整合 CogBench、ZhoBLiMP、Hanzi structure/pinyin 与中文 NLU 任务，形成 checkpoint 对比流程。</li>
-</ul>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">00 执行摘要</h2>
+<div class="project-section">
+<div class="ok callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>一句话定义</strong> 这个项目的关键不是“训一个小模型”，而是把中文语料、分词器、预训练、表示层选择和评测连成一条可复盘链路，让每个决策都能被压缩率、loss 曲线和下游结果共同验证。</p>
+</div>
+</div>
+</div>
+<div class="panel-grid cols-3">
+<section id="中文优先" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="中文优先">中文优先</h3>
+<p>tokenizer 和预训练语料都围绕中文分布设计，而不是直接沿用通用英文 tokenizer 的切分方式。</p>
 </section>
+<section id="小模型可训" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="小模型可训">小模型可训</h3>
+<p>模型规模、序列长度、batch 和精度都按双卡 5090 的现实资源做保守配置。</p>
+</section>
+<section id="闭环可证" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="闭环可证">闭环可证</h3>
+<p>从 tokenizer compression 到 base loss，再到 representation probing 和官方评测，全部纳入同一条选择链。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="tech" class="level2">
+<h2 class="anchored" data-anchor-id="tech">技术主线</h2>
+<div class="project-section">
+<div class="panel-grid cols-3">
+<section id="先看信息密度" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="先看信息密度">先看信息密度</h3>
+<p>BabyLM 的第一个判断不是参数量，而是中文字符和词片是否被 tokenizer 压缩成足够高的信息密度。压缩率好，后面的训练窗口才有意义。</p>
+</section>
+<section id="再看模型是否稳" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="再看模型是否稳">再看模型是否稳</h3>
+<p>小型 decoder-only 基座要先证明在有限语料和双卡资源里能稳定收敛，loss 曲线和 checkpoint 轨迹比单次指标更重要。</p>
+</section>
+<section id="最后看值不值得继续" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="最后看值不值得继续">最后看值不值得继续</h3>
+<p>表示层选择和官方评测不是附加项，而是决定这条路线是否能往后训练、下游任务和解释性分析继续延伸的收口。</p>
+</section>
+</div>
+</div>
+<div class="panel-grid cols-2">
+<section id="这条路为什么成立" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="这条路为什么成立">这条路为什么成立</h3>
+<p>中文 tokenizer 的压缩收益不是抽象概念，它直接把固定上下文窗口的有效容量放大了。对于 BabyLM 这种受限训练任务，这意味着同样的算力和步数，可以把更多中文语料完整送进模型，而不是被切碎成低密度 token。</p>
+</section>
+<section id="最后怎么判断值不值得继续" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="最后怎么判断值不值得继续">最后怎么判断值不值得继续</h3>
+<p>不是看训练集是否更像“背下来”了，而是看验证压缩、下游中文任务、表示层 probing 和 loss 曲线能否同时成立。如果这四件事不能同时过线，说明方向还没真站稳。</p>
+</section>
+</div>
+</section>
+<section id="constraints" class="level2">
+<h2 class="anchored" data-anchor-id="constraints">01 背景与约束</h2>
+<div class="project-section">
+<p class="section-lead">
+真正的分歧点不是“模型要多大”，而是中文 token 是否被压得足够密、足够稳，从而让有限上下文真正装下有效信息。硬件和语料的约束只是外壳，真正决定方案的是信息密度与可训练性。
+</p>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+约束
+</th>
+<th>
+实际含义
+</th>
+<th>
+设计结果
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+中文 BabyLM 语料上限
+</td>
+<td>
+总 token 规模受限，不能靠大规模堆数据取胜。
+</td>
+<td>
+优先做 tokenizer 贴合与训练流程稳定性。
+</td>
+</tr>
+<tr>
+<td>
+文档 cap
+</td>
+<td>
+单文档过长会拉高噪声与训练抖动。
+</td>
+<td>
+以文档切分和分片训练控制长度分布。
+</td>
+</tr>
+<tr>
+<td>
+硬件约束
+</td>
+<td>
+双卡 5090，32GB 级显存。
+</td>
+<td>
+采用 BF16、分布式训练和保守 batch 设置。
+</td>
+</tr>
+<tr>
+<td>
+目标约束
+</td>
+<td>
+既要中文压缩好，也要保留英文/代码等通用能力底线。
+</td>
+<td>
+接受任务专门化，但不把 tokenizer 做成纯单场景过拟合。
+</td>
+</tr>
+</tbody>
+</table>
+<div class="panel-grid cols-2">
+<section id="数据组织" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="数据组织">数据组织</h3>
+<p>预训练数据整理为可直接迭代的分片，验证集放在固定末尾分片，保持训练与评测一致的读取路径，减少 dataloader 改动。</p>
+</section>
+<section id="评估目标" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="评估目标">评估目标</h3>
+<p>tokenizer 先看压缩率，base model 再看 loss 和最终 Chinese eval，避免只用某一个局部指标做决策。</p>
+</section>
+</div>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>这个项目最有价值的地方，不是 tokenizer 数字更漂亮，而是把“中文信息密度”变成了一个可以被验证的目标。后续如果继续扩展，优先方向也不是盲目增大模型，而是先检查数据覆盖、分词粒度和表示层是否真的帮到了中文能力。</p>
+</div>
+</div>
+</div>
+</section>
+<section id="architecture" class="level2">
+<h2 class="anchored" data-anchor-id="architecture">02 总体架构</h2>
+<div class="project-section">
+<div class="flow-strip">
+<div class="flow-step">
+Corpus<small>中文语料</small>
+</div>
+<div class="flow-step">
+Tokenizer<small>32K BPE</small>
+</div>
+<div class="flow-step">
+Shards<small>parquet 分片</small>
+</div>
+<div class="flow-step">
+Pretrain<small>decoder-only</small>
+</div>
+<div class="flow-step">
+Probe<small>表示层扫描</small>
+</div>
+<div class="flow-step">
+Eval<small>官方/下游任务</small>
+</div>
+<div class="flow-step">
+Select<small>checkpoint 决策</small>
+</div>
+</div>
+<section id="训练与评测架构图" class="level3 diagram-panel">
+<h3 class="anchored" data-anchor-id="训练与评测架构图">训练与评测架构图</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+  raw["中文 BabyLM 原始语料"] --&gt; clean["清洗 / 去噪 / 切分"]
+  clean --&gt; tok["Tokenizer training&lt;br/&gt;32K Chinese BPE"]
+  tok --&gt; comp["Compression eval&lt;br/&gt;train / val bytes per token"]
+  tok --&gt; shards["Pretrain shards&lt;br/&gt;parquet 训练分片"]
+  shards --&gt; train["Base pretraining&lt;br/&gt;small decoder-only"]
+  train --&gt; ckpt["checkpoint pool"]
+  ckpt --&gt; probe["representation probing&lt;br/&gt;layers 4/8/12/16/20"]
+  ckpt --&gt; eval["official + downstream eval"]
+  probe --&gt; select["layer / checkpoint selection"]
+  eval --&gt; select
+  select --&gt; report["training report / analysis"]
+  report --&gt; feedback["data / schedule / eval feedback"]
+  feedback --&gt; clean
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<div class="panel-grid cols-2">
+<section id="基础模型" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="基础模型">基础模型</h3>
+<p>小型 decoder-only 基座围绕中文任务设计，训练过程保留清晰的 checkpoint 轨迹，方便比较不同阶段的 loss、生成质量和下游表现。</p>
+</section>
+<section id="精度与并行" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="精度与并行">精度与并行</h3>
+<p>双卡分布式训练采用 BF16 作为默认精度，在当前硬件上优先走稳定的注意力实现，而不是为追求边缘优化引入额外风险。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="tokenizer" class="level2">
+<h2 class="anchored" data-anchor-id="tokenizer">03 Tokenizer 设计</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+对比项
+</th>
+<th>
+训练集
+</th>
+<th>
+验证集
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+GPT-2 tokenizer
+</td>
+<td>
+17,057,557 tokens / 1.43 BPT
+</td>
+<td>
+1,445,873 tokens / 1.44 BPT
+</td>
+</tr>
+<tr>
+<td>
+GPT-4 tokenizer
+</td>
+<td>
+11,097,674 tokens / 2.20 BPT
+</td>
+<td>
+947,200 tokens / 2.19 BPT
+</td>
+</tr>
+<tr>
+<td>
+Our tokenizer
+</td>
+<td>
+4,901,856 tokens / 4.98 BPT
+</td>
+<td>
+432,486 tokens / 4.81 BPT
+</td>
+</tr>
+</tbody>
+</table>
+<div class="panel-grid cols-2">
+<section id="round-trip" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="round-trip">Round Trip</h3>
+<p>两个中文样例都满足 encode / decode 完整回环，说明 tokenizer 在中文输入上没有把字符级信息切坏。</p>
+</section>
+<section id="结论" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="结论">结论</h3>
+<p>这个 tokenizer 的目标不是做全场景通用压缩，而是尽量让中文 BabyLM 训练窗口装进更多中文有效信息。</p>
+</section>
+</div>
+<div class="panel-grid cols-2">
+<section id="为什么不能只看压缩率" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么不能只看压缩率">为什么不能只看压缩率</h3>
+<p>bytes/token 高说明上下文窗口更省，但也可能把低频词、数字、英文和代码切得更粗。我的判断方式是把 train / val 压缩、round-trip、跨域样例和后续 BPB 放在一起看，避免把 tokenizer 做成只会吃训练集的捷径。</p>
+</section>
+<section id="它改变了后面的训练问题" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="它改变了后面的训练问题">它改变了后面的训练问题</h3>
+<p>在中文语料里，同样 1024 token 的窗口可以覆盖更长的句子和更完整的段落，这会改变模型看到的依赖长度。后续 pretrain 不再只是“同样数据换个 tokenizer”，而是重新定义了每一步梯度里包含的中文信息量。</p>
+</section>
+</div>
+<div class="warn callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>和通用 tokenizer 相比，这个 tokenizer 在英文、韩文、代码和数学样例上不会占优；这是刻意接受的 tradeoff，因为当前任务是中文 BabyLM 基座，不是通用助手底座。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="pretrain" class="level2">
+<h2 class="anchored" data-anchor-id="pretrain">04 基座预训练</h2>
+<div class="project-section">
+<div class="panel-grid cols-3">
+<section id="训练判断" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="训练判断">训练判断</h3>
+<p>从零训练小型 decoder-only 模型，控制序列长度和 batch，在有限算力下优先保证 loss 可下降、训练可收敛。</p>
+</section>
+<section id="硬件现实" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="硬件现实">硬件现实</h3>
+<p>双卡 5090 场景下，BF16 和分布式并行是默认选择，重点是稳定而不是追逐极限吞吐。</p>
+</section>
+<section id="曲线意味着什么" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="曲线意味着什么">曲线意味着什么</h3>
+<p>训练损失先快速下降，再进入缓慢收敛区间，说明 tokenizer 和数据组织没有把模型拖进持续震荡。</p>
+</section>
+</div>
+<div class="project-figure">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/nanochat-loss.png" class="img-fluid figure-img"></p>
+<figcaption>Chinese BabyLM 训练损失曲线</figcaption>
+</figure>
+</div>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>这张曲线的价值不只是“loss 在降”，而是证明了中文分词、分片读取、优化器和训练节奏整体是可用的。后续决策还要结合验证损失和下游评测，不会只看训练曲线。</p>
+</div>
+</div>
+</div>
+<div class="panel-grid cols-2">
+<section id="训练中真正看的信号" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="训练中真正看的信号">训练中真正看的信号</h3>
+<p>我更关注曲线是否出现长期震荡、突然发散、后段学习率下降后是否还能继续降低，以及 checkpoint 之间的生成质量是否同步改善。这样可以把“训练跑完了”和“训练真的有效”区分开。</p>
+</section>
+<section id="下一轮会怎么改" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="下一轮会怎么改">下一轮会怎么改</h3>
+<p>如果验证 BPB 和中文评测没有跟上，优先检查数据分片分布、重复样本、学习率节奏和 tokenizer 的低频覆盖，而不是直接增大模型深度。小模型项目最怕的不是参数不够，而是把错误归因到模型规模。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="representation" class="level2">
+<h2 class="anchored" data-anchor-id="representation">05 表示层选择</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+扫描层
+</th>
+<th>
+目的
+</th>
+<th>
+判断方式
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+第 4 层
+</td>
+<td>
+看早期语义和局部词法信息。
+</td>
+<td>
+对比神经拟合任务和轻量下游任务表现。
+</td>
+</tr>
+<tr>
+<td>
+第 8 层
+</td>
+<td>
+看中间层表征是否更稳。
+</td>
+<td>
+检查任务区分度和噪声敏感性。
+</td>
+</tr>
+<tr>
+<td>
+第 12 层
+</td>
+<td>
+看语义和结构的平衡点。
+</td>
+<td>
+比较 representation 质量与泛化。
+</td>
+</tr>
+<tr>
+<td>
+第 16 / 20 层
+</td>
+<td>
+看高层表征是否已经开始任务化。
+</td>
+<td>
+用于寻找更适合目标任务的 checkpoint layer。
+</td>
+</tr>
+</tbody>
+</table>
+<div class="panel-grid cols-2">
+<section id="选择逻辑" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="选择逻辑">选择逻辑</h3>
+<p>表示层不是固定“越深越好”，而是看哪个层在目标任务上最有信息密度、最适合外部读取。</p>
+</section>
+<section id="结论形式" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="结论形式">结论形式</h3>
+<p>最后不会只保留一个“最好层”，而是保留一组可复用的 checkpoint / layer 组合，供后续研究和报告复现。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="evaluation">06 评测闭环</h2>
+<div class="project-section">
+<div class="flow-strip">
+<div class="flow-step">
+Compression<small>Tokenizer</small>
+</div>
+<div class="flow-step">
+Loss<small>Base pretrain</small>
+</div>
+<div class="flow-step">
+Probe<small>表示层</small>
+</div>
+<div class="flow-step">
+Bench<small>中文评测</small>
+</div>
+<div class="flow-step">
+Compare<small>checkpoint 对比</small>
+</div>
+<div class="flow-step">
+Select<small>候选模型</small>
+</div>
+<div class="flow-step">
+Report<small>复盘归档</small>
+</div>
+</div>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+评测维度
+</th>
+<th>
+作用
+</th>
+<th>
+对应闭环动作
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Tokenizer compression
+</td>
+<td>
+决定同一上下文窗口里能装下多少中文。
+</td>
+<td>
+先做分词器取舍。
+</td>
+</tr>
+<tr>
+<td>
+Validation loss / BPB
+</td>
+<td>
+衡量基座模型是否真的学到了分布。
+</td>
+<td>
+决定是否继续训练或调整 schedule。
+</td>
+</tr>
+<tr>
+<td>
+Chinese downstream eval
+</td>
+<td>
+看模型在中文任务上的综合能力。
+</td>
+<td>
+比较不同 checkpoint 的实用价值。
+</td>
+</tr>
+<tr>
+<td>
+Representation probing
+</td>
+<td>
+看哪一层最适合目标任务读取。
+</td>
+<td>
+输出层选择建议和后续实验方向。
+</td>
+</tr>
+</tbody>
+</table>
+<div class="panel-grid cols-2">
+<section id="官方下游任务" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="官方下游任务">官方/下游任务</h3>
+<p>把中文 NLU、汉字结构、拼音、语言知识等评测放进统一对比框架里，避免只拿一个任务代表整体模型质量。</p>
+</section>
+<section id="决策原则" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="决策原则">决策原则</h3>
+<p>tokenizer 结果只负责“是不是值得继续训”，base loss 只负责“训得稳不稳”，最终还要靠下游评测和表示层分析做定夺。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="loop" class="level2">
+<h2 class="anchored" data-anchor-id="loop">07 闭环与风险</h2>
+<div class="project-section">
+<div class="ok callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>整个项目的闭环是：语料准备 -&gt; tokenizer 训练 -&gt; 压缩率验证 -&gt; 基座预训练 -&gt; 表示层扫描 -&gt; 官方/下游评测 -&gt; checkpoint 选择 -&gt; 复盘修正。每一环都能反向影响下一轮数据和配置，而不是单向做完就结束。</p>
+</div>
+</div>
+</div>
+<div class="badcase-grid cols-2">
+<div class="badcase-card">
+<section id="中文专门化过强" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="中文专门化过强">中文专门化过强</h3>
+<p><span>Tradeoff</span></p>
+</section>
+<div class="badcase-body">
+<p>中文压缩变好后，通用语言和跨域样例会变弱一些。这个损失是可接受的，因为当前目标是中文 BabyLM 基座，而不是全能助手。</p>
+</div>
+</div>
+<div class="badcase-card">
+<section id="只看训练-loss" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="只看训练-loss">只看训练 loss</h3>
+<p><span>Evaluation Risk</span></p>
+</section>
+<div class="badcase-body">
+<p>训练损失下降不代表下游一定更好，所以必须把 tokenizer compression、validation loss、representation probing 和中文任务评测一起看。</p>
+</div>
+</div>
+<div class="badcase-card">
+<section id="层选择不稳定" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="层选择不稳定">层选择不稳定</h3>
+<p><span>Probe Risk</span></p>
+</section>
+<div class="badcase-body">
+<p>不同任务对表示层偏好不同，不能把一个层的结果当成永远成立的结论。更稳妥的做法是保留候选层并记录任务适配理由。</p>
+</div>
+</div>
+<div class="badcase-card">
+<section id="数据偏移" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="数据偏移">数据偏移</h3>
+<p><span>Data Risk</span></p>
+</section>
+<div class="badcase-body">
+<p>如果训练分布和评测分布拉得太开，tokenizer 优势会被模型层面的偏差抵消。后续需要继续检查语料质量和分片分布。</p>
+</div>
+</div>
+</div>
 <p><a href="../projects.html" class="text-link">返回项目总览</a></p>
+</div>
+</section>
+</div>
+</div>
 </div>
 
 

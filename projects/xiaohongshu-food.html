@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="刘俊言的小红书美食 Multi-Agent 应用项目。">
+<meta name="description" content="基于多 Agent 异步流水线、缓存体系与质量闭环的小红书美食推荐项目。">
 
 <title>小红书美食内容分析引擎 – 刘俊言</title>
 <style>
@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9cfd1dd1f7f4a79f2b208a20d47a483d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-80fce76f0f0fead5ded888acc3df0889.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -56,6 +56,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -106,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    刘俊言的小红书美食 Multi-Agent 应用项目。
+    基于多 Agent 异步流水线、缓存体系与质量闭环的小红书美食推荐项目。
   </div>
 </div>
 
@@ -124,27 +127,956 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="page-shell">
-<div class="project-intro">
-<div class="detail-year">
-<p>2025.11 - 2025.12</p>
+<div class="report-layout">
+<div class="report-sidebar">
+<div class="eyebrow">
+<p>Project Report</p>
+</div>
+<section id="目录" class="level3">
+<h3 class="anchored" data-anchor-id="目录">目录</h3>
+<div class="section-nav">
+<p><a href="#summary">00 摘要</a> <a href="#tech">技术主线</a> <a href="#architecture">01 架构</a> <a href="#intent">02 Intent</a> <a href="#spider">03 Spider</a> <a href="#analyzer">04 Analyzer</a> <a href="#cache">05 Cache</a> <a href="#stability">06 稳定性</a> <a href="#cloud">07 云原生</a> <a href="#loop">08 验证闭环</a> <a href="#risk">09 风险计划</a></p>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>这页讲的不是“怎么把帖子搜出来”，而是为什么推荐系统要先把可信度、POI 归一、缓存和降级做好，才能让看似热闹的内容变成真正能用的推荐。</p>
+</div>
+</div>
+</div>
+<div class="meta-row">
+<p><span class="pill">2025.11 - 2025.12</span> <span class="pill">Multi-Agent 应用</span> <span class="pill">FastAPI + Redis + SSE</span> <span class="pill">小红书美食推荐</span></p>
+</div>
+</section>
+</div>
+<div class="report-main">
+<div class="project-hero">
+<div class="eyebrow">
+<p>Food Agent</p>
 </div>
 <section id="小红书美食内容分析引擎" class="level1">
 <h1>小红书美食内容分析引擎</h1>
-<div class="project-type">
-<p>Multi-Agent 应用 / 推荐系统 / FastAPI + Redis + SSE</p>
+<p class="lead">
+面向小红书美食内容中“高热度但低可信”的推荐噪声，我先问的是：什么样的内容值得被推荐、什么样的结果值得被保留、什么样的失败值得被回流。IntentParser、Spider、Analyzer 和 POIEnricher 只是支撑这三个判断的工程实现。
+</p>
+<div class="kpi-grid">
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Agent Pipeline</p>
 </div>
-<p>针对小红书平台网红营销内容导致的推荐失真，设计多 Agent 美食推荐引擎，过滤噪音并生成可信餐厅推荐。</p>
+<div class="kpi-value">
+<p>4</p>
+</div>
+<div class="kpi-note">
+<p>IntentParser、Spider、Analyzer、POIEnricher 分层负责意图、搜索、内容理解和 POI 补全。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Analyzer Target</p>
+</div>
+<div class="kpi-value">
+<p>89%</p>
+</div>
+<div class="kpi-note">
+<p>PPT 中端到端 LLM 分析相对传统 pipeline 的目标准确率。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>P99 Target</p>
+</div>
+<div class="kpi-value">
+<p>9s</p>
+</div>
+<div class="kpi-note">
+<p>通过流式反馈、缓存和降级把长耗时检索变成可等待体验。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Cache Goal</p>
+</div>
+<div class="kpi-value">
+<p>92%</p>
+</div>
+<div class="kpi-note">
+<p>多级缓存目标命中率，用于降低 API 成本和尾延迟。</p>
+</div>
+</div>
+</div>
 </section>
 </div>
-<section id="核心工作" class="level2 project-detail-card">
-<h2 class="anchored" data-anchor-id="核心工作">核心工作</h2>
-<ul>
-<li>设计 IntentParser、Analyzer、POIEnricher 多 Agent 异步流水线。</li>
-<li>使用四阶段渐进式搜索策略与 LLM 评论可信度评分过滤营销内容。</li>
-<li>采用 Redis L1 缓存、PostgreSQL 持久化与 SSE 流式反馈支撑长耗时搜索体验。</li>
-</ul>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">00 执行摘要</h2>
+<div class="project-section">
+<div class="ok callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>一句话定义</strong> 这个项目把“搜小红书帖子”拆成可观测的推荐决策链：先理解用户要找什么，再渐进式找候选内容，随后识别营销噪声、抽取真实 POI，最后把用户反馈和线上 trace 回流到策略、提示词和缓存。</p>
+</div>
+</div>
+</div>
+<div class="panel-grid cols-3">
+<section id="先有判断" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="先有判断">先有判断</h3>
+<p>系统不是为了搜得更多，而是先判断用户真正要找什么、什么帖子值得进入推荐池。</p>
 </section>
+<section id="先保可信" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="先保可信">先保可信</h3>
+<p>热门推荐、POI 补全和缓存可以异步更新，但最终结果必须把营销噪声、重复帖子和过期 POI 挡在外面。</p>
+</section>
+<section id="先做闭环" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="先做闭环">先做闭环</h3>
+<p>签名失败、爬取超时、LLM 失败、缓存击穿都必须能被观测、被归因、被回流。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="tech" class="level2">
+<h2 class="anchored" data-anchor-id="tech">技术主线</h2>
+<div class="project-section">
+<p class="section-lead">
+这条线的本质不是搜索链路本身，而是如何把“可信推荐”做成一个可解释、可降级、可回流的判断系统。下面三块分别说明为什么要这样设计，而不是只说明系统如何运转。
+</p>
+<div class="panel-grid cols-3">
+<section id="为什么先判意图" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么先判意图">为什么先判意图</h3>
+<p>IntentParser 用 bge-small-zh-v1.5 384d 向量 + HNSW 做意图召回，cosine 阈值 0.85；它的作用不是多找，而是先把搜索意图收窄到值得继续展开的范围。</p>
+</section>
+<section id="为什么要分阶段扩候选" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么要分阶段扩候选">为什么要分阶段扩候选</h3>
+<p>Spider 用四阶段渐进式搜索扩候选池，Analyzer 用 LLM JSON schema 判断内容可信度，POIEnricher 负责去重和地点归一；这里的重点不是“跑完四步”，而是每一步都在收紧可信边界。</p>
+</section>
+<section id="为什么要有可回流的结果" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么要有可回流的结果">为什么要有可回流的结果</h3>
+<p>FastAPI + JWT + SSE 承载长链路，Token Bucket 限流 5 QPS、burst 10；L0 LRU、L1 Redis、L2 PostgreSQL/pgvector 形成缓存与持久化层，Circuit Breaker 和 K8s/HPA 兜住高峰和故障，但这些工程手段最终都要服务于可信推荐和可回流评测。</p>
+</section>
+</div>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+环节
+</th>
+<th>
+技术选择
+</th>
+<th>
+卡点
+</th>
+<th>
+处理方式
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+意图解析
+</td>
+<td>
+向量检索 + LLM rerank
+</td>
+<td>
+长尾意图和跨城市表达
+</td>
+<td>
+Miss 才调用 rerank，并缓存短期结果
+</td>
+</tr>
+<tr>
+<td>
+内容搜索
+</td>
+<td>
+渐进式 Spider
+</td>
+<td>
+反爬、签名、候选不足
+</td>
+<td>
+分阶段扩候选，达到 15 条即停
+</td>
+</tr>
+<tr>
+<td>
+内容分析
+</td>
+<td>
+端到端 LLM + schema
+</td>
+<td>
+广告噪声、营销口吻、重复帖子
+</td>
+<td>
+confidence &lt; 0.5 直接丢弃并回流标注
+</td>
+</tr>
+<tr>
+<td>
+服务承载
+</td>
+<td>
+SSE + 缓存 + 降级
+</td>
+<td>
+长耗时和尾延迟
+</td>
+<td>
+把状态拆成可见事件流并做多级缓存
+</td>
+</tr>
+</tbody>
+</table>
+<div class="panel-grid cols-2">
+<section id="什么算推荐成立" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="什么算推荐成立">什么算推荐成立</h3>
+<p>不是返回一堆热帖就成立，而是用户意图、城市/商圈、菜系场景、真实 POI、帖子可信度和推荐理由都能对齐。只要其中一个环节没有证据，结果就应该降权、补检索或进入回流。</p>
+</section>
+<section id="哪些失败必须回流" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="哪些失败必须回流">哪些失败必须回流</h3>
+<p>403/429、候选不足、重复店名、营销软文误判、POI 地址冲突、缓存过期和 LLM JSON 解析失败都不是“偶发错误”。它们会直接改变推荐质量，因此必须进入 trace 和指标面板，而不是只写进日志。</p>
+</section>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>这个项目的工程价值在于把“内容平台的不确定性”拆成可降级的服务边界：能缓存的缓存，能提前判断的提前判断，必须实时调用的部分才交给 Agent 链路。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="architecture" class="level2">
+<h2 class="anchored" data-anchor-id="architecture">01 系统架构</h2>
+<div class="project-section">
+<div class="flow-strip">
+<div class="flow-step">
+Request<small>FastAPI/JWT</small>
+</div>
+<div class="flow-step">
+Intent<small>向量+LLM</small>
+</div>
+<div class="flow-step">
+Spider<small>渐进式搜索</small>
+</div>
+<div class="flow-step">
+Analyze<small>可信度/噪声</small>
+</div>
+<div class="flow-step">
+POI<small>地点补全</small>
+</div>
+<div class="flow-step">
+Stream<small>SSE 输出</small>
+</div>
+<div class="flow-step">
+Feedback<small>闭环回流</small>
+</div>
+</div>
+<section id="系统架构图" class="level3 diagram-panel">
+<h3 class="anchored" data-anchor-id="系统架构图">系统架构图</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+  client["用户请求"] --&gt; api["FastAPI Gateway&lt;br/&gt;JWT/Rate Limit/SSE"]
+  api --&gt; intent["IntentParser&lt;br/&gt;向量检索 + LLM rerank"]
+  intent --&gt; spider["Spider Agent&lt;br/&gt;渐进式搜索/候选池"]
+  spider --&gt; analyzer["Analyzer Agent&lt;br/&gt;可信度/营销噪声识别"]
+  analyzer --&gt; poi["POIEnricher&lt;br/&gt;店名归一/地址补全"]
+  poi --&gt; ranker["推荐聚合与排序"]
+  ranker --&gt; stream["SSE 流式响应"]
+  cache0["L0 LRU"] --&gt; intent
+  cache1["L1 Redis"] --&gt; spider
+  db["PostgreSQL + pgvector"] --&gt; poi
+  obs["OpenTelemetry&lt;br/&gt;Prometheus/Grafana/Jaeger"] -.-&gt; api
+  obs -.-&gt; spider
+  obs -.-&gt; analyzer
+  breaker["Circuit Breaker&lt;br/&gt;MiniMax/GLM/Kimi 降级"] -.-&gt; analyzer
+  stream --&gt; feedback["用户反馈/保存/纠错"]
+  feedback --&gt; db
+  feedback --&gt; cache1
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<div class="panel-grid cols-2">
+<section id="request-layer" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="request-layer">Request Layer</h3>
+<p>FastAPI 负责 API 网关，JWT 处理身份，Token Bucket 对高风险接口限流，SSE 让长链路任务以事件流形式展示进度。</p>
+</section>
+<section id="storage-layer" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="storage-layer">Storage Layer</h3>
+<p>L0 LRU、L1 Redis、L2 PostgreSQL + pgvector 组成三级缓存与持久化层，兼顾毫秒级读取和可追溯历史。</p>
+</section>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>架构主线是“延迟与一致性取舍”：推荐系统不要求每次立即拿到全量最新信息，但要求每个阶段都有状态、失败可降级、结果可解释。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="intent" class="level2">
+<h2 class="anchored" data-anchor-id="intent">02 IntentParser</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+方案
+</th>
+<th>
+延迟
+</th>
+<th>
+准确率
+</th>
+<th>
+取舍
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+纯 LLM
+</td>
+<td>
+1-2s
+</td>
+<td>
+约 95%
+</td>
+<td>
+准确但成本和延迟较高。
+</td>
+</tr>
+<tr>
+<td>
+纯规则
+</td>
+<td>
+&lt;10ms
+</td>
+<td>
+约 60%
+</td>
+<td>
+快但泛化能力不足。
+</td>
+</tr>
+<tr>
+<td>
+向量 + LLM rerank
+</td>
+<td>
+命中 &lt;100ms，未命中 1-2s
+</td>
+<td>
+约 93%
+</td>
+<td>
+作为线上默认策略，兼顾速度和泛化。
+</td>
+</tr>
+</tbody>
+</table>
+<div class="panel-grid cols-3">
+<section id="embedding" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="embedding">Embedding</h3>
+<p>使用 BAAI/bge-small-zh-v1.5 的 384 维向量表达用户意图、城市、菜系和场景。</p>
+</section>
+<section id="retrieval" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="retrieval">Retrieval</h3>
+<p>HNSW 近似检索把意图匹配复杂度降到 O(log n)，cosine 阈值设为 0.85。</p>
+</section>
+<section id="miss-handling" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="miss-handling">Miss Handling</h3>
+<p>向量未命中时才调用 LLM rerank，并把新模式写入短期缓存，TTL 约 1 小时。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="spider" class="level2">
+<h2 class="anchored" data-anchor-id="spider">03 Spider 渐进式搜索</h2>
+<div class="project-section">
+<div class="flow-strip">
+<div class="flow-step">
+Phase 1<small>本地老店精搜</small>
+</div>
+<div class="flow-step">
+Phase 2<small>菜系/场景扩展</small>
+</div>
+<div class="flow-step">
+Phase 3<small>长尾关键词</small>
+</div>
+<div class="flow-step">
+Phase 4<small>兜底热门榜</small>
+</div>
+<div class="flow-step">
+Stop<small>候选 &gt;=15</small>
+</div>
+<div class="flow-step">
+Limit<small>5 QPS</small>
+</div>
+<div class="flow-step">
+Trace<small>403/429 监控</small>
+</div>
+</div>
+<div class="panel-grid cols-2">
+<section id="反爬适配" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="反爬适配">反爬适配</h3>
+<p>PPT 中方案包含 HMAC-SHA256 签名、Playwright 设备指纹、随机等待和 IP 池。项目页保留为技术方案，同时在闭环中加入 403/429、签名失败和候选不足的合规风险门控。</p>
+</section>
+<section id="候选池策略" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="候选池策略">候选池策略</h3>
+<p>不一次性把所有关键词打满，而是按“精确、本地、扩展、长尾、兜底”逐步扩大搜索范围。候选池达到 15 条后提前停止，减少噪声和接口成本。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="analyzer" class="level2">
+<h2 class="anchored" data-anchor-id="analyzer">04 Analyzer 与 POIEnricher</h2>
+<div class="project-section">
+<div class="panel-grid cols-2">
+<section id="内容可信度分析" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="内容可信度分析">内容可信度分析</h3>
+<p>Analyzer 用端到端 LLM 判断帖子是否真实有用，过滤广告口吻、模板化夸张、无细节种草和重复营销内容，并输出可解析 JSON。</p>
+</section>
+<section id="poi-补全" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="poi-补全">POI 补全</h3>
+<p>POIEnricher 把帖子中的店名、地址、商圈和菜品信息映射到真实地点，合并重复餐厅，降低“同店多贴”导致的排序膨胀。</p>
+</section>
+</div>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+策略
+</th>
+<th>
+PPT 记录收益
+</th>
+<th>
+闭环补充
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+端到端 LLM 分析
+</td>
+<td>
+开发周期 2 周降到 2 天，准确率 62% 提升到 89%。
+</td>
+<td>
+需要离线标注集校验真实广告过滤和推荐准确性。
+</td>
+</tr>
+<tr>
+<td>
+CoT 分析字段
+</td>
+<td>
+分析质量提升 8-12%。
+</td>
+<td>
+只作为解释与调试信号，不直接等同于正确性。
+</td>
+</tr>
+<tr>
+<td>
+JSON Schema + 重试
+</td>
+<td>
+提升结构化输出稳定性。
+</td>
+<td>
+统计 schema pass rate、retry 次数和最终丢弃率。
+</td>
+</tr>
+<tr>
+<td>
+confidence &lt; 0.5 丢弃
+</td>
+<td>
+减少低质量推荐。
+</td>
+<td>
+需要监控误杀率，避免把小众但真实的好店过滤掉。
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cache" class="level2">
+<h2 class="anchored" data-anchor-id="cache">05 缓存与成本控制</h2>
+<div class="project-section">
+<div class="panel-grid cols-3">
+<section id="l0-lru" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="l0-lru">L0 LRU</h3>
+<p>进程内缓存，命中可达微秒级，适合热意图和短期重复请求。</p>
+</section>
+<section id="l1-redis" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="l1-redis">L1 Redis</h3>
+<p>跨实例共享缓存，读延迟约毫秒级，是线上主要降本层。</p>
+</section>
+<section id="l2-postgresql" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="l2-postgresql">L2 PostgreSQL</h3>
+<p>长期存储查询、候选、推荐、反馈和 pgvector 向量索引，支撑复盘与训练样本沉淀。</p>
+</section>
+</div>
+<div class="warn callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Cache-Aside 加随机 TTL 48-72 分钟用于避免缓存雪崩；但美食 POI 有时效性，热门店铺状态、营业时间和口碑漂移需要通过反馈和定时刷新补偿。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="stability" class="level2">
+<h2 class="anchored" data-anchor-id="stability">06 稳定性与降级</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+机制
+</th>
+<th>
+参数或策略
+</th>
+<th>
+保护对象
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Circuit Breaker
+</td>
+<td>
+60s window，失败率 50%，最少 10 次调用后触发。
+</td>
+<td>
+防止单个外部服务拖垮整条推荐链路。
+</td>
+</tr>
+<tr>
+<td>
+LLM 降级
+</td>
+<td>
+MiniMax -&gt; GLM-4 -&gt; Kimi -&gt; 缓存热门推荐。
+</td>
+<td>
+在模型服务故障或限流时保留可用结果。
+</td>
+</tr>
+<tr>
+<td>
+Token Bucket
+</td>
+<td>
+5 QPS，burst capacity 10。
+</td>
+<td>
+保护小红书搜索与高成本接口。
+</td>
+</tr>
+<tr>
+<td>
+Backpressure
+</td>
+<td>
+队列长度和超时控制。
+</td>
+<td>
+避免高峰期堆积导致整体雪崩。
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cloud" class="level2">
+<h2 class="anchored" data-anchor-id="cloud">07 云原生部署</h2>
+<div class="project-section">
+<div class="panel-grid cols-2">
+<section id="container" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="container">Container</h3>
+<p>多阶段 Docker 构建将镜像从约 1.2GB 压缩到约 180MB，使用 non-root 用户运行，并配置 healthcheck。</p>
+</section>
+<section id="kubernetes" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="kubernetes">Kubernetes</h3>
+<p>Pod anti-affinity 避免单节点故障，startup / liveness / readiness probes 拆分启动、存活和可接流量状态。</p>
+</section>
+</div>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+HPA 策略
+</th>
+<th>
+配置
+</th>
+<th>
+目的
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+副本数
+</td>
+<td>
+min 2, max 20
+</td>
+<td>
+保证基础可用性并支持突发流量。
+</td>
+</tr>
+<tr>
+<td>
+扩缩指标
+</td>
+<td>
+CPU 70%, memory 80%
+</td>
+<td>
+用资源指标控制横向扩缩容。
+</td>
+</tr>
+<tr>
+<td>
+稳定窗口
+</td>
+<td>
+scale-up 60s, scale-down 300s
+</td>
+<td>
+避免推荐高峰时频繁抖动。
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="loop" class="level2">
+<h2 class="anchored" data-anchor-id="loop">08 验证与闭环设计</h2>
+<div class="project-section">
+<div class="flow-strip">
+<div class="flow-step">
+Trace<small>每步事件</small>
+</div>
+<div class="flow-step">
+Label<small>离线标注</small>
+</div>
+<div class="flow-step">
+Metric<small>质量/延迟</small>
+</div>
+<div class="flow-step">
+Feedback<small>有用/无用</small>
+</div>
+<div class="flow-step">
+Badcase<small>归因分类</small>
+</div>
+<div class="flow-step">
+Patch<small>prompt/策略</small>
+</div>
+<div class="flow-step">
+Regression<small>回归看板</small>
+</div>
+</div>
+<section id="数据流水线与质量闭环" class="level3 diagram-panel">
+<h3 class="anchored" data-anchor-id="数据流水线与质量闭环">数据流水线与质量闭环</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  query["用户 Query"] --&gt; intentLog["意图解析日志"]
+  intentLog --&gt; searchLog["搜索阶段日志&lt;br/&gt;关键词/候选数/403/429"]
+  searchLog --&gt; posts["帖子候选池"]
+  posts --&gt; llmJson["Analyzer JSON&lt;br/&gt;可信度/广告噪声/理由"]
+  llmJson --&gt; poiMatch["POI 匹配与去重"]
+  poiMatch --&gt; result["推荐列表"]
+  result --&gt; userFb["用户反馈&lt;br/&gt;有用/无用/收藏/纠错"]
+  userFb --&gt; labels["离线标注集"]
+  labels --&gt; dashboard["质量看板&lt;br/&gt;precision/recall/P99/cost"]
+  dashboard --&gt; badcase["badcase 分类&lt;br/&gt;意图错/噪声漏/POI 旧"]
+  badcase --&gt; patch["Prompt/搜索策略/缓存 TTL 修订"]
+  patch --&gt; intentLog
+  patch --&gt; searchLog
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+评测维度
+</th>
+<th>
+指标
+</th>
+<th>
+回流动作
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+意图理解
+</td>
+<td>
+城市、菜系、预算、场景识别准确率。
+</td>
+<td>
+补充 intent 样本，更新向量库和 LLM rerank prompt。
+</td>
+</tr>
+<tr>
+<td>
+候选质量
+</td>
+<td>
+候选池数量、重复率、广告噪声比例、403/429 失败率。
+</td>
+<td>
+调整渐进式搜索阶段、限流参数和关键词扩展策略。
+</td>
+</tr>
+<tr>
+<td>
+分析质量
+</td>
+<td>
+餐厅抽取 precision、营销过滤 precision/recall、JSON pass rate。
+</td>
+<td>
+沉淀 analyzer badcase，更新 schema、示例和置信度阈值。
+</td>
+</tr>
+<tr>
+<td>
+POI 匹配
+</td>
+<td>
+店名归一化、地址匹配、重复合并和过期 POI 比例。
+</td>
+<td>
+更新 POI 库、别名库和时效刷新策略。
+</td>
+</tr>
+<tr>
+<td>
+线上体验
+</td>
+<td>
+P50/P99、SSE 首事件延迟、cache hit、cost/request、availability。
+</td>
+<td>
+调缓存 TTL、降级链、HPA 和服务熔断阈值。
+</td>
+</tr>
+</tbody>
+</table>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>补齐后的闭环不是只看“推荐出来了没有”，而是把每一次推荐拆成可复盘 trace：用户意图、搜索阶段、候选池、分析 JSON、POI 合并、最终排序、用户反馈和后续修正都能被记录。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="risk" class="level2">
+<h2 class="anchored" data-anchor-id="risk">09 风险与下一步</h2>
+<div class="project-section">
+<div class="badcase-grid cols-2">
+<div class="badcase-card">
+<section id="平台合规风险" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="平台合规风险">平台合规风险</h3>
+<p><span>Compliance</span></p>
+</section>
+<div class="badcase-body">
+<p>反爬适配只能作为技术原型讨论，真实部署需要遵守平台条款、控制请求频率，并优先接入合法授权数据源。</p>
+</div>
+</div>
+<div class="badcase-card">
+<section id="营销内容误判" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="营销内容误判">营销内容误判</h3>
+<p><span>Noise</span></p>
+</section>
+<div class="badcase-body">
+<p>广告与真实分享边界模糊，需要用人工标注集、用户反馈和复核队列持续校正 Analyzer，而不是只相信 LLM 解释。</p>
+</div>
+</div>
+<div class="badcase-card">
+<section id="poi-时效性" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="poi-时效性">POI 时效性</h3>
+<p><span>Freshness</span></p>
+</section>
+<div class="badcase-body">
+<p>餐厅停业、搬迁、改名会让历史推荐失效。需要引入更新时间、外部 POI 校验和用户纠错入口。</p>
+</div>
+</div>
+<div class="badcase-card">
+<section id="成本与尾延迟" class="level3 badcase-title">
+<h3 class="anchored" data-anchor-id="成本与尾延迟">成本与尾延迟</h3>
+<p><span>Latency</span></p>
+</section>
+<div class="badcase-body">
+<p>LLM、浏览器自动化和向量检索叠加后容易出现尾延迟。下一步用 trace 看板定位慢阶段，再决定缓存、降级或异步化。</p>
+</div>
+</div>
+</div>
+<section id="choice" class="level2">
+<h2 class="anchored" data-anchor-id="choice">10 技术选型与卡点</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+选择
+</th>
+<th>
+为什么这么选
+</th>
+<th>
+卡点
+</th>
+<th>
+回路
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+向量 + LLM rerank
+</td>
+<td>
+兼顾低延迟和意图泛化，比纯规则更稳。
+</td>
+<td>
+同义意图、跨城市和长尾菜系容易漏命中。
+</td>
+<td>
+失败样本回流到短期缓存和 rerank prompt。
+</td>
+</tr>
+<tr>
+<td>
+SSE + 异步 Agent
+</td>
+<td>
+长链路任务需要可见的阶段状态，而不是静默等待。
+</td>
+<td>
+事件粒度过粗会像黑盒，过细会拖慢前端。
+</td>
+<td>
+按“解析/搜索/分析/补全”四阶段拆分事件。
+</td>
+</tr>
+<tr>
+<td>
+三级缓存
+</td>
+<td>
+L0/L1/L2 兼顾热数据速度、跨实例共享和历史追溯。
+</td>
+<td>
+POI 时效性和缓存过期策略容易失衡。
+</td>
+<td>
+随机 TTL + 用户纠错 + 定时刷新一起做。
+</td>
+</tr>
+<tr>
+<td>
+K8s + HPA
+</td>
+<td>
+比单机部署更能承接突发流量和失败隔离。
+</td>
+<td>
+服务多了以后成本与观测复杂度上升。
+</td>
+<td>
+用指标、熔断和降级把复杂度压回可控范围。
+</td>
+</tr>
+</tbody>
+</table>
+<div class="warn callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>这个系统的关键不是“抓到最多帖子”，而是“抓到最可信、最能解释、最不容易误导人的帖子”。因此技术选型一直围绕成本、延迟、质量和可维护性四个目标做权衡。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="assets" class="level2">
+<h2 class="anchored" data-anchor-id="assets">11 项目资料</h2>
+<div class="project-section">
+<section id="本地-ppt-原稿" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="本地-ppt-原稿">本地 PPT 原稿</h3>
+<p><a href="../assets/projects/xhs-food-agent.pptx">XHS Food Agent 技术深度解析.pptx</a></p>
+<p>用于本地审阅的原始汇报材料。</p>
+</section>
+</div>
 <p><a href="../projects.html" class="text-link">返回项目总览</a></p>
+</section>
+</div>
+</section>
+</div>
+</div>
 </div>
 
 

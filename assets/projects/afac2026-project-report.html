@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AFAC2026 金融长文本 QA 项目报告</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #687287;
+      --line: #dfe4ee;
+      --blue: #1f5eff;
+      --green: #188464;
+      --amber: #a96500;
+      --red: #b93434;
+      --slate: #28364f;
+      --soft-blue: #eaf0ff;
+      --soft-green: #e7f6f0;
+      --soft-amber: #fff4dd;
+      --soft-red: #ffeded;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.62;
+      letter-spacing: 0;
+    }
+    html { scroll-behavior: smooth; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .toc {
+      position: fixed;
+      top: 20px;
+      left: 18px;
+      width: 228px;
+      max-height: calc(100vh - 40px);
+      overflow: auto;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: 0 10px 28px rgba(32, 45, 75, 0.10);
+      z-index: 10;
+    }
+    .toc-title {
+      margin-bottom: 8px;
+      color: var(--slate);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .toc a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.35;
+      text-decoration: none;
+    }
+    .toc a:hover {
+      background: var(--soft-blue);
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+    }
+    @media (min-width: 1420px) {
+      .page { margin-left: 270px; margin-right: 24px; }
+    }
+    @media (max-width: 1419px) {
+      .toc {
+        position: static;
+        width: auto;
+        max-width: 1180px;
+        max-height: none;
+        margin: 16px auto 0;
+      }
+    }
+    header {
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5ff 100%);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 34px 36px 30px;
+      box-shadow: 0 12px 32px rgba(32, 45, 75, 0.08);
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--blue);
+      background: var(--soft-blue);
+      border: 1px solid #d4ddff;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    h1 {
+      margin: 18px 0 8px;
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      max-width: 880px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 10px;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--slate);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    section {
+      margin-top: 26px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 28px;
+      box-shadow: 0 8px 22px rgba(32, 45, 75, 0.05);
+    }
+    h2 {
+      margin: 0 0 16px;
+      font-size: 25px;
+      line-height: 1.24;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 22px 0 10px;
+      font-size: 18px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+    p { margin: 10px 0; }
+    .muted { color: var(--muted); }
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fbfcff;
+      min-height: 112px;
+    }
+    .metric .label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .metric .value {
+      margin-top: 6px;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: 780;
+      color: var(--ink);
+    }
+    .metric .note {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .callout {
+      border-left: 4px solid var(--blue);
+      background: var(--soft-blue);
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+    .callout.green { border-left-color: var(--green); background: var(--soft-green); }
+    .callout.amber { border-left-color: var(--amber); background: var(--soft-amber); }
+    .callout.red { border-left-color: var(--red); background: var(--soft-red); }
+    .code {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: #101828;
+      color: #eef4ff;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.5;
+    }
+    .json-trace {
+      font-family: var(--mono);
+      font-size: 13px;
+      background: #101828;
+      color: #eef4ff;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.55;
+    }
+    .json-key { color: #7dd3fc; }
+    .json-string { color: #86efac; }
+    .json-number { color: #fbbf24; }
+    .json-bool { color: #c4b5fd; }
+    .json-punc { color: #94a3b8; }
+    code {
+      font-family: var(--mono);
+      background: #eef1f7;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 0.92em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 9px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f4f6fa;
+      color: #3a465b;
+      font-weight: 720;
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid transparent;
+    }
+    .tag.ok { color: var(--green); background: var(--soft-green); border-color: #b8e5d6; }
+    .tag.warn { color: var(--amber); background: var(--soft-amber); border-color: #f1d59b; }
+    .tag.bad { color: var(--red); background: var(--soft-red); border-color: #efbebe; }
+    .diagram {
+      border: 1px solid var(--line);
+      background: #fbfcff;
+      border-radius: 10px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    .diagram-img {
+      display: block;
+      width: 100%;
+      min-width: 760px;
+      height: auto;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .flow {
+      min-width: 980px;
+      display: grid;
+      grid-template-columns: 1.05fr 1.05fr 1.2fr 1.15fr 1fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .lane {
+      border: 1px solid #d6ddec;
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px;
+    }
+    .lane h4 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      color: var(--blue);
+      letter-spacing: 0;
+    }
+    .node {
+      border: 1px solid var(--line);
+      background: #f8faff;
+      border-radius: 7px;
+      padding: 9px;
+      margin: 8px 0;
+      font-size: 13px;
+    }
+    .arrow {
+      color: var(--muted);
+      text-align: center;
+      font-weight: 700;
+      margin: 4px 0;
+    }
+    .timeline {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0 14px;
+    }
+    .timeline .ver {
+      color: var(--blue);
+      font-weight: 800;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .timeline .desc {
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+    .demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .demo-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fbfcff;
+    }
+    .trace-panel {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .trace-step {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcff;
+      padding: 12px;
+      min-height: 104px;
+    }
+    .trace-step .idx {
+      display: inline-flex;
+      width: 24px;
+      height: 24px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: var(--soft-blue);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .trace-step strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+    .trace-step span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .small { font-size: 13px; }
+    .footer {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      margin-top: 28px;
+    }
+    @media (max-width: 860px) {
+      .toc {
+        position: static;
+        width: auto;
+        max-height: none;
+        margin: 12px;
+      }
+      .page { padding: 16px 12px 44px; }
+      header, section { padding: 20px; }
+      .grid.cols-4, .grid.cols-3, .grid.cols-2, .demo, .trace-panel { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: 1fr; }
+      .timeline .ver { padding-top: 16px; }
+      table { font-size: 13px; }
+    }
+    @media print {
+      body { background: #fff; }
+      .page { max-width: none; padding: 0; }
+      header, section { box-shadow: none; break-inside: avoid; }
+      .code, .diagram { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="toc" aria-label="章节导航">
+    <div class="toc-title">报告目录</div>
+    <a href="#summary">1. 执行摘要</a>
+    <a href="#data">2. 数据特征</a>
+    <a href="#architecture">3. 总体架构</a>
+    <a href="#solution">4. 解决方案分层</a>
+    <a href="#rationale">5. 架构取舍</a>
+    <a href="#flow">6. 数据流与 Trace</a>
+    <a href="#tricks">7. 关键 Trick</a>
+    <a href="#metrics">8. 指标与版本</a>
+    <a href="#demo">9. Demo</a>
+    <a href="#experiments">10. 实验与 badcase</a>
+    <a href="#engineering">11. 工程化规范</a>
+    <a href="#risk">12. 风险与计划</a>
+  </nav>
+  <main class="page">
+    <header>
+      <div class="eyebrow">AFAC2026 · 金融长文本 QA · 项目报告</div>
+      <h1>无向量约束下的金融长文本 Agent 与提交候选路线</h1>
+      <p class="subtitle">
+        本报告完整说明项目目标、数据流、架构设计、关键技术取舍、版本演进、工程化复现、指标结果与 Demo。
+        当前推荐主线为“可信历史快照 + 安全残差修正”的提交候选：以官网验证过的答案快照为基线，只接受可审计、可回放、无下行风险的答案变化。
+      </p>
+      <div class="meta">
+        <span class="pill">当前日期：2026-07-07</span>
+        <span class="pill">数据规模：A 榜 100 题，5 个金融域</span>
+        <span class="pill">核心约束：禁 embedding / 在线模型限 Qwen / 严格 token 统计</span>
+        <span class="pill">候选 SHA：7390fd5f...</span>
+      </div>
+    </header>
+
+    <section id="summary">
+      <h2>1. 执行摘要</h2>
+      <div class="grid cols-4">
+        <div class="metric">
+          <div class="label">最高已验证官网基线</div>
+          <div class="value">88/100</div>
+          <div class="note">V9 / V11 对应官网分 86.2732</div>
+        </div>
+        <div class="metric">
+          <div class="label">当前候选正确数区间</div>
+          <div class="value">88-90</div>
+          <div class="note">约束推导区间，仍需官网提交确认</div>
+        </div>
+        <div class="metric">
+          <div class="label">候选 token</div>
+          <div class="value">327,052</div>
+          <div class="note">prompt 290,900 + completion 36,152</div>
+        </div>
+        <div class="metric">
+          <div class="label">早停 token 优化</div>
+          <div class="value">11.33%</div>
+          <div class="note">deterministic early exit，无答案漂移</div>
+        </div>
+      </div>
+      <div class="callout green">
+        <strong>当前工程结论：</strong>不要把在线 live Agent 机制探索路线与提交候选路线混在一起。
+        提交候选来自“可信历史答案快照 + 残差安全修正”；live Qwen/检索推理路线适合继续做机制研究，但在银标对比上仍需通过 badcase 回归逐步吸收。
+      </div>
+    </section>
+
+    <section id="data">
+      <h2>2. 赛题与数据特征</h2>
+      <p>
+        AFAC2026 赛题四要求回答金融长文本选择题。题目覆盖五类材料：金融合同、财报、保险条款、监管法规与行业研报。
+        每类 20 题，共 100 题。题型包含单选、多选和判断类变体；答案提交为 CSV，除逐题答案外还要求 token 统计。
+      </p>
+      <table>
+        <thead>
+          <tr><th>领域</th><th>题号前缀</th><th>主要难点</th><th>适合的处理策略</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>金融合同</td><td><code>fc_a_*</code></td><td>条款条件、主体动作、期限金额、否定限制</td><td>条款六元组、关系槽位覆盖、反证保留</td></tr>
+          <tr><td>财务报告</td><td><code>fin_a_*</code></td><td>表格口径、年度/季度、单位换算、同比计算</td><td>表格行结构化、受限计算 DSL、口径校验</td></tr>
+          <tr><td>保险条款</td><td><code>ins_a_*</code></td><td>产品混淆、等待期、责任免除、情景约束</td><td>产品实体绑定、scenario + exclusion 判断</td></tr>
+          <tr><td>监管法规</td><td><code>reg_a_*</code></td><td>应当/不得/无需、例外、期限、主体对象</td><td>clause matcher、polarity、义务主体比对</td></tr>
+          <tr><td>行业研报</td><td><code>res_a_*</code></td><td>图表恢复、指标趋势、公司/行业实体绑定</td><td>图表文本恢复、数值端点绑定、文档级导航</td></tr>
+        </tbody>
+      </table>
+      <div class="callout amber">
+        <strong>关键挑战：</strong>很多错误不是模型“不会推理”，而是关键证据没有进入最终 evidence ledger，或者表格行/条款上下文被切碎。
+        因此项目的核心不是堆长上下文，而是让证据短、准、可追踪。
+      </div>
+      <h3>2.1 数据文件形态</h3>
+      <p>
+        数据侧可以理解为三类文件：题目 JSON、原始金融文档、提交/评估 CSV。题目 JSON 给出题干、选项、答案格式和候选文档 ID；
+        原始文档提供长文本证据；提交 CSV 不只包含答案，还必须逐题统计 prompt、completion 和 total token。
+      </p>
+      <div class="code">public_dataset_upload/
+  raw/
+    financial_contracts/*.pdf
+    financial_reports/*.pdf
+    insurance/*.pdf
+    regulatory/*.pdf
+    research/*.pdf
+  questions/group_a/
+    financial_contracts_questions.json
+    financial_reports_questions.json
+    insurance_questions.json
+    regulatory_questions.json
+    research_questions.json
+
+outputs/
+  answer.csv
+  answer_results.jsonl
+  evidence.json
+  token_usage.json
+  run_manifest.json
+  trace.json</div>
+      <h3>2.2 题目 JSON 示例</h3>
+      <div class="json-trace"><span class="json-punc">{</span>
+  <span class="json-key">"qid"</span><span class="json-punc">:</span> <span class="json-string">"reg_a_001"</span><span class="json-punc">,</span>
+  <span class="json-key">"domain"</span><span class="json-punc">:</span> <span class="json-string">"regulatory"</span><span class="json-punc">,</span>
+  <span class="json-key">"question"</span><span class="json-punc">:</span> <span class="json-string">"关于金融机构客户受益所有人识别管理办法的实施要求，下列说法正确的有？"</span><span class="json-punc">,</span>
+  <span class="json-key">"options"</span><span class="json-punc">:</span> <span class="json-punc">{</span>
+    <span class="json-key">"A"</span><span class="json-punc">:</span> <span class="json-string">"发现重大差异的，应在 30 个工作日内提交差异报告"</span><span class="json-punc">,</span>
+    <span class="json-key">"B"</span><span class="json-punc">:</span> <span class="json-string">"无法开展尽职调查时，可先建立业务关系但需提交可疑交易报告"</span><span class="json-punc">,</span>
+    <span class="json-key">"C"</span><span class="json-punc">:</span> <span class="json-string">"存量较高风险以上客户识别核实应在施行日起 6 个月内完成"</span><span class="json-punc">,</span>
+    <span class="json-key">"D"</span><span class="json-punc">:</span> <span class="json-string">"客户尽调办法施行日期早于受益所有人识别办法"</span>
+  <span class="json-punc">},</span>
+  <span class="json-key">"answer_format"</span><span class="json-punc">:</span> <span class="json-string">"multi"</span><span class="json-punc">,</span>
+  <span class="json-key">"doc_ids"</span><span class="json-punc">:</span> <span class="json-punc">[</span><span class="json-string">"中国人民银行令〔2025〕第12号"</span><span class="json-punc">,</span> <span class="json-string">"三部门令〔2025〕第11号"</span><span class="json-punc">]</span>
+<span class="json-punc">}</span></div>
+      <h3>2.3 提交 CSV 示例</h3>
+      <table>
+        <thead>
+          <tr><th>qid</th><th>answer</th><th>prompt_tokens</th><th>completion_tokens</th><th>total_tokens</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>summary</code></td><td></td><td>290900</td><td>36152</td><td>327052</td></tr>
+          <tr><td><code>fc_a_001</code></td><td>ABD</td><td>3080</td><td>192</td><td>3272</td></tr>
+          <tr><td><code>fc_a_002</code></td><td>ABD</td><td>2344</td><td>203</td><td>2547</td></tr>
+          <tr><td><code>fc_a_003</code></td><td>A</td><td>1347</td><td>107</td><td>1454</td></tr>
+        </tbody>
+      </table>
+      <h3>2.4 文档解析后的中间文件示例</h3>
+      <p>
+        原始材料不直接塞给模型，而是先转成可检索、可回溯、可压缩的中间层。每个 chunk 保留文档、页码、章节、表格/条款类型和文本摘要；
+        表格类材料额外落成行级结构，便于后续做年度、指标、单位绑定。
+      </p>
+      <div class="json-trace"><span class="json-punc">{</span>
+  <span class="json-key">"doc_id"</span><span class="json-punc">:</span> <span class="json-string">"financial_reports/annual_report_001.pdf"</span><span class="json-punc">,</span>
+  <span class="json-key">"chunk_id"</span><span class="json-punc">:</span> <span class="json-string">"fin001_p42_tbl03_r05"</span><span class="json-punc">,</span>
+  <span class="json-key">"page"</span><span class="json-punc">:</span> <span class="json-number">42</span><span class="json-punc">,</span>
+  <span class="json-key">"section"</span><span class="json-punc">:</span> <span class="json-string">"主要会计数据和财务指标"</span><span class="json-punc">,</span>
+  <span class="json-key">"block_type"</span><span class="json-punc">:</span> <span class="json-string">"table_row"</span><span class="json-punc">,</span>
+  <span class="json-key">"cells"</span><span class="json-punc">:</span> <span class="json-punc">{</span>
+    <span class="json-key">"metric"</span><span class="json-punc">:</span> <span class="json-string">"营业收入"</span><span class="json-punc">,</span>
+    <span class="json-key">"2025"</span><span class="json-punc">:</span> <span class="json-string">"821.00 亿元"</span><span class="json-punc">,</span>
+    <span class="json-key">"2024"</span><span class="json-punc">:</span> <span class="json-string">"642.00 亿元"</span>
+  <span class="json-punc">},</span>
+  <span class="json-key">"anchor_text"</span><span class="json-punc">:</span> <span class="json-string">"营业收入 | 2025 | 821.00亿元；营业收入 | 2024 | 642.00亿元"</span>
+<span class="json-punc">}</span></div>
+    </section>
+
+    <section id="architecture">
+      <h2>3. 总体架构</h2>
+      <p>
+        项目形成了两条互补路线：一条是 live Agent 机制探索路线，负责检索、证据选择和题型分流实验；
+        另一条是提交候选路线，负责基于可信官网历史快照进行残差修正与提交复现。
+      </p>
+      <div class="diagram">
+        <img class="diagram-img" src="assets/afac_architecture.svg" alt="AFAC2026 金融长文本 QA 系统架构图" />
+      </div>
+      <h3>核心 Agent 链路</h3>
+      <div class="code">question
+  -> profiler 判断题型
+  -> plan_compiler 生成执行计划
+  -> rewrite_query 按题型和选项生成短 query
+  -> search_bm25 从 KB chunks 检索候选
+  -> rerank_evidence / qwen_filter_evidence 选择证据
+  -> read_chunk 扩展局部上下文
+  -> evidence_ledger 证据片段 atom 化
+  -> compare_documents / calculate / analyze_clauses
+  -> judge_option 支持 / 反证 / 未发现
+  -> aggregate_answer 单选/多选聚合
+  -> validate_answer 格式、引用、token、trace 校验</div>
+    </section>
+
+    <section id="solution">
+      <h2>4. 解决方案分层设计</h2>
+      <p>
+        方案按“可验证子模块”拆解，而不是把所有任务交给一个黑盒 Agent。每个子模块都有明确输入、输出和回归信号：
+        解析层保证材料结构可用，检索规划层控制召回范围，证据工程层保证证据可追踪，推理工具层只处理适合它的问题，
+        聚合层负责最终答案风险控制，评估层把错误归因回具体模块。
+      </p>
+      <div class="diagram">
+        <img class="diagram-img" src="assets/afac_modules.svg" alt="AFAC2026 解决方案子模块分解图" />
+      </div>
+      <div class="grid cols-3">
+        <div class="demo-card">
+          <h3>文档处理层</h3>
+          <p>负责把 PDF/HTML/TXT 转成稳定的结构化语料。核心产物不是纯文本，而是带页码、章节、表格口径、条款号和文档实体的证据块。</p>
+        </div>
+        <div class="demo-card">
+          <h3>检索规划层</h3>
+          <p>先判断题型，再生成短 query 和 must-have 关系槽位。这样可以避免全题统一检索造成候选过宽、上下文过长。</p>
+        </div>
+        <div class="demo-card">
+          <h3>证据工程层</h3>
+          <p>将候选证据整理成支持、反证、未发现三类片段 atom，并记录每个选项缺失的主体、动作、条件、期限或数值端点。</p>
+        </div>
+        <div class="demo-card">
+          <h3>推理工具层</h3>
+          <p>数值比较、条款匹配、保险责任校验优先走确定性函数；Qwen 只处理压缩后的模糊语义判断，降低 token 和漂移。</p>
+        </div>
+        <div class="demo-card">
+          <h3>答案聚合层</h3>
+          <p>单选题按完整性、冲突度、目标文档匹配排序；多选题保留未选原因，避免只看 supported 导致 ABCD 泛化。</p>
+        </div>
+        <div class="demo-card">
+          <h3>评估回归层</h3>
+          <p>银标、badcase、trace 和 token A/B 分开记录。一次修改必须能说明它修的是检索、取证、工具、judge 还是聚合。</p>
+        </div>
+      </div>
+      <h3>4.1 模块级技术设计</h3>
+      <table>
+        <thead>
+          <tr><th>子模块</th><th>输入</th><th>核心技术</th><th>输出</th><th>失败控制 / 验收</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>文档处理层</td>
+            <td>原始 PDF、HTML、TXT、题目指定文档 ID</td>
+            <td>确定性解析、页章节锚点、表格行抽取、条款号识别、文档实体归一</td>
+            <td><code>chunks</code>、<code>table_rows</code>、<code>doc_map</code>、页码锚点</td>
+            <td>单位/年份/章节不丢失；表格行可回到原页；同名文档不串文档</td>
+          </tr>
+          <tr>
+            <td>检索规划层</td>
+            <td>题干、选项、答案格式、候选文档范围</td>
+            <td>profiler 题型分流、plan compiler、option-aware query rewrite、must-have slot 抽取</td>
+            <td><code>QueryPlan</code>、短 query、目标文档范围、补检索触发条件</td>
+            <td>query 必须短；不得使用 embedding；不把全题长文本直接送入模型</td>
+          </tr>
+          <tr>
+            <td>证据工程层</td>
+            <td><code>QueryPlan</code>、BM25 候选、邻近上下文</td>
+            <td>BM25F、<code>read_chunk</code> 扩展、关系槽位覆盖检测、evidence ledger 片段 atom 化</td>
+            <td><code>EvidenceAtom[]</code>，含 support / contradict / not_found 与缺失槽位</td>
+            <td>每个选项至少覆盖核心主体和动作；not_found 只做一次定向补检索</td>
+          </tr>
+          <tr>
+            <td>推理工具层</td>
+            <td>证据片段 atom、表格行、条款六元组、题型 profile</td>
+            <td><code>compare_numeric_rows</code>、<code>match_clause_condition</code>、<code>insurance_liability_check</code>、Qwen 压缩判断</td>
+            <td><code>ToolFact[]</code>、逐选项 verdict、引用证据</td>
+            <td>能确定的先由函数处理；Qwen 只看压缩证据和函数结论，避免长上下文漂移</td>
+          </tr>
+          <tr>
+            <td>答案聚合层</td>
+            <td>逐选项 verdict、反证、缺失原因、答案格式</td>
+            <td>单选冲突排序、多选保守聚合、限制词 guard、答案格式校验</td>
+            <td><code>AnswerResult</code>、CSV 行、token 统计、最终引用</td>
+            <td>单选多 supported 时按完整性/冲突度排序；多选保留未选理由，防止过选</td>
+          </tr>
+          <tr>
+            <td>评估回归层</td>
+            <td>答案、trace、银标、badcase、运行 manifest</td>
+            <td>exact match、token A/B、badcase 分层归因、SHA 复现、回归门禁</td>
+            <td>评估报告、差异表、可回放 trace、下一轮修复清单</td>
+            <td>不硬融银标；旧正确题不得无解释回退；token 增幅需要被收益覆盖</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>4.2 模块之间的数据契约</h3>
+      <p>
+        分层的关键是中间态必须稳定，否则 trace 无法 review，badcase 也无法归因。项目中每道题至少保留以下六类结构：
+      </p>
+      <div class="json-trace"><span class="json-punc">{</span>
+  <span class="json-key">"QuestionProfile"</span><span class="json-punc">:</span> <span class="json-punc">{</span>
+    <span class="json-key">"qid"</span><span class="json-punc">:</span> <span class="json-string">"reg_a_001"</span><span class="json-punc">,</span>
+    <span class="json-key">"domain"</span><span class="json-punc">:</span> <span class="json-string">"regulatory"</span><span class="json-punc">,</span>
+    <span class="json-key">"answer_format"</span><span class="json-punc">:</span> <span class="json-string">"multi"</span><span class="json-punc">,</span>
+    <span class="json-key">"question_type"</span><span class="json-punc">:</span> <span class="json-string">"clause_matching"</span>
+  <span class="json-punc">},</span>
+  <span class="json-key">"QueryPlan"</span><span class="json-punc">:</span> <span class="json-punc">[</span><span class="json-string">"受益所有人 识别 存量 高风险 6个月"</span><span class="json-punc">],</span>
+  <span class="json-key">"EvidenceAtom"</span><span class="json-punc">:</span> <span class="json-punc">{</span>
+    <span class="json-key">"subject"</span><span class="json-punc">:</span> <span class="json-string">"金融机构"</span><span class="json-punc">,</span>
+    <span class="json-key">"action"</span><span class="json-punc">:</span> <span class="json-string">"完成识别核实"</span><span class="json-punc">,</span>
+    <span class="json-key">"condition"</span><span class="json-punc">:</span> <span class="json-string">"存量较高风险以上非自然人客户"</span><span class="json-punc">,</span>
+    <span class="json-key">"deadline"</span><span class="json-punc">:</span> <span class="json-string">"施行之日起6个月内"</span><span class="json-punc">,</span>
+    <span class="json-key">"polarity"</span><span class="json-punc">:</span> <span class="json-string">"obligation"</span>
+  <span class="json-punc">},</span>
+  <span class="json-key">"ToolFact"</span><span class="json-punc">:</span> <span class="json-string">"选项 C 的主体、条件、期限与证据一致"</span><span class="json-punc">,</span>
+  <span class="json-key">"OptionJudgement"</span><span class="json-punc">:</span> <span class="json-punc">{</span><span class="json-key">"C"</span><span class="json-punc">:</span> <span class="json-string">"supported"</span><span class="json-punc">},</span>
+  <span class="json-key">"AnswerResult"</span><span class="json-punc">:</span> <span class="json-punc">{</span><span class="json-key">"answer"</span><span class="json-punc">:</span> <span class="json-string">"ACD"</span><span class="json-punc">,</span> <span class="json-key">"validated"</span><span class="json-punc">:</span> <span class="json-bool">true</span><span class="json-punc">}</span>
+<span class="json-punc">}</span></div>
+      <h3>4.3 按题型分流的执行分支</h3>
+      <table>
+        <thead>
+          <tr><th>题型</th><th>优先工具链</th><th>模型介入点</th><th>主要防错点</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>财报表格比较题</td><td>表格行抽取 -> 指标/年份/单位绑定 -> 数值比较</td><td>只解释计算结论与选项语义是否一致</td><td>亿元/万元、同比/环比、母公司/合并口径</td></tr>
+          <tr><td>监管条款题</td><td>条款召回 -> 六元组抽取 -> polarity 比对</td><td>处理“除外、仅、无需”等模糊边界</td><td>主体、动作、对象、期限、例外不能缺槽</td></tr>
+          <tr><td>保险情景题</td><td>产品绑定 -> scenario 解析 -> exclusion 校验</td><td>判断情景是否命中责任或免责条件</td><td>等待期、意外/非意外、合同生效日、责任免除</td></tr>
+          <tr><td>金融合同题</td><td>条款定位 -> 条件链还原 -> 反证收集</td><td>合并跨条款条件并判断选项是否过度概括</td><td>“应当/可以/不得”、金额阈值、期限触发条件</td></tr>
+          <tr><td>行业研报题</td><td>章节导航 -> 图表文本恢复 -> 指标端点绑定</td><td>判断趋势描述与图表/段落是否一致</td><td>公司实体、行业口径、时间区间、预测/历史值区分</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="rationale">
+      <h2>5. 为什么选这个架构</h2>
+      <div class="grid cols-2">
+        <div>
+          <h3>5.1 赛题约束决定不能走通用向量 RAG</h3>
+          <p>
+            比赛明确禁止 embedding，且在线模型限制为 Qwen 系列。传统 dense retrieval、向量数据库、非 Qwen reranker 或微调路线都不适合作为主线。
+            因此检索层选择 BM25F、结构导航、规则化表格/条款抽取，尽量把召回和证据压缩放在确定性系统里完成。
+          </p>
+        </div>
+        <div>
+          <h3>5.2 长上下文不是收益单调的</h3>
+          <p>
+            V2 文档级高召回让正确题数增加，但 token 暴涨导致综合分下降；后续 30K 深证据实验也产生大量答案反转。
+            这说明“更多上下文”会引入干扰，应该采用渐进式披露：先短证据判断，只有槽位缺失时再补检索。
+          </p>
+        </div>
+        <div>
+          <h3>5.3 多选题需要证据隔离与聚合策略</h3>
+          <p>
+            多选不是逐项支持就结束，还要处理反证、未发现、完整性和选项间冲突。项目把证据从句子升级为片段 atom，
+            并在聚合层按题型控制 over-select / under-select 风险。
+          </p>
+        </div>
+        <div>
+          <h3>5.4 官网反馈可转化为约束</h3>
+          <p>
+            单次提交只返回总分，但多版本完整答案快照可以形成 0-1 整数约束。当前提交主线正是利用可信历史提交推导“旧答案必错、新答案无下行”的残差候选。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="flow">
+      <h2>6. 数据流与产物流</h2>
+      <div class="diagram">
+        <img class="diagram-img" src="assets/afac_dataflow.svg" alt="AFAC2026 端到端数据流和 trace 采集点" />
+      </div>
+      <h3>6.1 live Agent 数据流</h3>
+      <ol>
+        <li>原始文档解析为文本块、表格行、页章节索引和元数据。</li>
+        <li>题目进入 profiler，按财报表格、监管条款、保险情景、研报指标等分流。</li>
+        <li>按选项生成 precision query，BM25 检索候选证据。</li>
+        <li>证据回填到 relation slots，例如主体、动作、对象、条件、期限、例外、数值端点。</li>
+        <li>确定性函数先处理可计算部分；Qwen 只接收压缩后的证据和中间结论。</li>
+        <li>答案聚合器生成最终选项，并记录 trace、token、证据片段。</li>
+      </ol>
+      <h3>6.2 提交候选数据流</h3>
+      <div class="code">leaderboard_answer_snapshot.csv
+  -> 取已验证历史列作为 baseline
+  -> safe_gain_review_config.json
+  -> residual_candidate_builder
+  -> submission_exporter
+  -> answer.csv / answer_results.jsonl / evidence.json / token_usage.json
+  -> SHA-256 与正式产物校验</div>
+      <div class="callout green">
+        当前候选工程化 wrapper 已验证输出正式 CSV SHA：
+        <code>7390fd5f15555f2ac519305016ae61950203f8293e8c01ffca3d07622386ac08</code>。
+      </div>
+      <h3>6.3 Trace 轨迹展示</h3>
+      <p>
+        trace 不只记录最终答案，而是把每道题从题型识别到检索、取证、工具计算、选项判断和聚合的中间状态全部落盘。
+        人工 review 时优先看“证据是否覆盖关系槽位”和“候选答案为什么被选/不选”，而不是只看模型最终解释。
+      </p>
+      <div class="trace-panel">
+        <div class="trace-step">
+          <span class="idx">1</span>
+          <strong>profiler</strong>
+          <span>识别为财报表格、监管条款、保险情景或研报指标题，决定后续工具链。</span>
+        </div>
+        <div class="trace-step">
+          <span class="idx">2</span>
+          <strong>retrieval</strong>
+          <span>记录 query、top chunks、doc scope、补检索触发条件和召回来源。</span>
+        </div>
+        <div class="trace-step">
+          <span class="idx">3</span>
+          <strong>evidence ledger</strong>
+          <span>把证据整理成片段 atom，保留支持、反证、未发现和缺失槽位。</span>
+        </div>
+        <div class="trace-step">
+          <span class="idx">4</span>
+          <strong>tool results</strong>
+          <span>保存数值比较、条款六元组、保险责任校验等确定性结论。</span>
+        </div>
+        <div class="trace-step">
+          <span class="idx">5</span>
+          <strong>judge_option</strong>
+          <span>逐选项输出 supported / contradicted / not_found 及引用证据。</span>
+        </div>
+        <div class="trace-step">
+          <span class="idx">6</span>
+          <strong>aggregate</strong>
+          <span>单选按完整性和冲突度排序，多选保留未选原因，避免泛化过选。</span>
+        </div>
+        <div class="trace-step">
+          <span class="idx">7</span>
+          <strong>validation</strong>
+          <span>校验答案格式、token 汇总、引用完整性和 qid 覆盖。</span>
+        </div>
+        <div class="trace-step">
+          <span class="idx">8</span>
+          <strong>badcase</strong>
+          <span>将错误归因到检索、取证、工具、judge 或聚合层，形成回归集。</span>
+        </div>
+      </div>
+      <div class="json-trace"><span class="json-punc">{</span>
+  <span class="json-key">"qid"</span><span class="json-punc">:</span> <span class="json-string">"reg_a_004"</span><span class="json-punc">,</span>
+  <span class="json-key">"profile"</span><span class="json-punc">:</span> <span class="json-punc">{</span><span class="json-key">"domain"</span><span class="json-punc">:</span> <span class="json-string">"regulatory"</span><span class="json-punc">,</span> <span class="json-key">"type"</span><span class="json-punc">:</span> <span class="json-string">"clause_match"</span><span class="json-punc">},</span>
+  <span class="json-key">"queries"</span><span class="json-punc">:</span> <span class="json-punc">[</span><span class="json-string">"受益所有人 识别 高风险 非自然人客户 六个月"</span><span class="json-punc">],</span>
+  <span class="json-key">"retrieved_chunks"</span><span class="json-punc">:</span> <span class="json-punc">[</span><span class="json-punc">{</span><span class="json-key">"doc_id"</span><span class="json-punc">:</span> <span class="json-string">"reg_doc"</span><span class="json-punc">,</span> <span class="json-key">"chunk_id"</span><span class="json-punc">:</span> <span class="json-string">"p12_c03"</span><span class="json-punc">,</span> <span class="json-key">"score"</span><span class="json-punc">:</span> <span class="json-number">18.7</span><span class="json-punc">}],</span>
+  <span class="json-key">"evidence_atoms"</span><span class="json-punc">:</span> <span class="json-punc">[</span>
+    <span class="json-punc">{</span><span class="json-key">"subject"</span><span class="json-punc">:</span> <span class="json-string">"金融机构"</span><span class="json-punc">,</span> <span class="json-key">"action"</span><span class="json-punc">:</span> <span class="json-string">"完成受益所有人识别"</span><span class="json-punc">,</span> <span class="json-key">"deadline"</span><span class="json-punc">:</span> <span class="json-string">"施行之日起6个月"</span><span class="json-punc">}</span>
+  <span class="json-punc">],</span>
+  <span class="json-key">"option_judgements"</span><span class="json-punc">:</span> <span class="json-punc">{</span>
+    <span class="json-key">"A"</span><span class="json-punc">:</span> <span class="json-string">"supported"</span><span class="json-punc">,</span>
+    <span class="json-key">"B"</span><span class="json-punc">:</span> <span class="json-string">"supported"</span><span class="json-punc">,</span>
+    <span class="json-key">"C"</span><span class="json-punc">:</span> <span class="json-string">"supported"</span><span class="json-punc">,</span>
+    <span class="json-key">"D"</span><span class="json-punc">:</span> <span class="json-string">"contradicted"</span>
+  <span class="json-punc">},</span>
+  <span class="json-key">"answer"</span><span class="json-punc">:</span> <span class="json-string">"ABC"</span><span class="json-punc">,</span>
+  <span class="json-key">"validation"</span><span class="json-punc">:</span> <span class="json-punc">{</span><span class="json-key">"format"</span><span class="json-punc">:</span> <span class="json-string">"ok"</span><span class="json-punc">,</span> <span class="json-key">"citations"</span><span class="json-punc">:</span> <span class="json-string">"ok"</span><span class="json-punc">,</span> <span class="json-key">"token_usage"</span><span class="json-punc">:</span> <span class="json-string">"ok"</span><span class="json-punc">}</span>
+<span class="json-punc">}</span></div>
+    </section>
+
+    <section id="tricks">
+      <h2>7. 关键 Trick 与工程经验</h2>
+      <table>
+        <thead>
+          <tr><th>Trick</th><th>解决的问题</th><th>效果/注意点</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>题型分流</td>
+            <td>所有题走同一 judge 会导致监管、保险、表格题混淆</td>
+            <td>财报走 table/numeric extractor；监管走 clause matcher；保险走 product + scenario + exclusion</td>
+          </tr>
+          <tr>
+            <td>关系级 evidence coverage</td>
+            <td>关键词覆盖不等于关系覆盖</td>
+            <td>按 subject/action/object/condition/deadline/exception 检查槽位，缺槽才定向补检索</td>
+          </tr>
+          <tr>
+            <td>表格结构化抽取</td>
+            <td>财报表格行被切碎，年度/单位/口径丢失</td>
+            <td>抽出 metric/year/value/unit，并用受限计算函数做比较</td>
+          </tr>
+          <tr>
+            <td>deterministic early exit</td>
+            <td>judge_option token 占比高，且很多题已有确定性结论</td>
+            <td>全量 A100 节省 104,101 token，降幅 11.33%，答案无漂移</td>
+          </tr>
+          <tr>
+            <td>答案聚合 guard</td>
+            <td>单选多个 supported、多选过选/漏选</td>
+            <td>按完整性、冲突度、目标文档匹配度排序；保留 contradicted/not_found 原因</td>
+          </tr>
+          <tr>
+            <td>Leaderboard constraints</td>
+            <td>没有 ground truth，官网只给总分</td>
+            <td>把多次可信提交转化为硬约束，排除不可能答案；必须防止把语义真值越层当隐藏标签</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="metrics">
+      <h2>8. 版本演进与指标</h2>
+      <table>
+        <thead>
+          <tr><th>版本</th><th>核心变化</th><th>Token</th><th>正确题数</th><th>官网分</th><th>结论</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>V1</td><td>财报指标行、受限计算、答案级门禁</td><td>1,030,141</td><td>62</td><td>58.1679</td><td>结构化财务事实有效</td></tr>
+          <tr><td>V2</td><td>文档级高召回、反证审计</td><td>2,292,333</td><td>67</td><td>57.7848</td><td>召回提升但 token 失控</td></tr>
+          <tr><td>V3</td><td>原子谓词、真实值查询、保守融合</td><td>377,650</td><td>未确认</td><td>66.2592</td><td>证据密度明显改善</td></tr>
+          <tr><td>V4</td><td>确定性 PDF 版面与表格增量索引</td><td>312,541</td><td>70</td><td>68.6873</td><td>表格结构恢复带来收益</td></tr>
+          <tr><td>V5</td><td>结构导航、文档绑定、逐项真值组装</td><td>315,727</td><td>82</td><td>80.4466</td><td>从 V4 净增 12 题</td></tr>
+          <tr><td>V6</td><td>证据契约、事实账本、口径门禁</td><td>326,076</td><td>85</td><td>83.33</td><td>充分性优先于扩大召回</td></tr>
+          <tr><td>V7</td><td>题干范围门禁、法规字面规则复核</td><td>327,052</td><td>86</td><td>84.3124</td><td>范围门禁需限制触发</td></tr>
+          <tr><td>V8</td><td>显式蕴含门禁</td><td>328,445</td><td>85</td><td>83.3249</td><td><span class="tag bad">负向</span></td></tr>
+          <tr><td>V9</td><td>官网整数约束、六题残差候选</td><td>327,052</td><td>88</td><td>86.2732</td><td><span class="tag ok">主基线</span></td></tr>
+          <tr><td>V10</td><td>二态分差反演</td><td>327,052</td><td>87</td><td>85.2928</td><td><span class="tag bad">证伪</span></td></tr>
+          <tr><td>V11</td><td>三态约束诊断</td><td>327,052</td><td>88</td><td>86.2732</td><td>诊断版本</td></tr>
+          <tr><td>V12</td><td>条件标签覆盖</td><td>327,052</td><td>85</td><td>83.3320</td><td><span class="tag bad">证伪</span></td></tr>
+          <tr><td>Candidate</td><td>可信快照 + 两处无下行修正</td><td>327,052</td><td>88-90</td><td>待提交</td><td><span class="tag ok">当前候选</span></td></tr>
+        </tbody>
+      </table>
+      <div class="grid cols-3">
+        <div class="metric">
+          <div class="label">V1 -> V9 正确率提升</div>
+          <div class="value">+26</div>
+          <div class="note">62/100 到 88/100</div>
+        </div>
+        <div class="metric">
+          <div class="label">V1 -> V9 token 降幅</div>
+          <div class="value">68.3%</div>
+          <div class="note">1,030,141 到 327,052</div>
+        </div>
+        <div class="metric">
+          <div class="label">V4 -> V5 净增</div>
+          <div class="value">+12</div>
+          <div class="note">token 仅增加约 1.0%</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo">
+      <h2>9. Demo：两题残差修正</h2>
+      <p>
+        当前候选不重新跑 100 题推理，而是针对可信历史约束证明的两道残差题修改答案。
+        这两个旧答案在 V4-V12 可信提交约束下均不可能命中；新答案只可能是增益或双错，因此不会低于 V9。
+      </p>
+      <div class="demo">
+        <div class="demo-card">
+          <h3><code>reg_a_004</code></h3>
+          <p><strong>V9：</strong><code>AC</code></p>
+          <p><strong>候选：</strong><code>ABC</code></p>
+          <p class="muted">约束结论：旧答案必错；新答案为增益或双错。</p>
+        </div>
+        <div class="demo-card">
+          <h3><code>res_a_011</code></h3>
+          <p><strong>V9：</strong><code>ABC</code></p>
+          <p><strong>候选：</strong><code>ABCD</code></p>
+          <p class="muted">约束结论：旧答案必错；新答案为增益或双错。</p>
+        </div>
+      </div>
+      <h3>复现命令</h3>
+      <div class="code">python scripts/run_candidate_engineered.py \
+  --run-name 20260707_submission_candidate_rebuild</div>
+      <h3>验收输出</h3>
+      <table>
+        <tbody>
+          <tr><th>changed_count</th><td>2</td></tr>
+          <tr><th>token_usage</th><td>prompt 290,900 / completion 36,152 / total 327,052</td></tr>
+          <tr><th>answer.csv SHA-256</th><td><code>7390fd5f15555f2ac519305016ae61950203f8293e8c01ffca3d07622386ac08</code></td></tr>
+          <tr><th>CSV 行值校验</th><td>与候选镜像文件 101 行字段值一致</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="experiments">
+      <h2>10. live Agent 实验现状与 badcase</h2>
+      <p>
+        live Agent 路线已经能跑通全量 100 题、保存 trace，并支持题型分流、证据账本、确定性函数和 token A/B。
+        但对当前银标的 full A100 对比显示，某些机制版本仍只有 57/100 exact match，说明它目前更适合作为研发验证平台，而不是提交主线。
+      </p>
+      <table>
+        <thead>
+          <tr><th>实验</th><th>完成度</th><th>结果</th><th>主要问题</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>mechanism v14 full A100</td>
+            <td>100/100</td>
+            <td>57/100 exact match vs silver</td>
+            <td>监管条款过选、财报表格漏选、保险情景混淆、研报实体绑定不足</td>
+          </tr>
+          <tr>
+            <td>deterministic early exit full A100</td>
+            <td>100/100</td>
+            <td>无答案漂移，节省 104,101 token</td>
+            <td>主要节省 judge_option，剩余 token 需针对保险/多跳题局部优化</td>
+          </tr>
+          <tr>
+            <td>silver GT</td>
+            <td>100 行</td>
+            <td>用户报告约 88-90 题正确</td>
+            <td>银标不是最终人工 gold，不能把其错误直接反向硬融进 agent</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout amber">
+        <strong>下一步建议：</strong>以当前候选作为提交 baseline；live Agent 侧继续做局部机制验证。
+        每次机制变更先跑固定 regression 子集，至少修复 2 道且旧正确题不回归，再跑 30/100 题全量。
+      </div>
+    </section>
+
+    <section id="engineering">
+      <h2>11. 工程化规范</h2>
+      <div class="grid cols-2">
+        <div>
+          <h3>产物规范</h3>
+          <ul>
+            <li><code>answer.csv</code>：正式提交文件，含 summary 行与逐题 token。</li>
+            <li><code>answer_results.jsonl</code>：逐题答案、证据、token、metadata。</li>
+            <li><code>evidence.json</code>：便于人工 review 的证据展开。</li>
+            <li><code>token_usage.json</code>：prompt/completion/total 汇总。</li>
+            <li><code>run_manifest.json</code>：路径、命令、SHA、版本、验收结论。</li>
+            <li><code>trace.json</code>：完整链路轨迹，用于 badcase 归因。</li>
+          </ul>
+        </div>
+        <div>
+          <h3>验收门槛</h3>
+          <ul>
+            <li>100 题完整覆盖，不能有 unknown/missing qid。</li>
+            <li>答案格式符合单选/多选/判断约束。</li>
+            <li>token 总数与逐题相加一致。</li>
+            <li>候选输出 SHA 必须可复现。</li>
+            <li>候选答案变化必须有 review config 或 trace 证据。</li>
+            <li>不把 silver/模型共识直接当作 hidden ground truth。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="risk">
+      <h2>12. 风险与后续计划</h2>
+      <table>
+        <thead>
+          <tr><th>风险</th><th>表现</th><th>控制策略</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>过度硬融银标</td><td>agent 追候选答案而不是追证据</td><td>银标只做回归对比；修改必须落到检索/证据/聚合机制</td></tr>
+          <tr><td>证据漂移</td><td>候选证据换文档或换口径后答案仍被支持</td><td>实体绑定、doc scope、关系槽位覆盖、引用校验</td></tr>
+          <tr><td>多选过选</td><td>supported 过宽导致 ABCD 泛化</td><td>反证保留、限制词 guard、单选/多选分聚合</td></tr>
+          <tr><td>表格口径错误</td><td>季度/全年、母公司/合并、单位混淆</td><td>bind_metric_year_value + validate_unit_and_scale</td></tr>
+          <tr><td>token 成本反弹</td><td>补检索和二次 judge 全题触发</td><td>渐进式披露，只对缺槽 not_found 定向补检索</td></tr>
+        </tbody>
+      </table>
+      <h3>短期里程碑</h3>
+      <ol>
+        <li>提交或确认当前候选，获得 88/89/90 的官网反馈。</li>
+        <li>将反馈作为新硬约束，更新 residual candidate 搜索空间。</li>
+        <li>live Agent 侧只针对固定 badcase 类别做机制修复：表格、条款、保险情景、研报指标。</li>
+        <li>建立 12 题 badcase 回归集 + 30 题人工 gold 集 + 100 题银标对比三层验证。</li>
+        <li>把 deterministic early exit 推为 token baseline，再做局部 progressive disclosure A/B。</li>
+      </ol>
+    </section>
+
+    <div class="footer">
+      生成位置：/Users/liujunyan/Documents/AFAC2026/reports/afac2026_project_report.html
+    </div>
+  </main>
+</body>
+</html>
