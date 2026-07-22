@@ -40,7 +40,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-80fce76f0f0fead5ded888acc3df0889.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9b17374f06adfea98d0189fff3c00b2d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "No results",
@@ -123,232 +123,320 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="page-shell">
-<div class="hero-band">
-<p><img src="images/junyan-portrait.png" class="hero-portrait img-fluid" alt="刘俊言个人照片"></p>
-<div class="eyebrow">
-<p>刘俊言 · 算法工程师</p>
-</div>
-<div class="research-direction">
-<p>研究方向：Agentic Research 与大模型后训练，关注检索增强生成、多轮工具调用智能体的训练与评测。</p>
-</div>
-<div class="hero-actions">
-<p><a href="#education" class="text-link">教育背景</a> <a href="#internships" class="text-link">实习经历</a> <a href="#projects" class="text-link">项目时间轴</a></p>
-</div>
-</div>
-<div class="writing-board">
-<div class="cell-header">
-<div class="cell-title">
-<div class="cell-dot">
+<main class="page-shell">
+<section class="profile-console" aria-label="个人基础信息">
+  <div class="profile-card">
+    <img class="profile-avatar" src="images/junyan-portrait.png" alt="刘俊言个人照片">
+    <div class="profile-copy">
+      <div class="profile-title-row">
+        <h1>刘俊言</h1>
+        <span class="profile-badge">算法工程师</span>
+      </div>
+      <p class="profile-handle">forge</p>
+      <p class="profile-summary">研究方向：Agentic Research 与大模型后训练，关注检索增强生成、多轮工具调用智能体的训练与评测。</p>
+      <div class="profile-tags" aria-label="基础信息">
+        <span>华南农业大学 2025.09 - 2028.06</span>
+        <span>计算机技术硕士</span>
+        <span>佛山大学 数据科学与大数据技术</span>
+      </div>
+    </div>
+    <div class="profile-actions">
+      <a class="soft-button" href="#experience-board">项目与实习</a>
+      <button class="soft-button" type="button" id="share-page">分享</button>
+    </div>
+  </div>
 
-</div>
-<p>Markdown Cell</p>
-</div>
-<div class="cell-tabs">
-<button class="cell-tab is-active" type="button" data-mode="edit" aria-pressed="true">
-写 MD
-</button>
-<button class="cell-tab" type="button" data-mode="preview" aria-pressed="false">
-Preview
-</button>
-</div>
-</div>
-<div class="cell-body">
-<textarea id="markdown-cell" aria-label="Markdown 书写板" spellcheck="false"># 今天想记录什么？
+  <div class="writing-board profile-note">
+    <div class="cell-header">
+      <div class="cell-title">
+        <div class="cell-dot"></div>
+        Markdown Cell
+      </div>
+      <div class="cell-tabs">
+        <button class="cell-tab is-active" type="button" data-mode="edit" aria-pressed="true">写 MD</button>
+        <button class="cell-tab" type="button" data-mode="preview" aria-pressed="false">Preview</button>
+      </div>
+    </div>
+    <div class="cell-body">
+      <textarea id="markdown-cell" aria-label="Markdown 书写板" spellcheck="false"># 今天想记录什么？
 
 - 写一个项目想法
 - 记一个实验结论
 - 留一段给未来的自己
 </textarea>
-<div id="markdown-preview" class="cell-preview is-hidden">
+      <div id="markdown-preview" class="cell-preview is-hidden"></div>
+    </div>
+  </div>
+</section>
 
-</div>
-</div>
-</div>
+<section class="portfolio-section" id="experience-board" aria-label="实习经历">
+  <div class="section-heading">
+    <div>
+      <p class="section-kicker">Internship</p>
+      <h2 class="anchored">实习经历</h2>
+    </div>
+  </div>
+
+  <div class="repo-grid internship-grid">
+    <a class="repo-card" href="internships/wendeshuhui.html" data-kind="internship" data-sort="202604" data-search="文德数惠 大模型应用算法实习生 知识库 agent retrieval trace">
+      <div class="repo-head">
+        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
+        <div>
+          <div class="repo-title">文德数惠</div>
+          <div class="repo-owner">大模型应用算法实习生</div>
+        </div>
+        <span class="repo-badge internship">实习</span>
+      </div>
+      <p>参与企业级知识库 Agent 平台建设，负责知识接入、Agentic Retrieval、Trace 评测与工具服务化。</p>
+      <div class="repo-meta">
+        <span>Knowledge Agent / RAG</span>
+        <span>2026.04 - 至今</span>
+      </div>
+    </a>
+
+    <a class="repo-card" href="internships/skyworth-ai.html" data-kind="internship" data-sort="202601" data-search="创维 ai 研究院 算法实习 时序预测 grpo qwen lora">
+      <div class="repo-head">
+        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
+        <div>
+          <div class="repo-title">创维AI研究院</div>
+          <div class="repo-owner">算法实习生</div>
+        </div>
+        <span class="repo-badge internship">实习</span>
+      </div>
+      <p>参与业务预测策略优化链路，负责时序大模型预测增强、相似案例召回与 GRPO 修正策略训练。</p>
+      <div class="repo-meta">
+        <span>时序预测 / 策略优化</span>
+        <span>2026.01 - 2026.04</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<section class="portfolio-section project-board" id="projects-board" aria-label="项目经历">
+  <div class="section-heading">
+    <div>
+      <p class="section-kicker">Projects</p>
+      <h2 class="anchored">项目经历</h2>
+    </div>
+    <a class="soft-button dark" href="projects.html">查看完整项目</a>
+  </div>
+
+  <div class="repo-toolbar project-toolbar" aria-label="搜索和排序项目">
+    <label class="search-box">
+      <span aria-hidden="true"></span>
+      <input id="project-search" type="search" placeholder="搜索项目..." autocomplete="off">
+    </label>
+    <label class="select-box">
+      <span>排序：</span>
+      <select id="project-sort">
+        <option value="recent">最近更新</option>
+        <option value="time">时间顺序</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="repo-grid" id="project-grid">
+    <a class="repo-card is-featured" href="projects/ai-market-center.html" data-kind="project" data-sort="2026072" data-search="ai获客通 ai market center 营销获客 中台 小红书 线索 crm feishu next fastapi">
+      <div class="repo-head">
+        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
+        <div>
+          <div class="repo-title">AI 获客通</div>
+          <div class="repo-owner">刘俊言</div>
+        </div>
+        <span class="repo-badge">项目</span>
+      </div>
+      <p>通用 AI 营销获客中台，把内容洞察、AI 文案、半自动发布、线索解析、销售跟进和 BI 复盘接成闭环。</p>
+      <div class="repo-meta">
+        <span>AI SaaS / 获客 CRM / Feishu BI</span>
+        <span>2026.07</span>
+      </div>
+    </a>
+
+    <a class="repo-card" href="projects/afac2026.html" data-kind="project" data-sort="202607" data-search="afac2026 金融长文本证据推理 评测 harness agent">
+      <div class="repo-head">
+        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
+        <div>
+          <div class="repo-title">AFAC2026</div>
+          <div class="repo-owner">刘俊言</div>
+        </div>
+        <span class="repo-badge">项目</span>
+      </div>
+      <p>金融长文本证据推理与评测 Harness，把证据契约、题型分流和回归评测做成闭环。</p>
+      <div class="repo-meta">
+        <span>Agent Harness / 金融推理</span>
+        <span>2026.06 - 2026.07</span>
+      </div>
+    </a>
+
+    <a class="repo-card is-featured" href="projects/mr-search.html" data-kind="project" data-sort="202606" data-search="mr-search agentic rl 搜索智能体 运维 saas 复杂问答">
+      <div class="repo-head">
+        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
+        <div>
+          <div class="repo-title">MR-Search</div>
+          <div class="repo-owner">刘俊言</div>
+        </div>
+        <span class="repo-badge">项目</span>
+      </div>
+      <p>面向运维 SaaS 复杂问答的 Agentic RL 搜索智能体，把行为链训练、诊断和评测收拢到同一条链路。</p>
+      <div class="repo-meta">
+        <span>Agentic RL / RAG</span>
+        <span>2026.05 - 2026.06</span>
+      </div>
+    </a>
+
+    <a class="repo-card" href="projects/nanochat-zh.html" data-kind="project" data-sort="202606" data-search="nanochat zh 中文 babylm tokenizer 预训练 后训练">
+      <div class="repo-head">
+        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
+        <div>
+          <div class="repo-title">NanoChat-zh-d22</div>
+          <div class="repo-owner">刘俊言</div>
+        </div>
+        <span class="repo-badge">项目</span>
+      </div>
+      <p>中文 BabyLM 小模型实验，从 tokenizer 信息密度到预训练、表示层选择和评测闭环。</p>
+      <div class="repo-meta">
+        <span>中文小模型 / 后训练</span>
+        <span>2026.05 - 2026.06</span>
+      </div>
+    </a>
+
+    <a class="repo-card" href="projects/xiaohongshu-food.html" data-kind="project" data-sort="202512" data-search="小红书 美食 agent 推荐 poi 多智能体 内容分析">
+      <div class="repo-head">
+        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
+        <div>
+          <div class="repo-title">XHS Food Agent</div>
+          <div class="repo-owner">刘俊言</div>
+        </div>
+        <span class="repo-badge">项目</span>
+      </div>
+      <p>小红书美食内容分析引擎，围绕可信内容筛选、POI 归一和推荐反馈做多智能体闭环。</p>
+      <div class="repo-meta">
+        <span>Multi-Agent / 推荐</span>
+        <span>2025.11 - 2025.12</span>
+      </div>
+    </a>
+
+    <a class="repo-card" href="projects/medical-recommendation.html" data-kind="project" data-sort="202510" data-search="中文病历 代谢疾病 用药推荐 医疗 nlp llm 微调">
+      <div class="repo-head">
+        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
+        <div>
+          <div class="repo-title">Medical Recommendation</div>
+          <div class="repo-owner">刘俊言</div>
+        </div>
+        <span class="repo-badge">项目</span>
+      </div>
+      <p>中文病历代谢疾病用药推荐系统，先绑定候选集、证据与安全门，再判断推荐是否成立。</p>
+      <div class="repo-meta">
+        <span>医疗 NLP / LLM 微调</span>
+        <span>2025.09 - 2025.10</span>
+      </div>
+    </a>
+  </div>
+</section>
+</main>
+
 <script>
 (() => {
   const input = document.getElementById("markdown-cell");
   const preview = document.getElementById("markdown-preview");
   const tabs = Array.from(document.querySelectorAll(".cell-tab"));
-  if (!input || !preview) return;
 
-  const escapeHtml = (value) => value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+  if (input && preview) {
+    const escapeHtml = (value) => value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
 
-  const renderMarkdown = (value) => {
-    const lines = escapeHtml(value).split("\n");
-    const html = [];
-    let inList = false;
+    const renderMarkdown = (value) => {
+      const lines = escapeHtml(value).split("\n");
+      const html = [];
+      let inList = false;
 
-    for (const line of lines) {
-      if (/^###\s+/.test(line)) {
-        if (inList) html.push("</ul>");
-        inList = false;
-        html.push(`<h3>${line.replace(/^###\s+/, "")}</h3>`);
-      } else if (/^##\s+/.test(line)) {
-        if (inList) html.push("</ul>");
-        inList = false;
-        html.push(`<h2>${line.replace(/^##\s+/, "")}</h2>`);
-      } else if (/^#\s+/.test(line)) {
-        if (inList) html.push("</ul>");
-        inList = false;
-        html.push(`<h1>${line.replace(/^#\s+/, "")}</h1>`);
-      } else if (/^-\s+/.test(line)) {
-        if (!inList) html.push("<ul>");
-        inList = true;
-        html.push(`<li>${line.replace(/^-\s+/, "")}</li>`);
-      } else if (line.trim()) {
-        if (inList) html.push("</ul>");
-        inList = false;
-        html.push(`<p>${line}</p>`);
-      } else if (inList) {
-        html.push("</ul>");
-        inList = false;
+      for (const line of lines) {
+        if (/^###\s+/.test(line)) {
+          if (inList) html.push("</ul>");
+          inList = false;
+          html.push(`<h3>${line.replace(/^###\s+/, "")}</h3>`);
+        } else if (/^##\s+/.test(line)) {
+          if (inList) html.push("</ul>");
+          inList = false;
+          html.push(`<h2>${line.replace(/^##\s+/, "")}</h2>`);
+        } else if (/^#\s+/.test(line)) {
+          if (inList) html.push("</ul>");
+          inList = false;
+          html.push(`<h1>${line.replace(/^#\s+/, "")}</h1>`);
+        } else if (/^-\s+/.test(line)) {
+          if (!inList) html.push("<ul>");
+          inList = true;
+          html.push(`<li>${line.replace(/^-\s+/, "")}</li>`);
+        } else if (line.trim()) {
+          if (inList) html.push("</ul>");
+          inList = false;
+          html.push(`<p>${line}</p>`);
+        } else if (inList) {
+          html.push("</ul>");
+          inList = false;
+        }
       }
-    }
 
-    if (inList) html.push("</ul>");
-    preview.innerHTML = html.join("");
+      if (inList) html.push("</ul>");
+      preview.innerHTML = html.join("");
+    };
+
+    input.value = localStorage.getItem("junyan-markdown-cell") || input.value;
+    input.addEventListener("input", () => {
+      localStorage.setItem("junyan-markdown-cell", input.value);
+      renderMarkdown(input.value);
+    });
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const showPreview = tab.dataset.mode === "preview";
+        input.classList.toggle("is-hidden", showPreview);
+        preview.classList.toggle("is-hidden", !showPreview);
+        tabs.forEach((item) => {
+          const active = item === tab;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-pressed", String(active));
+        });
+        if (showPreview) renderMarkdown(input.value);
+      });
+    });
+    renderMarkdown(input.value);
+  }
+
+  const grid = document.getElementById("project-grid");
+  const cards = Array.from(document.querySelectorAll("#project-grid .repo-card"));
+  const search = document.getElementById("project-search");
+  const sort = document.getElementById("project-sort");
+
+  const refreshCards = () => {
+    if (!grid) return;
+    const query = (search?.value || "").trim().toLowerCase();
+    const sorted = [...cards].sort((a, b) => {
+      const delta = Number(b.dataset.sort || 0) - Number(a.dataset.sort || 0);
+      return sort?.value === "time" ? -delta : delta;
+    });
+
+    for (const card of sorted) {
+      const matchesQuery = !query || (card.dataset.search || card.textContent || "").toLowerCase().includes(query);
+      card.hidden = !matchesQuery;
+      grid.appendChild(card);
+    }
   };
 
-  input.value = localStorage.getItem("junyan-markdown-cell") || input.value;
-  input.addEventListener("input", () => {
-    localStorage.setItem("junyan-markdown-cell", input.value);
-    renderMarkdown(input.value);
+  [search, sort].forEach((control) => control?.addEventListener("input", refreshCards));
+  refreshCards();
+
+  document.getElementById("share-page")?.addEventListener("click", async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      await navigator.share({ title: document.title, url });
+    } else if (navigator.clipboard) {
+      await navigator.clipboard.writeText(url);
+    }
   });
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const showPreview = tab.dataset.mode === "preview";
-      input.classList.toggle("is-hidden", showPreview);
-      preview.classList.toggle("is-hidden", !showPreview);
-      tabs.forEach((item) => {
-        const active = item === tab;
-        item.classList.toggle("is-active", active);
-        item.setAttribute("aria-pressed", String(active));
-      });
-      if (showPreview) renderMarkdown(input.value);
-    });
-  });
-  renderMarkdown(input.value);
 })();
 </script>
-<section id="education" class="level2">
-<h2 class="anchored" data-anchor-id="education">教育背景</h2>
-<div class="info-grid">
-<div class="info-card">
-<div class="info-label">
-<p>2025.09 - 2028.06</p>
-</div>
-<section id="华南农业大学" class="level3">
-<h3 class="anchored" data-anchor-id="华南农业大学">华南农业大学</h3>
-<p>计算机技术硕士，电子科技大学联合培养。</p>
-</section>
-</div>
-<div class="info-card">
-<div class="info-label">
-<p>2021.09 - 2025.06</p>
-</div>
-<section id="佛山大学" class="level3">
-<h3 class="anchored" data-anchor-id="佛山大学">佛山大学</h3>
-<p>数据科学与大数据技术本科。</p>
-</section>
-</div>
-</div>
-</section>
-<section id="internships" class="level2">
-<h2 class="anchored" data-anchor-id="internships">实习经历</h2>
-<div class="detail-stack">
-<div class="detail-card">
-<div class="detail-year">
-<p>2026.04 - 至今</p>
-</div>
-<section id="文德数惠---大模型应用算法实习生" class="level3">
-<h3 class="anchored" data-anchor-id="文德数惠---大模型应用算法实习生"><a href="internships/wendeshuhui.html" class="detail-title-link">文德数惠 - 大模型应用算法实习生</a></h3>
-<p>参与企业级知识库 Agent 平台建设，负责知识接入、Agentic Retrieval、Trace 评测与工具服务化。</p>
-<ul>
-<li>面向 PDF、Office、图片、音频等 7 类数据构建统一知识接入链路</li>
-<li>搭建全文检索 + 向量召回 + Rerank 的多路融合链路</li>
-<li>记录 query、工具调用、候选证据与最终引用，形成可回放 Trace 和回归评测集</li>
-</ul>
-</section>
-</div>
-<div class="detail-card">
-<div class="detail-year">
-<p>2026.01 - 2026.04</p>
-</div>
-<section id="创维ai研究院---算法实习生" class="level3">
-<h3 class="anchored" data-anchor-id="创维ai研究院---算法实习生"><a href="internships/skyworth-ai.html" class="detail-title-link">创维AI研究院 - 算法实习生</a></h3>
-<p>参与业务预测策略优化链路，负责时序大模型预测增强、相似案例召回与 GRPO 修正策略训练。</p>
-<ul>
-<li>面向 3000+ 自有机型销量预测场景统一状态特征</li>
-<li>引入历史销量 embedding、傅里叶周期性与趋势变化，提升预测准确率</li>
-<li>基于 Qwen2.5-3B + LoRA 训练预测修正策略模型</li>
-</ul>
-</section>
-</div>
-</div>
-</section>
-<section id="projects" class="level2">
-<h2 class="anchored" data-anchor-id="projects">项目时间轴</h2>
-<div class="section-note">
-<p>按时间去重后的项目鱼骨图。这里只保留标题、类型、时间与一句话简介，点击节点进入详情。</p>
-</div>
-<div class="fishbone">
-<div class="fishbone-item fishbone-right">
-<div class="fishbone-date">
-<p>2026.06 - 2026.07</p>
-</div>
-<p><a href="projects/afac2026.html" class="fishbone-card">金融长文本证据推理与评测 Harness</a></p>
-<div class="project-type">
-<p>Agent Harness / 金融长文本推理</p>
-</div>
-<p>把证据契约、题型分流和回归评测做成闭环。</p>
-</div>
-<div class="fishbone-item fishbone-left">
-<div class="fishbone-date">
-<p>2026.05 - 2026.06</p>
-</div>
-<p><a href="projects/mr-search.html" class="fishbone-card">MR-Search Agentic RL 搜索智能体</a></p>
-<div class="project-type">
-<p>Agentic RL / 运维 SaaS 问答</p>
-</div>
-<p>把复杂问答变成可训练、可诊断、可收敛的行为链。</p>
-</div>
-<div class="fishbone-item fishbone-right">
-<div class="fishbone-date">
-<p>2026.05 - 2026.06</p>
-</div>
-<p><a href="projects/nanochat-zh.html" class="fishbone-card">NanoChat-zh-d22 中文 BabyLM</a></p>
-<div class="project-type">
-<p>中文小模型 / 预训练与后训练</p>
-</div>
-<p>先判断中文 tokenizer 是否提高信息密度，再做预训练、表示层选择和评测闭环。</p>
-</div>
-<div class="fishbone-item fishbone-left">
-<div class="fishbone-date">
-<p>2025.11 - 2025.12</p>
-</div>
-<p><a href="projects/xiaohongshu-food.html" class="fishbone-card">小红书美食内容分析引擎</a></p>
-<div class="project-type">
-<p>Multi-Agent 应用 / 推荐系统</p>
-</div>
-<p>先判断什么内容值得进入推荐池，再把可信推荐、POI 归一和回流评测做稳。</p>
-</div>
-<div class="fishbone-item fishbone-right">
-<div class="fishbone-date">
-<p>2025.09 - 2025.10</p>
-</div>
-<p><a href="projects/medical-recommendation.html" class="fishbone-card">中文病历代谢疾病用药推荐系统</a></p>
-<div class="project-type">
-<p>医疗 NLP / LLM 微调</p>
-</div>
-<p>先收口候选集、先绑定证据、先设安全门，再谈推荐是否成立。</p>
-</div>
-</div>
-</section>
-</div>
 
 
 

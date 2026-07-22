@@ -203,6 +203,132 @@
     "text": "MR-Search 讲稿 PDF\n用于本地审阅的原始讲稿与说明。\n\n\n返回项目总览"
   },
   {
+    "objectID": "projects/ai-market-center.html",
+    "href": "projects/ai-market-center.html",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "Project Report\n\n\n\n\n00 概览 技术主线 01 架构 02 闭环 03 前端 04 后端 05 选型 06 风险 07 Demo\n\n\n\n\n\n\n\nAI 获客通不是“小红书自动发文工具”，而是把内容洞察、AI 文案、人工审核、半自动发布、线索解析、销售跟进和 BI 复盘接成一条可演示、可交付、可复用的获客闭环。\n\n\n\n\nNext.js 14 + React 18 FastAPI + SQLAlchemy 场景包驱动 Feishu BI / H5 看板\n\n\n\n\n\n\nProject Report\n\n\n\n\n面向 B2B 服务型企业的 AI 营销获客中台：用行业场景包约束内容生成，用半自动发布规避平台风控，用 AI 线索解析把小红书互动转成可跟进销售线索。\n\n\n打开前端 Demo 飞书 H5 看板 BI Dashboard\n\n\n\n\nWorkflow\n\n\n7 模块\n\n\n工作台、场景包、内容洞察、AI 写作、内容管理、线索 CRM、BI 看板。\n\n\n\n\nScenarios\n\n\n3 类\n\n\n跨境物流、医美、少儿英语通过场景包复用同一套系统底座。\n\n\n\n\nFrontend\n\n\n9 页\n\n\nNext.js 静态导出，可在个人站直接演示主要交互。\n\n\n\n\nBackend\n\n\nP0 API\n\n\n覆盖场景、内容、发布、线索、跟进、BI 聚合等核心接口。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n一句话定义： AI 获客通把“发内容”升级成“内容获客经营”：先用公开内容和行业关键词判断什么值得写，再用 AI 生成可审核内容，发布后把评论/咨询结构化成线索，最后用 BI 看板复盘内容、线索和销售跟进。\n\n\n\n\n\n\nB2B 服务企业做小红书时，最容易停在“采集很多、生成很多、发布很多”，但有效线索、销售跟进和 ROI 无法证明。\n\n\n\n用“通用底座 + 行业场景包”拆开共性流程和行业差异，让跨境物流、医美、教育可以复用同一套工作台。\n\n\n\n前端可演示，后端可联调，数据可落到飞书/BI，关键动作保留人工确认，避免账号风控和合规风险。\n\n\n\n\n\n\n\n\n这个项目的技术核心不是“接一个大模型写文案”，而是把营销获客链路拆成可配置、可回放、可评估的状态机：每个内容、线索和销售动作都有状态、来源和下一步。\n\n\n\n\n\n环节\n\n\n技术选择\n\n\n卡点\n\n\n处理方式\n\n\n\n\n\n\n行业适配\n\n\nScenario Pack\n\n\n不同行业关键词、风险词、线索字段差异大\n\n\n把关键词、模板、禁用词、CRM 字段都配置化\n\n\n\n\n内容生成\n\n\nAI Copywriter + 风险词防火墙\n\n\n营销文案容易夸大承诺或同质化\n\n\n按能力型、干货型、痛点型模板生成，并高亮敏感词\n\n\n\n\n发布链路\n\n\n半自动发布助手\n\n\n全自动发布有账号封禁和平台协议风险\n\n\n复制标题正文，由销售人工确认发布并回填链接\n\n\n\n\n线索经营\n\n\nAI 线索解析 + CRM 状态\n\n\n评论文本不结构化，销售无法快速分配\n\n\n抽取联系方式、需求、预算、地区、紧急度和跟进状态\n\n\n\n\n效果复盘\n\n\nDashboard Aggregation + Feishu BI\n\n\n曝光点赞不能直接解释成交贡献\n\n\n聚合内容曝光、互动、咨询、有效线索、成交漏斗\n\n\n\n\n\n\n\n如果把行业知识写死在页面里，系统只能服务一个客户；场景包把客户画像、关键词、模板、风险词和线索字段抽出来，后续替换行业时不用重写主链路。\n\n\n\n小红书等平台对自动化发布和违规导流敏感；AI 负责生成、整理、建议和提醒，人负责审核、发布和关键销售动作，这样演示闭环和账号安全可以同时成立。\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nflowchart TB\n  input[\"输入与场景包&lt;br/&gt;公开内容 / 人工导入 / 关键词 / 模板 / 风险词 / CRM 字段\"]\n  content[\"内容生产工作台&lt;br/&gt;看同行洞察 → AI Copywriter → 风险词审核 → 半自动发布\"]\n  sales[\"线索经营工作台&lt;br/&gt;评论/私信/人工录入 → AI 线索解析 → 销售分配与跟进\"]\n  bi[\"复盘与协同&lt;br/&gt;BI 漏斗 / 内容贡献 / 销售跟进 / 飞书 H5 看板\"]\n\n  input --&gt; content --&gt; sales --&gt; bi\n  bi -. 复盘结果反哺关键词、模板和销售规则 .-&gt; input\n\n\n\n\n\n\n\n\n\n\nNext.js App Router 承载桌面工作台，提供场景包、内容洞察、AI 写作、内容管理、线索 CRM 和 BI Dashboard。\n\n\n\nFastAPI 按业务域拆分 routes / schemas / services / models，覆盖 MVP P0 接口，默认 SQLite，Docker Compose 可切 PostgreSQL + Redis。\n\n\n\n把聚合后的 BI 指标写入飞书多维表/看板，也提供移动端 H5 Dashboard，适配管理者随手查看。\n\n\n\n\n\n\n\n\n\nInsight看同行\n\n\nPrompt场景包约束\n\n\nGenerateAI 写内容\n\n\nAudit风险词审核\n\n\nPublish人工发布\n\n\nLeadAI 解析\n\n\nBI复盘迭代\n\n\n\n\n\n内容发布后产生曝光、点赞、评论和咨询，咨询进入线索池，线索解析后绑定销售跟进，最终反哺 BI 漏斗和文案方向贡献。\n\n\n\n运营先从竞品内容里选题，再交给 AI 生成内容；销售审核并发布，客户咨询后系统自动整理关键信息，管理者根据 BI 判断哪类内容更有效。\n\n\n\n\n\n\n\n\n\n\n工作台、场景配置、看同行、AI 写内容、内容管理、线索管理、BI 看板、飞书 H5 都是独立路由。\n\n\n\nAppStateContext 先充当前端模拟数据库，同时把读写动作封装成稳定接口，后续接 API 时页面不用大改。\n\n\n\n页面加载先请求后端；后端不可用时保留本地 mock 演示，因此静态站也能完整走主要交互。\n\n\n\n\n\n\n\n\n当前挂载在个人站的 Demo 是 Next.js 静态导出版本，适合展示产品流、交互和信息架构；真实联调时可切回后端 API，使用 FastAPI/数据库承载持久化。\n\n\n\n\n\n\n\n\n\n\n\n\n模块\n\n\n职责\n\n\n代表接口\n\n\n\n\n\n\nscenarios\n\n\n行业场景包配置\n\n\n关键词、模板、风险词、字段规则\n\n\n\n\nsource_contents\n\n\n竞品/渠道内容导入\n\n\n标题、正文、热度、标签、发布时间\n\n\n\n\ncontent\n\n\nAI 文案与审核状态\n\n\n创建草稿、审核、发布后回写指标\n\n\n\n\nleads\n\n\n线索录入、AI 抽取、销售分配\n\n\n抽取联系方式、需求字段、跟进状态\n\n\n\n\ndashboard\n\n\nBI 聚合\n\n\noverview / content / leads 三类看板数据\n\n\n\n\n\n\n\n\n\n\n\nflowchart LR\n  routes[\"FastAPI routes\"] --&gt; schemas[\"Pydantic schemas\"]\n  schemas --&gt; services[\"services&lt;br/&gt;generation/extract/dashboard\"]\n  services --&gt; models[\"SQLAlchemy models\"]\n  models --&gt; db[\"SQLite/PostgreSQL\"]\n  db --&gt; dashboard[\"dashboard aggregation\"]\n  dashboard --&gt; frontend[\"Web / Feishu BI\"]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n项目需要同时展示后台工作台、移动 H5、图表和多路交互，Next.js App Router + React Context 足够快，静态导出后也方便作为客户演示链接传播。\n\n\n\n后端以业务接口和数据契约为主，FastAPI + Pydantic 适合快速给前端提供稳定 schema，同时 Swagger 能让联调和客户技术沟通更直观。\n\n\n\n自动化发布虽然炫，但平台账号风险高；半自动发布把标题正文复制、发布链接回填、指标记录自动化，保留人最后确认。\n\n\n\n获客项目需要运营、销售和管理者共享进度；飞书多维表/BI 看板是轻量协作层，比一上来做完整 CRM 更适合 MVP 验证。\n\n\n\n\n\n\n\n\n\n\n\n风险\n\n\n表现\n\n\n缓解策略\n\n\n\n\n\n\n账号风控\n\n\n采集/发布自动化触发平台限制\n\n\n生产主链路采用公开内容/人工导入/半自动发布\n\n\n\n\n内容合规\n\n\nAI 文案夸大承诺、触碰风险词\n\n\n场景包风险词、人工审核、敏感词替换\n\n\n\n\n线索质量\n\n\n曝光高但销售无感\n\n\n看有效线索、报价、成交，而不是只看点赞收藏\n\n\n\n\n行业迁移\n\n\n物流规则不能直接套到医美/教育\n\n\n关键词、模板、线索字段和风险词都配置化\n\n\n\n\n演示与生产差距\n\n\n静态 demo 没有持久化后端\n\n\n前端保留 mock 演示，生产联调切 FastAPI + DB\n\n\n\n\n\n\n\n\n\n\n\n\n静态挂载的 Next.js 控制台，可体验工作台、场景切换、AI 写作、内容管理、线索解析和 BI 页面。\n\n\n\n移动端看板模式，用来展示管理者在飞书内查看获客漏斗和运营数据的形态。\n\n\n\n聚合内容曝光、互动、咨询、有效线索和成交状态，强调从内容到销售的业务闭环。"
+  },
+  {
+    "objectID": "projects/ai-market-center.html#overview",
+    "href": "projects/ai-market-center.html#overview",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "一句话定义： AI 获客通把“发内容”升级成“内容获客经营”：先用公开内容和行业关键词判断什么值得写，再用 AI 生成可审核内容，发布后把评论/咨询结构化成线索，最后用 BI 看板复盘内容、线索和销售跟进。\n\n\n\n\n\n\nB2B 服务企业做小红书时，最容易停在“采集很多、生成很多、发布很多”，但有效线索、销售跟进和 ROI 无法证明。\n\n\n\n用“通用底座 + 行业场景包”拆开共性流程和行业差异，让跨境物流、医美、教育可以复用同一套工作台。\n\n\n\n前端可演示，后端可联调，数据可落到飞书/BI，关键动作保留人工确认，避免账号风控和合规风险。"
+  },
+  {
+    "objectID": "projects/ai-market-center.html#tech",
+    "href": "projects/ai-market-center.html#tech",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "这个项目的技术核心不是“接一个大模型写文案”，而是把营销获客链路拆成可配置、可回放、可评估的状态机：每个内容、线索和销售动作都有状态、来源和下一步。\n\n\n\n\n\n环节\n\n\n技术选择\n\n\n卡点\n\n\n处理方式\n\n\n\n\n\n\n行业适配\n\n\nScenario Pack\n\n\n不同行业关键词、风险词、线索字段差异大\n\n\n把关键词、模板、禁用词、CRM 字段都配置化\n\n\n\n\n内容生成\n\n\nAI Copywriter + 风险词防火墙\n\n\n营销文案容易夸大承诺或同质化\n\n\n按能力型、干货型、痛点型模板生成，并高亮敏感词\n\n\n\n\n发布链路\n\n\n半自动发布助手\n\n\n全自动发布有账号封禁和平台协议风险\n\n\n复制标题正文，由销售人工确认发布并回填链接\n\n\n\n\n线索经营\n\n\nAI 线索解析 + CRM 状态\n\n\n评论文本不结构化，销售无法快速分配\n\n\n抽取联系方式、需求、预算、地区、紧急度和跟进状态\n\n\n\n\n效果复盘\n\n\nDashboard Aggregation + Feishu BI\n\n\n曝光点赞不能直接解释成交贡献\n\n\n聚合内容曝光、互动、咨询、有效线索、成交漏斗\n\n\n\n\n\n\n\n如果把行业知识写死在页面里，系统只能服务一个客户；场景包把客户画像、关键词、模板、风险词和线索字段抽出来，后续替换行业时不用重写主链路。\n\n\n\n小红书等平台对自动化发布和违规导流敏感；AI 负责生成、整理、建议和提醒，人负责审核、发布和关键销售动作，这样演示闭环和账号安全可以同时成立。"
+  },
+  {
+    "objectID": "projects/ai-market-center.html#architecture",
+    "href": "projects/ai-market-center.html#architecture",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "flowchart TB\n  input[\"输入与场景包&lt;br/&gt;公开内容 / 人工导入 / 关键词 / 模板 / 风险词 / CRM 字段\"]\n  content[\"内容生产工作台&lt;br/&gt;看同行洞察 → AI Copywriter → 风险词审核 → 半自动发布\"]\n  sales[\"线索经营工作台&lt;br/&gt;评论/私信/人工录入 → AI 线索解析 → 销售分配与跟进\"]\n  bi[\"复盘与协同&lt;br/&gt;BI 漏斗 / 内容贡献 / 销售跟进 / 飞书 H5 看板\"]\n\n  input --&gt; content --&gt; sales --&gt; bi\n  bi -. 复盘结果反哺关键词、模板和销售规则 .-&gt; input\n\n\n\n\n\n\n\n\n\n\nNext.js App Router 承载桌面工作台，提供场景包、内容洞察、AI 写作、内容管理、线索 CRM 和 BI Dashboard。\n\n\n\nFastAPI 按业务域拆分 routes / schemas / services / models，覆盖 MVP P0 接口，默认 SQLite，Docker Compose 可切 PostgreSQL + Redis。\n\n\n\n把聚合后的 BI 指标写入飞书多维表/看板，也提供移动端 H5 Dashboard，适配管理者随手查看。"
+  },
+  {
+    "objectID": "projects/ai-market-center.html#loop",
+    "href": "projects/ai-market-center.html#loop",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "Insight看同行\n\n\nPrompt场景包约束\n\n\nGenerateAI 写内容\n\n\nAudit风险词审核\n\n\nPublish人工发布\n\n\nLeadAI 解析\n\n\nBI复盘迭代\n\n\n\n\n\n内容发布后产生曝光、点赞、评论和咨询，咨询进入线索池，线索解析后绑定销售跟进，最终反哺 BI 漏斗和文案方向贡献。\n\n\n\n运营先从竞品内容里选题，再交给 AI 生成内容；销售审核并发布，客户咨询后系统自动整理关键信息，管理者根据 BI 判断哪类内容更有效。"
+  },
+  {
+    "objectID": "projects/ai-market-center.html#frontend",
+    "href": "projects/ai-market-center.html#frontend",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "工作台、场景配置、看同行、AI 写内容、内容管理、线索管理、BI 看板、飞书 H5 都是独立路由。\n\n\n\nAppStateContext 先充当前端模拟数据库，同时把读写动作封装成稳定接口，后续接 API 时页面不用大改。\n\n\n\n页面加载先请求后端；后端不可用时保留本地 mock 演示，因此静态站也能完整走主要交互。\n\n\n\n\n\n\n\n\n当前挂载在个人站的 Demo 是 Next.js 静态导出版本，适合展示产品流、交互和信息架构；真实联调时可切回后端 API，使用 FastAPI/数据库承载持久化。"
+  },
+  {
+    "objectID": "projects/ai-market-center.html#backend",
+    "href": "projects/ai-market-center.html#backend",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "模块\n\n\n职责\n\n\n代表接口\n\n\n\n\n\n\nscenarios\n\n\n行业场景包配置\n\n\n关键词、模板、风险词、字段规则\n\n\n\n\nsource_contents\n\n\n竞品/渠道内容导入\n\n\n标题、正文、热度、标签、发布时间\n\n\n\n\ncontent\n\n\nAI 文案与审核状态\n\n\n创建草稿、审核、发布后回写指标\n\n\n\n\nleads\n\n\n线索录入、AI 抽取、销售分配\n\n\n抽取联系方式、需求字段、跟进状态\n\n\n\n\ndashboard\n\n\nBI 聚合\n\n\noverview / content / leads 三类看板数据\n\n\n\n\n\n\n\n\n\n\n\nflowchart LR\n  routes[\"FastAPI routes\"] --&gt; schemas[\"Pydantic schemas\"]\n  schemas --&gt; services[\"services&lt;br/&gt;generation/extract/dashboard\"]\n  services --&gt; models[\"SQLAlchemy models\"]\n  models --&gt; db[\"SQLite/PostgreSQL\"]\n  db --&gt; dashboard[\"dashboard aggregation\"]\n  dashboard --&gt; frontend[\"Web / Feishu BI\"]"
+  },
+  {
+    "objectID": "projects/ai-market-center.html#choice",
+    "href": "projects/ai-market-center.html#choice",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "项目需要同时展示后台工作台、移动 H5、图表和多路交互，Next.js App Router + React Context 足够快，静态导出后也方便作为客户演示链接传播。\n\n\n\n后端以业务接口和数据契约为主，FastAPI + Pydantic 适合快速给前端提供稳定 schema，同时 Swagger 能让联调和客户技术沟通更直观。\n\n\n\n自动化发布虽然炫，但平台账号风险高；半自动发布把标题正文复制、发布链接回填、指标记录自动化，保留人最后确认。\n\n\n\n获客项目需要运营、销售和管理者共享进度；飞书多维表/BI 看板是轻量协作层，比一上来做完整 CRM 更适合 MVP 验证。"
+  },
+  {
+    "objectID": "projects/ai-market-center.html#risk",
+    "href": "projects/ai-market-center.html#risk",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "风险\n\n\n表现\n\n\n缓解策略\n\n\n\n\n\n\n账号风控\n\n\n采集/发布自动化触发平台限制\n\n\n生产主链路采用公开内容/人工导入/半自动发布\n\n\n\n\n内容合规\n\n\nAI 文案夸大承诺、触碰风险词\n\n\n场景包风险词、人工审核、敏感词替换\n\n\n\n\n线索质量\n\n\n曝光高但销售无感\n\n\n看有效线索、报价、成交，而不是只看点赞收藏\n\n\n\n\n行业迁移\n\n\n物流规则不能直接套到医美/教育\n\n\n关键词、模板、线索字段和风险词都配置化\n\n\n\n\n演示与生产差距\n\n\n静态 demo 没有持久化后端\n\n\n前端保留 mock 演示，生产联调切 FastAPI + DB"
+  },
+  {
+    "objectID": "projects/ai-market-center.html#demo",
+    "href": "projects/ai-market-center.html#demo",
+    "title": "AI 获客通项目报告",
+    "section": "",
+    "text": "静态挂载的 Next.js 控制台，可体验工作台、场景切换、AI 写作、内容管理、线索解析和 BI 页面。\n\n\n\n移动端看板模式，用来展示管理者在飞书内查看获客漏斗和运营数据的形态。\n\n\n\n聚合内容曝光、互动、咨询、有效线索和成交状态，强调从内容到销售的业务闭环。"
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "项目总览",
+    "section": "",
+    "text": "Project Index\n\n\n\n代表项目已经拆成独立页面。这里保留索引，方便从一个页面快速进入每个项目。\n\n\n\n\n\n2026.07\n\n\n\n\nAI SaaS / 营销获客中台 / Next.js + FastAPI + Feishu BI\n\n把内容洞察、AI 文案、人工审核、半自动发布、线索解析、销售跟进和 BI 复盘接成可演示、可联调、可复用的获客闭环。\n\n\n\n\n2026.06 - 2026.07\n\n\n\n\nAgent Harness / 金融长文本推理 / 阿里天池 AFAC2026\n\n不是把长文档塞进上下文，而是把证据契约、题型分流和回归评测做成闭环。\n\n\n\n\n2026.05 - 2026.06\n\n\n\n\nAgentic RL / 运维 SaaS 问答 / Qwen2.5-7B + LoRA-GRPO\n\n把复杂问答变成一条可训练、可诊断、可收敛的 search-reason-answer 行为链。\n\n\n\n\n2026.05 - 2026.06\n\n\n\n\n中文小模型 / 预训练与后训练 / NLPCC BabyLM\n\n先判断中文 tokenizer 是否真正提高信息密度，再做从零预训练、表示层选择和官方评测闭环。\n\n\n\n\n2025.11 - 2025.12\n\n\n\n\nMulti-Agent 应用 / 推荐系统 / FastAPI + Redis + SSE\n\n先判断什么内容值得进入推荐池，再用意图、可信度、POI 归一和回流评测把推荐闭环做稳。\n\n\n\n\n2025.09 - 2025.10\n\n\n\n\n医疗 NLP / LLM 微调 / 阿里天池\n\n先收口候选集、先绑定证据、先设安全门，再谈用药推荐是否成立。"
+  },
+  {
+    "objectID": "projects.html#ai-获客通",
+    "href": "projects.html#ai-获客通",
+    "title": "项目总览",
+    "section": "",
+    "text": "AI SaaS / 营销获客中台 / Next.js + FastAPI + Feishu BI\n\n把内容洞察、AI 文案、人工审核、半自动发布、线索解析、销售跟进和 BI 复盘接成可演示、可联调、可复用的获客闭环。"
+  },
+  {
+    "objectID": "projects.html#金融长文本证据推理与评测-harness",
+    "href": "projects.html#金融长文本证据推理与评测-harness",
+    "title": "项目总览",
+    "section": "",
+    "text": "Agent Harness / 金融长文本推理 / 阿里天池 AFAC2026\n\n不是把长文档塞进上下文，而是把证据契约、题型分流和回归评测做成闭环。"
+  },
+  {
+    "objectID": "projects.html#mr-search-agentic-rl-搜索智能体",
+    "href": "projects.html#mr-search-agentic-rl-搜索智能体",
+    "title": "项目总览",
+    "section": "",
+    "text": "Agentic RL / 运维 SaaS 问答 / Qwen2.5-7B + LoRA-GRPO\n\n把复杂问答变成一条可训练、可诊断、可收敛的 search-reason-answer 行为链。"
+  },
+  {
+    "objectID": "projects.html#nanochat-zh-d22-中文-babylm",
+    "href": "projects.html#nanochat-zh-d22-中文-babylm",
+    "title": "项目总览",
+    "section": "",
+    "text": "中文小模型 / 预训练与后训练 / NLPCC BabyLM\n\n先判断中文 tokenizer 是否真正提高信息密度，再做从零预训练、表示层选择和官方评测闭环。"
+  },
+  {
+    "objectID": "projects.html#小红书美食内容分析引擎",
+    "href": "projects.html#小红书美食内容分析引擎",
+    "title": "项目总览",
+    "section": "",
+    "text": "Multi-Agent 应用 / 推荐系统 / FastAPI + Redis + SSE\n\n先判断什么内容值得进入推荐池，再用意图、可信度、POI 归一和回流评测把推荐闭环做稳。"
+  },
+  {
+    "objectID": "projects.html#中文病历代谢疾病用药推荐系统",
+    "href": "projects.html#中文病历代谢疾病用药推荐系统",
+    "title": "项目总览",
+    "section": "",
+    "text": "医疗 NLP / LLM 微调 / 阿里天池\n\n先收口候选集、先绑定证据、先设安全门，再谈用药推荐是否成立。"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "刘俊言",
+    "section": "",
+    "text": "刘俊言\n        算法工程师\n      \n      forge\n      研究方向：Agentic Research 与大模型后训练，关注检索增强生成、多轮工具调用智能体的训练与评测。\n      \n        华南农业大学 2025.09 - 2028.06\n        计算机技术硕士\n        佛山大学 数据科学与大数据技术\n      \n    \n    \n      项目与实习\n      分享\n    \n  \n\n  \n    \n      \n        \n        Markdown Cell\n      \n      \n        写 MD\n        Preview\n      \n    \n    \n      # 今天想记录什么？\n\n- 写一个项目想法\n- 记一个实验结论\n- 留一段给未来的自己\n\n      \n    \n  \n\n\n\n  \n    \n      Internship\n      实习经历\n    \n  \n\n  \n    \n      \n        \n        \n          文德数惠\n          大模型应用算法实习生\n        \n        实习\n      \n      参与企业级知识库 Agent 平台建设，负责知识接入、Agentic Retrieval、Trace 评测与工具服务化。\n      \n        Knowledge Agent / RAG\n        2026.04 - 至今\n      \n    \n\n    \n      \n        \n        \n          创维AI研究院\n          算法实习生\n        \n        实习\n      \n      参与业务预测策略优化链路，负责时序大模型预测增强、相似案例召回与 GRPO 修正策略训练。\n      \n        时序预测 / 策略优化\n        2026.01 - 2026.04\n      \n    \n  \n\n\n\n  \n    \n      Projects\n      项目经历\n    \n    查看完整项目\n  \n\n  \n    \n      \n      \n    \n    \n      排序：\n      \n        最近更新\n        时间顺序\n      \n    \n  \n\n  \n    \n      \n        \n        \n          AI 获客通\n          刘俊言\n        \n        项目\n      \n      通用 AI 营销获客中台，把内容洞察、AI 文案、半自动发布、线索解析、销售跟进和 BI 复盘接成闭环。\n      \n        AI SaaS / 获客 CRM / Feishu BI\n        2026.07\n      \n    \n\n    \n      \n        \n        \n          AFAC2026\n          刘俊言\n        \n        项目\n      \n      金融长文本证据推理与评测 Harness，把证据契约、题型分流和回归评测做成闭环。\n      \n        Agent Harness / 金融推理\n        2026.06 - 2026.07\n      \n    \n\n    \n      \n        \n        \n          MR-Search\n          刘俊言\n        \n        项目\n      \n      面向运维 SaaS 复杂问答的 Agentic RL 搜索智能体，把行为链训练、诊断和评测收拢到同一条链路。\n      \n        Agentic RL / RAG\n        2026.05 - 2026.06\n      \n    \n\n    \n      \n        \n        \n          NanoChat-zh-d22\n          刘俊言\n        \n        项目\n      \n      中文 BabyLM 小模型实验，从 tokenizer 信息密度到预训练、表示层选择和评测闭环。\n      \n        中文小模型 / 后训练\n        2026.05 - 2026.06\n      \n    \n\n    \n      \n        \n        \n          XHS Food Agent\n          刘俊言\n        \n        项目\n      \n      小红书美食内容分析引擎，围绕可信内容筛选、POI 归一和推荐反馈做多智能体闭环。\n      \n        Multi-Agent / 推荐\n        2025.11 - 2025.12\n      \n    \n\n    \n      \n        \n        \n          Medical Recommendation\n          刘俊言\n        \n        项目\n      \n      中文病历代谢疾病用药推荐系统，先绑定候选集、证据与安全门，再判断推荐是否成立。\n      \n        医疗 NLP / LLM 微调\n        2025.09 - 2025.10"
+  },
+  {
     "objectID": "projects/afac2026.html",
     "href": "projects/afac2026.html",
     "title": "AFAC2026 金融长文本 QA 项目报告",
@@ -285,76 +411,6 @@
     "title": "AFAC2026 金融长文本 QA 项目报告",
     "section": "",
     "text": "AFAC2026 项目报告原文\n用于本地审阅的原始项目报告。\n\n\n返回项目总览"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "刘俊言",
-    "section": "",
-    "text": "刘俊言 · 算法工程师\n\n\n研究方向：Agentic Research 与大模型后训练，关注检索增强生成、多轮工具调用智能体的训练与评测。\n\n\n教育背景 实习经历 项目时间轴\n\n\n\n\n\n\n\n\nMarkdown Cell\n\n\n\n写 MD\n\n\nPreview\n\n\n\n\n# 今天想记录什么？\n\n- 写一个项目想法\n- 记一个实验结论\n- 留一段给未来的自己\n\n\n\n\n\n\n\n\n\n\n\n\n2025.09 - 2028.06\n\n\n\n计算机技术硕士，电子科技大学联合培养。\n\n\n\n\n2021.09 - 2025.06\n\n\n\n数据科学与大数据技术本科。\n\n\n\n\n\n\n\n\n\n2026.04 - 至今\n\n\n\n参与企业级知识库 Agent 平台建设，负责知识接入、Agentic Retrieval、Trace 评测与工具服务化。\n\n面向 PDF、Office、图片、音频等 7 类数据构建统一知识接入链路\n搭建全文检索 + 向量召回 + Rerank 的多路融合链路\n记录 query、工具调用、候选证据与最终引用，形成可回放 Trace 和回归评测集\n\n\n\n\n\n2026.01 - 2026.04\n\n\n\n参与业务预测策略优化链路，负责时序大模型预测增强、相似案例召回与 GRPO 修正策略训练。\n\n面向 3000+ 自有机型销量预测场景统一状态特征\n引入历史销量 embedding、傅里叶周期性与趋势变化，提升预测准确率\n基于 Qwen2.5-3B + LoRA 训练预测修正策略模型\n\n\n\n\n\n\n\n\n按时间去重后的项目鱼骨图。这里只保留标题、类型、时间与一句话简介，点击节点进入详情。\n\n\n\n\n2026.06 - 2026.07\n\n金融长文本证据推理与评测 Harness\n\nAgent Harness / 金融长文本推理\n\n把证据契约、题型分流和回归评测做成闭环。\n\n\n\n2026.05 - 2026.06\n\nMR-Search Agentic RL 搜索智能体\n\nAgentic RL / 运维 SaaS 问答\n\n把复杂问答变成可训练、可诊断、可收敛的行为链。\n\n\n\n2026.05 - 2026.06\n\nNanoChat-zh-d22 中文 BabyLM\n\n中文小模型 / 预训练与后训练\n\n先判断中文 tokenizer 是否提高信息密度，再做预训练、表示层选择和评测闭环。\n\n\n\n2025.11 - 2025.12\n\n小红书美食内容分析引擎\n\nMulti-Agent 应用 / 推荐系统\n\n先判断什么内容值得进入推荐池，再把可信推荐、POI 归一和回流评测做稳。\n\n\n\n2025.09 - 2025.10\n\n中文病历代谢疾病用药推荐系统\n\n医疗 NLP / LLM 微调\n\n先收口候选集、先绑定证据、先设安全门，再谈推荐是否成立。"
-  },
-  {
-    "objectID": "index.html#education",
-    "href": "index.html#education",
-    "title": "刘俊言",
-    "section": "",
-    "text": "2025.09 - 2028.06\n\n\n\n计算机技术硕士，电子科技大学联合培养。\n\n\n\n\n2021.09 - 2025.06\n\n\n\n数据科学与大数据技术本科。"
-  },
-  {
-    "objectID": "index.html#internships",
-    "href": "index.html#internships",
-    "title": "刘俊言",
-    "section": "",
-    "text": "2026.04 - 至今\n\n\n\n参与企业级知识库 Agent 平台建设，负责知识接入、Agentic Retrieval、Trace 评测与工具服务化。\n\n面向 PDF、Office、图片、音频等 7 类数据构建统一知识接入链路\n搭建全文检索 + 向量召回 + Rerank 的多路融合链路\n记录 query、工具调用、候选证据与最终引用，形成可回放 Trace 和回归评测集\n\n\n\n\n\n2026.01 - 2026.04\n\n\n\n参与业务预测策略优化链路，负责时序大模型预测增强、相似案例召回与 GRPO 修正策略训练。\n\n面向 3000+ 自有机型销量预测场景统一状态特征\n引入历史销量 embedding、傅里叶周期性与趋势变化，提升预测准确率\n基于 Qwen2.5-3B + LoRA 训练预测修正策略模型"
-  },
-  {
-    "objectID": "index.html#projects",
-    "href": "index.html#projects",
-    "title": "刘俊言",
-    "section": "",
-    "text": "按时间去重后的项目鱼骨图。这里只保留标题、类型、时间与一句话简介，点击节点进入详情。\n\n\n\n\n2026.06 - 2026.07\n\n金融长文本证据推理与评测 Harness\n\nAgent Harness / 金融长文本推理\n\n把证据契约、题型分流和回归评测做成闭环。\n\n\n\n2026.05 - 2026.06\n\nMR-Search Agentic RL 搜索智能体\n\nAgentic RL / 运维 SaaS 问答\n\n把复杂问答变成可训练、可诊断、可收敛的行为链。\n\n\n\n2026.05 - 2026.06\n\nNanoChat-zh-d22 中文 BabyLM\n\n中文小模型 / 预训练与后训练\n\n先判断中文 tokenizer 是否提高信息密度，再做预训练、表示层选择和评测闭环。\n\n\n\n2025.11 - 2025.12\n\n小红书美食内容分析引擎\n\nMulti-Agent 应用 / 推荐系统\n\n先判断什么内容值得进入推荐池，再把可信推荐、POI 归一和回流评测做稳。\n\n\n\n2025.09 - 2025.10\n\n中文病历代谢疾病用药推荐系统\n\n医疗 NLP / LLM 微调\n\n先收口候选集、先绑定证据、先设安全门，再谈推荐是否成立。"
-  },
-  {
-    "objectID": "projects.html",
-    "href": "projects.html",
-    "title": "项目总览",
-    "section": "",
-    "text": "Project Index\n\n\n\n代表项目已经拆成独立页面。这里保留索引，方便从一个页面快速进入每个项目。\n\n\n\n\n\n2026.06 - 2026.07\n\n\n\n\nAgent Harness / 金融长文本推理 / 阿里天池 AFAC2026\n\n不是把长文档塞进上下文，而是把证据契约、题型分流和回归评测做成闭环。\n\n\n\n\n2026.05 - 2026.06\n\n\n\n\nAgentic RL / 运维 SaaS 问答 / Qwen2.5-7B + LoRA-GRPO\n\n把复杂问答变成一条可训练、可诊断、可收敛的 search-reason-answer 行为链。\n\n\n\n\n2026.05 - 2026.06\n\n\n\n\n中文小模型 / 预训练与后训练 / NLPCC BabyLM\n\n先判断中文 tokenizer 是否真正提高信息密度，再做从零预训练、表示层选择和官方评测闭环。\n\n\n\n\n2025.11 - 2025.12\n\n\n\n\nMulti-Agent 应用 / 推荐系统 / FastAPI + Redis + SSE\n\n先判断什么内容值得进入推荐池，再用意图、可信度、POI 归一和回流评测把推荐闭环做稳。\n\n\n\n\n2025.09 - 2025.10\n\n\n\n\n医疗 NLP / LLM 微调 / 阿里天池\n\n先收口候选集、先绑定证据、先设安全门，再谈用药推荐是否成立。"
-  },
-  {
-    "objectID": "projects.html#金融长文本证据推理与评测-harness",
-    "href": "projects.html#金融长文本证据推理与评测-harness",
-    "title": "项目总览",
-    "section": "",
-    "text": "Agent Harness / 金融长文本推理 / 阿里天池 AFAC2026\n\n不是把长文档塞进上下文，而是把证据契约、题型分流和回归评测做成闭环。"
-  },
-  {
-    "objectID": "projects.html#mr-search-agentic-rl-搜索智能体",
-    "href": "projects.html#mr-search-agentic-rl-搜索智能体",
-    "title": "项目总览",
-    "section": "",
-    "text": "Agentic RL / 运维 SaaS 问答 / Qwen2.5-7B + LoRA-GRPO\n\n把复杂问答变成一条可训练、可诊断、可收敛的 search-reason-answer 行为链。"
-  },
-  {
-    "objectID": "projects.html#nanochat-zh-d22-中文-babylm",
-    "href": "projects.html#nanochat-zh-d22-中文-babylm",
-    "title": "项目总览",
-    "section": "",
-    "text": "中文小模型 / 预训练与后训练 / NLPCC BabyLM\n\n先判断中文 tokenizer 是否真正提高信息密度，再做从零预训练、表示层选择和官方评测闭环。"
-  },
-  {
-    "objectID": "projects.html#小红书美食内容分析引擎",
-    "href": "projects.html#小红书美食内容分析引擎",
-    "title": "项目总览",
-    "section": "",
-    "text": "Multi-Agent 应用 / 推荐系统 / FastAPI + Redis + SSE\n\n先判断什么内容值得进入推荐池，再用意图、可信度、POI 归一和回流评测把推荐闭环做稳。"
-  },
-  {
-    "objectID": "projects.html#中文病历代谢疾病用药推荐系统",
-    "href": "projects.html#中文病历代谢疾病用药推荐系统",
-    "title": "项目总览",
-    "section": "",
-    "text": "医疗 NLP / LLM 微调 / 阿里天池\n\n先收口候选集、先绑定证据、先设安全门，再谈用药推荐是否成立。"
   },
   {
     "objectID": "projects/medical-recommendation.html",
