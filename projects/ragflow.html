@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="RAGFlow 深度文档理解与 Agentic RAG 平台项目总结。">
+
+<title>RAGFlow 项目报告 – 刘俊言</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<link href="../images/site-logo.png" rel="icon" type="image/png">
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-9b17374f06adfea98d0189fff3c00b2d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">刘俊言</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">首页</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">项目</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">RAGFlow 项目报告</h1>
+</div>
+
+<div>
+  <div class="description">
+    RAGFlow 深度文档理解与 Agentic RAG 平台项目总结。
+  </div>
+</div>
+
+
+<div class="quarto-title-meta column-page">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="page-shell">
+<div class="report-layout">
+<div class="report-sidebar">
+<div class="eyebrow">
+<p>Project Report</p>
+</div>
+<section id="目录" class="level3">
+<h3 class="anchored" data-anchor-id="目录">目录</h3>
+<div class="section-nav">
+<p><a href="#overview">00 概览</a> <a href="#tech">技术主线</a> <a href="#architecture">01 架构</a> <a href="#pipeline">02 索引流水线</a> <a href="#retrieval">03 检索与引用</a> <a href="#agentic">04 Agentic RAG</a> <a href="#engineering">05 工程扩展</a> <a href="#risk">06 风险卡点</a> <a href="#demo">07 Demo</a></p>
+</div>
+<div class="info callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>RAGFlow 可以包装成一个“企业级 RAG 平台工程拆解”：它不是单点问答 demo，而是把文档解析、异步索引、混合检索、引用归因、Agent 工具调用、GraphRAG、MCP 与沙箱执行放进同一个系统。</p>
+</div>
+</div>
+</div>
+<div class="meta-row">
+<p><span class="pill">DeepDoc Parsing</span> <span class="pill">Hybrid Retrieval</span> <span class="pill">Agentic DeepRead</span> <span class="pill">GraphRAG / MCP / Sandbox</span></p>
+</div>
+</section>
+</div>
+<div class="report-main">
+<div class="project-hero">
+<div class="eyebrow">
+<p>Project Report</p>
+</div>
+<section id="ragflow" class="level1">
+<h1>RAGFlow</h1>
+<p class="lead">
+面向复杂企业知识库的 RAG 平台重构总结：从“把文档切块后检索”推进到“结构化解析、异步索引、混合召回、证据引用、Agent 深读和工具生态”的系统闭环。
+</p>
+<div class="section-nav">
+<p><a href="../demos/ragflow/" class="soft-button dark">打开前端 Demo</a> <a href="../projects.html" class="soft-button">查看项目索引</a></p>
+</div>
+<div class="kpi-grid">
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Core</p>
+</div>
+<div class="kpi-value">
+<p>RAG 平台</p>
+</div>
+<div class="kpi-note">
+<p>围绕知识库、文档、检索、聊天、搜索、Agent 和工作流形成产品闭环。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Parsing</p>
+</div>
+<div class="kpi-value">
+<p>DeepDoc</p>
+</div>
+<div class="kpi-note">
+<p>面向 PDF、Office、网页、表格等非结构化文档做版面解析与模板化切分。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Retrieval</p>
+</div>
+<div class="kpi-value">
+<p>Hybrid</p>
+</div>
+<div class="kpi-note">
+<p>词法召回、向量召回、融合排序、重排、聚合与高亮引用一起工作。</p>
+</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">
+<p>Extension</p>
+</div>
+<div class="kpi-value">
+<p>Agent</p>
+</div>
+<div class="kpi-note">
+<p>检索工具、GraphRAG、DeepRead、MCP 和沙箱执行把问答扩展成可编排智能体。</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">00 项目概览</h2>
+<div class="project-section">
+<div class="ok callout callout-style-simple callout-none no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>一句话定义：</strong> RAGFlow 是一个从文档进入、从证据回答、从工具扩展的 RAG 平台。它把知识库建设中最难的“脏文档解析、索引任务稳定性、检索可信度、回答可追溯、Agent 可控扩展”拆成可观察的工程链路。</p>
+</div>
+</div>
+</div>
+<div class="panel-grid cols-3">
+<section id="问题背景" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="问题背景">问题背景</h3>
+<p>企业知识库文档类型混杂、版面复杂、更新频繁；如果只做普通 chunk + embedding，容易出现表格丢结构、页码丢引用、长链推理断裂和无法复盘的问题。</p>
+</section>
+<section id="系统解法" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="系统解法">系统解法</h3>
+<p>用 DeepDoc 做结构化解析，用任务队列和索引 worker 承接长耗时处理，用 hybrid retrieval 和 rerank 稳定召回，再把证据链交给 Chat、Search、Agent 和 MCP。</p>
+</section>
+<section id="项目价值" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="项目价值">项目价值</h3>
+<p>这个项目适合体现系统级 RAG 工程能力：既有算法侧检索、重排、GraphRAG 和 Agentic DeepRead，也有工程侧异步任务、存储、前端工作台和工具服务化。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="tech" class="level2">
+<h2 class="anchored" data-anchor-id="tech">技术主线</h2>
+<div class="project-section">
+<p class="section-lead">
+我会把 RAGFlow 的叙事重点放在“闭环”上：文档进入系统后，经过解析、索引、检索、引用、回答、反馈和工具扩展，每一步都能回到可诊断的状态。
+</p>
+<table class="project-table">
+<thead>
+<tr>
+<th>
+阶段
+</th>
+<th>
+技术选择
+</th>
+<th>
+关键卡点
+</th>
+<th>
+处理逻辑
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+文档接入
+</td>
+<td>
+DeepDoc + parser factory
+</td>
+<td>
+PDF、表格、图片、网页等格式结构差异大
+</td>
+<td>
+按 parser 类型拆分解析器，保留章节、表格、图片与页码等证据信息
+</td>
+</tr>
+<tr>
+<td>
+索引构建
+</td>
+<td>
+Redis queue + task executor
+</td>
+<td>
+解析、切块、embedding、入库耗时长且容易失败
+</td>
+<td>
+异步 worker、信号量和进度更新把长任务拆成可追踪步骤
+</td>
+</tr>
+<tr>
+<td>
+召回排序
+</td>
+<td>
+Full-text + Dense Vector + Fusion
+</td>
+<td>
+纯向量易漂移，纯关键词召回覆盖不足
+</td>
+<td>
+词法和向量混合召回，再用权重融合、重排、聚合和高亮构造证据集
+</td>
+</tr>
+<tr>
+<td>
+复杂推理
+</td>
+<td>
+GraphRAG + Agentic DeepRead
+</td>
+<td>
+多跳问题需要跨段落、跨实体、跨文档组合证据
+</td>
+<td>
+图谱实体关系、候选文档深读、工具调用式证据选择共同补足普通 RAG
+</td>
+</tr>
+<tr>
+<td>
+生态扩展
+</td>
+<td>
+MCP + Sandbox
+</td>
+<td>
+RAG 能力需要被外部 Agent 安全调用
+</td>
+<td>
+用 MCP 暴露检索接口，用沙箱隔离代码执行，避免工具链失控
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="architecture" class="level2">
+<h2 class="anchored" data-anchor-id="architecture">01 系统架构</h2>
+<div class="project-section">
+<section id="总体架构图" class="level3 diagram-panel">
+<h3 class="anchored" data-anchor-id="总体架构图">总体架构图</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+  web["Web Console&lt;br/&gt;知识库 / 搜索 / Chat / Agent / 文件管理"]
+  api["API Server&lt;br/&gt;Flask app / tenant / document / runtime config"]
+  worker["Task Executor&lt;br/&gt;parse / chunk / embedding / graph index"]
+  retrieval["Retrieval Service&lt;br/&gt;full-text / dense / fusion / rerank / citation"]
+  agent["Agent Layer&lt;br/&gt;retrieval tool / DeepRead / GraphRAG / MCP"]
+  store["Storage Layer&lt;br/&gt;object store / SQL metadata / Redis queue / doc index"]
+
+  web --&gt; api
+  api --&gt; store
+  api --&gt; retrieval
+  api --&gt; agent
+  store --&gt; worker
+  worker --&gt; store
+  retrieval --&gt; store
+  agent --&gt; retrieval
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<div class="figure">
+<p><img src="../assets/projects/ragflow-architecture.png" class="img-fluid"></p>
+</div>
+<div class="panel-grid cols-3">
+<section id="服务启动" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="服务启动">服务启动</h3>
+<p><code>api/ragflow_server.py</code> 负责初始化日志、配置、数据库、运行时环境、插件和进度更新线程，体现的是平台服务而不是单脚本 demo。</p>
+</section>
+<section id="后台任务" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="后台任务">后台任务</h3>
+<p><code>rag/svr/task_executor.py</code> 连接解析器、队列、embedding、对象存储和 GraphRAG，是文档从上传到可检索的核心调度层。</p>
+</section>
+<section id="前端工作台" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="前端工作台">前端工作台</h3>
+<p><code>web/</code> 使用 Umi + React + Ant Design，覆盖知识库、聊天、搜索、Agent、文件管理、模型配置和流程页面。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="pipeline">02 索引流水线</h2>
+<div class="project-section">
+<section id="文档进入到可检索" class="level3 diagram-panel">
+<h3 class="anchored" data-anchor-id="文档进入到可检索">文档进入到可检索</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  upload["上传/同步文档"] --&gt; parse["DeepDoc 解析&lt;br/&gt;版面 / 表格 / 图片 / 章节"]
+  parse --&gt; chunk["模板化切块&lt;br/&gt;parser-specific chunking"]
+  chunk --&gt; embed["Embedding&lt;br/&gt;批量向量化"]
+  chunk --&gt; kgindex["GraphRAG&lt;br/&gt;实体 / 关系 / community"]
+  embed --&gt; index["文档索引&lt;br/&gt;文本字段 + 向量字段 + 元数据"]
+  kgindex --&gt; index
+  index --&gt; ready["可检索知识库&lt;br/&gt;progress / status / citation"]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<div class="figure">
+<p><img src="../assets/projects/ragflow-dataflow.png" class="img-fluid"></p>
+</div>
+<div class="panel-grid cols-2">
+<section id="为什么用异步任务" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么用异步任务">为什么用异步任务</h3>
+<p>文档解析、OCR、embedding 和图谱抽取都可能是分钟级任务；如果直接阻塞 API，请求会超时且无法恢复。RAGFlow 把长任务放到 worker 和队列里，并通过进度更新让前端展示状态。</p>
+</section>
+<section id="为什么保留结构信息" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="为什么保留结构信息">为什么保留结构信息</h3>
+<p>企业问答需要回答“依据在哪一页、哪一段、哪张表”。解析阶段如果丢掉页码、标题层级和表格关系，后面的 citation 再漂亮也只是表面可信。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="retrieval" class="level2">
+<h2 class="anchored" data-anchor-id="retrieval">03 检索与引用</h2>
+<div class="project-section">
+<p class="section-lead">
+RAGFlow 的检索链路不是单一向量搜索。<code>rag/nlp/search.py</code> 中可以看到关键词查询、dense vector、weighted fusion、fallback、聚合、高亮和引用插入这些步骤被放在同一个 Dealer 流程里。
+</p>
+<div class="flow-strip">
+<div class="flow-step">
+Query<small>问题分析</small>
+</div>
+<div class="flow-step">
+Lexical<small>关键词召回</small>
+</div>
+<div class="flow-step">
+Dense<small>向量召回</small>
+</div>
+<div class="flow-step">
+Fusion<small>融合排序</small>
+</div>
+<div class="flow-step">
+Rerank<small>相关性重排</small>
+</div>
+<div class="flow-step">
+Citation<small>高亮与引用</small>
+</div>
+</div>
+<div class="panel-grid cols-3">
+<section id="召回覆盖" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="召回覆盖">召回覆盖</h3>
+<p>关键词召回适合精确实体和术语，向量召回适合语义改写和长句问题；二者融合可以降低任一单路失效的风险。</p>
+</section>
+<section id="排序稳定" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="排序稳定">排序稳定</h3>
+<p>相似度阈值、向量权重、top-k、rerank 和 fallback 共同控制质量，避免“召回很多但证据不准”。</p>
+</section>
+<section id="可追溯回答" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="可追溯回答">可追溯回答</h3>
+<p>高亮、doc aggs、chunk positions 和 citation insertion 让回答能回到原文证据，而不是只给一个无法验证的总结。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="agentic" class="level2">
+<h2 class="anchored" data-anchor-id="agentic">04 Agentic RAG</h2>
+<div class="project-section">
+<section id="从一次检索到多步深读" class="level3 diagram-panel">
+<h3 class="anchored" data-anchor-id="从一次检索到多步深读">从一次检索到多步深读</h3>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TB
+  question["用户复杂问题"] --&gt; mode{"Retrieval Mode"}
+  mode --&gt; naive["naive retrieval&lt;br/&gt;普通知识库召回"]
+  mode --&gt; kgretrieval["graph retrieval&lt;br/&gt;实体/关系/多跳"]
+  mode --&gt; deepread["agentic_deepread&lt;br/&gt;候选文档 → 目录概览 → 工具式证据选择"]
+  naive --&gt; evidence["证据集"]
+  kgretrieval --&gt; evidence
+  deepread --&gt; evidence
+  evidence --&gt; answer["带引用回答 / Agent 下一步动作"]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<div class="panel-grid cols-2">
+<section id="retrieval-tool" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="retrieval-tool">Retrieval Tool</h3>
+<p><code>agent/tools/retrieval.py</code> 把检索封装成 Agent 工具，并提供 naive、graph、agentic_deepread 等模式选择。这样 Agent 不需要知道底层索引细节，只需要按任务选择检索策略。</p>
+</section>
+<section id="deepread-researcher" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="deepread-researcher">DeepRead Researcher</h3>
+<p><code>agentic_reasoning/deepread_researcher.py</code> 先粗召回候选文档，再加载结构化 corpus，最后通过工具调用式过程选择 evidence。它解决的是“需要读文档结构才能回答”的问题。</p>
+</section>
+<section id="graphrag" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="graphrag">GraphRAG</h3>
+<p><code>graphrag/general/index.py</code> 和 <code>graphrag/search.py</code> 把实体、关系、PageRank、community report 和多跳路径放进检索链路，适合回答跨实体、跨段落的问题。</p>
+</section>
+<section id="闭环视角" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="闭环视角">闭环视角</h3>
+<p>普通 RAG 负责快召回，DeepRead 负责结构化深读，GraphRAG 负责关系推理；三者不是互斥方案，而是按问题复杂度逐层加算力。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="engineering" class="level2">
+<h2 class="anchored" data-anchor-id="engineering">05 工程扩展</h2>
+<div class="project-section">
+<div class="panel-grid cols-3">
+<section id="mcp-服务化" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="mcp-服务化">MCP 服务化</h3>
+<p><code>mcp/server/server.py</code> 把 RAGFlow 的 dataset list、retrieval 等能力包装成外部工具接口，使知识库检索可以被 Claude、Cursor 或自建 Agent 调用。</p>
+</section>
+<section id="沙箱执行" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="沙箱执行">沙箱执行</h3>
+<p><code>sandbox/executor_manager/services/execution.py</code> 通过容器池执行 Python/Node 代码，设置超时、内存和错误分类，适合 Agent 执行计算类工具但不直接污染宿主环境。</p>
+</section>
+<section id="前端可挂载" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="前端可挂载">前端可挂载</h3>
+<p>这次已经把 <code>web/</code> 构建成静态 Umi 版本，挂在个人站 <code>demos/ragflow/</code>。由于没有启动 RAGFlow 后端，登录和 API 数据会受限，但页面结构、路由和产品形态可以直接展示。</p>
+</section>
+</div>
+</div>
+</section>
+<section id="risk" class="level2">
+<h2 class="anchored" data-anchor-id="risk">06 风险卡点</h2>
+<div class="project-section">
+<table class="project-table">
+<thead>
+<tr>
+<th>
+风险
+</th>
+<th>
+为什么难
+</th>
+<th>
+包装成项目能力
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+文档解析不稳定
+</td>
+<td>
+扫描件、复杂表格、多栏 PDF、页眉页脚会污染 chunk
+</td>
+<td>
+强调 DeepDoc、模板化 chunk、结构字段保留和解析失败回退
+</td>
+</tr>
+<tr>
+<td>
+检索质量难复现
+</td>
+<td>
+召回、重排、prompt 和模型版本都会影响最终回答
+</td>
+<td>
+把 similarity、vector weight、top-k、rerank、引用命中率纳入评测维度
+</td>
+</tr>
+<tr>
+<td>
+长任务不可观察
+</td>
+<td>
+解析和 embedding 失败时用户只看到“卡住”
+</td>
+<td>
+使用队列、进度线程、状态字段和日志，把失败定位到 parse/chunk/embed/index
+</td>
+</tr>
+<tr>
+<td>
+Agent 工具失控
+</td>
+<td>
+工具调用可能循环、越权、执行不可信代码
+</td>
+<td>
+用工具模式、MCP 授权、沙箱容器、超时和错误分类控制边界
+</td>
+</tr>
+<tr>
+<td>
+前端静态展示受限
+</td>
+<td>
+真实知识库、登录态和检索依赖后端服务
+</td>
+<td>
+个人站挂静态前端展示信息架构，真实演示再接 API Server 和 worker
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="demo" class="level2">
+<h2 class="anchored" data-anchor-id="demo">07 Demo</h2>
+<div class="project-section">
+<div class="panel-grid cols-2">
+<section id="vendeflow-前端-demo" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="vendeflow-前端-demo">Vendeflow 前端 Demo</h3>
+<p><a href="../demos/ragflow/" class="detail-title-link">打开 Vendeflow 前端</a></p>
+<p>构建自 <code>/Users/liujunyan/vende/ragflow-main/web</code>，已改成个人站子路径可加载的静态资源，并拆掉静态展示里的登录门。当前未启动 <code>api/ragflow_server.py</code>，所以真实知识库、检索和写入类接口不会返回业务数据。</p>
+</section>
+<section id="推荐演示方式" class="level3 project-card">
+<h3 class="anchored" data-anchor-id="推荐演示方式">推荐演示方式</h3>
+<p>页面上重点展示 RAGFlow 的产品复杂度：知识库、搜索、Chat、Agent、文件管理、模型配置和工作流。项目报告页负责解释背后的工程闭环和算法链路。</p>
+</section>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/liuforge\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>刘俊言 · Algorithm Engineer<br></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Made with <a href="https://quarto.org/">Quarto</a><br></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

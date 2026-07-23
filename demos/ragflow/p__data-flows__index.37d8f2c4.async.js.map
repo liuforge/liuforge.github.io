@@ -1,0 +1,1 @@
+{"version":3,"file":"p__data-flows__index.37d8f2c4.async.js","mappings":"uJAAe,SAASA,IACtB,OAAOC,EAAAA,EAAAA,KAAA,WAAAC,SAAS,MAClB,C","sources":["webpack:///./src/pages/data-flows/index.tsx"],"sourcesContent":["export default function DataFlows() {\n  return <section>xx</section>;\n}\n"],"names":["DataFlows","_jsx","children"],"sourceRoot":""}

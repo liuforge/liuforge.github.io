@@ -1,0 +1,1 @@
+{"version":3,"file":"p__dataset__knowledge-graph__index.0070a3d8.chunk.css","mappings":"AAAA","sources":["webpack:///./src/pages/dataset/knowledge-graph/index.less"],"sourcesContent":[".forceContainer {\n  :global(.tooltip) {\n    border-radius: 10px !important;\n  }\n}\n\n@hack: true; @import \"~@/less/index.less\";"],"names":[],"sourceRoot":""}
