@@ -64,7 +64,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-light" data-bs-theme="light">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
@@ -83,6 +83,21 @@ ul.task-list li input[type="checkbox"] {
   <li class="nav-item">
     <a class="nav-link" href="./projects.html"> 
 <span class="menu-text">项目</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/liuforge" target="_blank" rel="noopener" title="GitHub"> 
+<i class="bi bi-github" role="img"></i>
+<span class="menu-text d-lg-none ms-1">GitHub</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="mailto:liujunyan0211@gmail.com" title="Email"> 
+<i class="bi bi-envelope" role="img"></i>
+<span class="menu-text d-lg-none ms-1">邮箱</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="assets/刘俊言简历.pdf" target="_blank" title="个人简历"> 
+<i class="bi bi-file-earmark-person" role="img"></i>
+<span class="menu-text ms-1">简历</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -133,38 +148,71 @@ ul.task-list li input[type="checkbox"] {
         <span class="profile-badge">算法工程师</span>
       </div>
       <p class="profile-handle">forge</p>
-      <p class="profile-summary">研究方向：Agentic Research 与大模型后训练，关注检索增强生成、多轮工具调用智能体的训练与评测。</p>
-      <div class="profile-tags" aria-label="基础信息">
-        <span>华南农业大学 2025.09 - 2028.06</span>
-        <span>计算机技术硕士</span>
-        <span>佛山大学 数据科学与大数据技术</span>
+      <p class="profile-summary">聚焦 Agentic RL、大模型后训练与 VLA 具身智能，探索复杂推理链路、企业级 RAG 与算法工程闭环。</p>
+      <div class="profile-contacts" aria-label="联系方式与简历">
+        <a class="contact-pill" href="https://github.com/liuforge" target="_blank" rel="noopener">
+          <i class="bi bi-github"></i> GitHub
+        </a>
+        <a class="contact-pill" href="mailto:liujunyan0211@gmail.com">
+          <i class="bi bi-envelope"></i> liujunyan0211@gmail.com
+        </a>
+        <a class="contact-pill resume-pill" href="assets/刘俊言简历.pdf" target="_blank">
+          <i class="bi bi-file-earmark-pdf"></i> 个人简历
+        </a>
       </div>
     </div>
     <div class="profile-actions">
-      <a class="soft-button" href="#experience-board">项目与实习</a>
-      <button class="soft-button" type="button" id="share-page">分享</button>
+      <a class="soft-button primary" href="assets/刘俊言简历.pdf" target="_blank" download="刘俊言简历.pdf">
+        <i class="bi bi-download"></i> 简历下载
+      </a>
+      <a class="soft-button" href="#experience-board">实习</a>
+      <a class="soft-button" href="#research-board">科研</a>
+      <a class="soft-button" href="#projects-board">项目</a>
+      <button class="soft-button" type="button" id="share-page"><i class="bi bi-share"></i> 分享</button>
     </div>
-  </div>
-
-  <div class="writing-board profile-note">
-    <div class="cell-header">
-      <div class="cell-title">
-        <div class="cell-dot"></div>
-        Markdown Cell
+    <div class="education-block" aria-label="教育背景">
+      <div class="edu-heading">
+        <i class="bi bi-mortarboard-fill"></i> 教育经历
       </div>
-      <div class="cell-tabs">
-        <button class="cell-tab is-active" type="button" data-mode="edit" aria-pressed="true">写 MD</button>
-        <button class="cell-tab" type="button" data-mode="preview" aria-pressed="false">Preview</button>
-      </div>
-    </div>
-    <div class="cell-body">
-      <textarea id="markdown-cell" aria-label="Markdown 书写板" spellcheck="false"># 今天想记录什么？
+      <div class="edu-grid">
+        <div class="edu-card">
+          <div class="edu-card-head">
+            <div class="edu-school-main">
+              <img src="images/scau-logo.svg" alt="华南农业大学校徽" class="edu-school-logo" width="44" height="44">
+              <div class="edu-school-info">
+                <div class="edu-school-row">
+                  <span class="edu-school">华南农业大学</span>
+                  <span class="edu-badge joint"><i class="bi bi-link-45deg"></i> 电子科技大学联合培养</span>
+                </div>
+                <div class="edu-major-row">
+                  <span class="edu-degree">计算机技术</span> · 硕士研究生
+                </div>
+              </div>
+            </div>
+            <span class="edu-period">2025.09 – 2028.06</span>
+          </div>
+          <p class="edu-desc">研究方向：主攻 Agentic RL 与 VLA 具身决策；深耕检索增强生成（RAG）、Agent 多轮工具调用的对齐评测及业务时序大模型后训练（Post-training / GRPO）。</p>
+        </div>
 
-- 写一个项目想法
-- 记一个实验结论
-- 留一段给未来的自己
-</textarea>
-      <div id="markdown-preview" class="cell-preview is-hidden"></div>
+        <div class="edu-card">
+          <div class="edu-card-head">
+            <div class="edu-school-main">
+              <img src="images/fosu-logo.svg" alt="佛山大学校徽" class="edu-school-logo" width="44" height="44">
+              <div class="edu-school-info">
+                <div class="edu-school-row">
+                  <span class="edu-school">佛山大学</span>
+                  <span class="edu-badge bachelor">工学学士</span>
+                </div>
+                <div class="edu-major-row">
+                  <span class="edu-degree">数据科学与大数据技术</span> · 本科
+                </div>
+              </div>
+            </div>
+            <span class="edu-period">2021.09 – 2025.06</span>
+          </div>
+          <p class="edu-desc">专业基础：熟练掌握 Flink、Kafka、Hadoop、Spark 等大数据技术栈，具备实时数仓架构、分布式流批计算与高吞吐数据流水线工程能力。</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -177,38 +225,91 @@ ul.task-list li input[type="checkbox"] {
     </div>
   </div>
 
-  <div class="repo-grid internship-grid">
-    <a class="repo-card" href="internships/wendeshuhui.html" data-kind="internship" data-sort="202604" data-search="文德数惠 大模型应用算法实习生 知识库 agent retrieval trace">
-      <div class="repo-head">
-        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
-        <div>
-          <div class="repo-title">文德数惠</div>
-          <div class="repo-owner">大模型应用算法实习生</div>
-        </div>
-        <span class="repo-badge internship">实习</span>
-      </div>
-      <p>参与企业级知识库 Agent 平台建设，负责知识接入、Agentic Retrieval、Trace 评测与工具服务化。</p>
-      <div class="repo-meta">
-        <span>Knowledge Agent / RAG</span>
-        <span>2026.04 - 至今</span>
-      </div>
-    </a>
+  <div class="internship-board profile-note" aria-label="实习经历展板">
+    <div class="internship-body">
+      <div class="internship-grid">
+        <a class="repo-card" href="internships/wendeshuhui.html" data-kind="internship" data-sort="202604" data-search="文德数慧 大模型应用算法实习生 知识库 agent retrieval trace">
+          <div class="repo-head">
+            <img src="images/vende-logo.png" alt="文德数慧 Logo" class="repo-avatar company-logo">
+            <div>
+              <div class="repo-title">文德数慧</div>
+              <div class="repo-owner">大模型应用算法实习生</div>
+            </div>
+            <span class="repo-badge internship">实习</span>
+          </div>
+          <p>参与企业级知识库 Agent 平台建设，负责知识接入、Agentic Retrieval、Trace 评测与工具服务化。</p>
+          <div class="repo-meta">
+            <span>Knowledge Agent / RAG</span>
+            <span>2026.04 - 至今</span>
+          </div>
+        </a>
 
-    <a class="repo-card" href="internships/skyworth-ai.html" data-kind="internship" data-sort="202601" data-search="创维 ai 研究院 算法实习 时序预测 grpo qwen lora">
-      <div class="repo-head">
-        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
-        <div>
-          <div class="repo-title">创维AI研究院</div>
-          <div class="repo-owner">算法实习生</div>
+        <a class="repo-card" href="internships/skyworth-ai.html" data-kind="internship" data-sort="202601" data-search="创维 ai 研究院 算法实习 时序预测 grpo qwen lora">
+          <div class="repo-head">
+            <img src="images/skyworth-logo.png" alt="创维AI研究院 Logo" class="repo-avatar company-logo">
+            <div>
+              <div class="repo-title">创维AI研究院</div>
+              <div class="repo-owner">算法实习生</div>
+            </div>
+            <span class="repo-badge internship">实习</span>
+          </div>
+          <p>参与业务预测策略优化链路，负责时序大模型预测增强、相似案例召回与 GRPO 修正策略训练。</p>
+          <div class="repo-meta">
+            <span>时序预测 / 策略优化</span>
+            <span>2026.01 - 2026.04</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="portfolio-section research-section" id="research-board" aria-label="科研经历">
+  <div class="section-heading">
+    <div>
+      <p class="section-kicker">Research</p>
+      <h2 class="anchored">科研经历</h2>
+    </div>
+  </div>
+
+  <div class="research-board profile-note" aria-label="科研方向与学术探索">
+    <div class="research-body">
+      <div id="research-overview" class="research-overview">
+        <div class="research-pillar-grid">
+          <div class="research-pillar-card">
+            <div class="pillar-head">
+              <i class="bi bi-robot"></i>
+              <span>Agentic Search &amp; 决策智能体</span>
+            </div>
+            <p class="pillar-desc">
+              面向复杂长链问答与运维排查，探索多轮搜索-反思-推理决策链（Search-Reason-Answer）的状态机与可回放环境构建。
+            </p>
+          </div>
+          <div class="research-pillar-card">
+            <div class="pillar-head">
+              <i class="bi bi-cpu"></i>
+              <span>LLM Post-training 策略</span>
+            </div>
+            <p class="pillar-desc">
+              基于 LoRA-GRPO、PPO 等策略优化算法，探索大模型时序增强、预测修正、工具调用惩罚与细粒度奖励建模。
+            </p>
+          </div>
+          <div class="research-pillar-card">
+            <div class="pillar-head">
+              <i class="bi bi-shield-check"></i>
+              <span>证据契约与评测闭环</span>
+            </div>
+            <p class="pillar-desc">
+              聚焦非结构化文档深度解析（DeepDoc）、多路融合召回与引用归因，搭建 Trace Harness 自动化回归评测流。
+            </p>
+          </div>
         </div>
-        <span class="repo-badge internship">实习</span>
+        <div class="research-recent-strip">
+          <strong><i class="bi bi-journal-bookmark-fill"></i> 在研学术论文与竞赛</strong>
+          <span>AgentOS: Feedback-Driven Evolution of English Tutoring Policies · 阿里天池 AFAC2026 (Top 101/1400)</span>
+        </div>
       </div>
-      <p>参与业务预测策略优化链路，负责时序大模型预测增强、相似案例召回与 GRPO 修正策略训练。</p>
-      <div class="repo-meta">
-        <span>时序预测 / 策略优化</span>
-        <span>2026.01 - 2026.04</span>
-      </div>
-    </a>
+    </div>
   </div>
 </section>
 
@@ -224,7 +325,7 @@ ul.task-list li input[type="checkbox"] {
   <div class="repo-toolbar project-toolbar" aria-label="搜索和排序项目">
     <label class="search-box">
       <span aria-hidden="true"></span>
-      <input id="project-search" type="search" placeholder="搜索项目..." autocomplete="off">
+      <input id="project-search" type="search" placeholder="搜索项目（技术栈、方向、关键词）..." autocomplete="off">
     </label>
     <label class="select-box">
       <span>排序：</span>
@@ -235,222 +336,236 @@ ul.task-list li input[type="checkbox"] {
     </label>
   </div>
 
-  <div class="repo-grid" id="project-grid">
-    <a class="repo-card is-featured" href="projects/ai-market-center.html" data-kind="project" data-sort="2026072" data-search="ai获客通 ai market center 营销获客 中台 小红书 线索 crm feishu next fastapi">
-      <div class="repo-head">
-        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
-        <div>
-          <div class="repo-title">AI 获客通</div>
-          <div class="repo-owner">刘俊言</div>
-        </div>
-        <span class="repo-badge">项目</span>
-      </div>
-      <p>通用 AI 营销获客中台，把内容洞察、AI 文案、半自动发布、线索解析、销售跟进和 BI 复盘接成闭环。</p>
-      <div class="repo-meta">
-        <span>AI SaaS / 获客 CRM / Feishu BI</span>
-        <span>2026.07</span>
-      </div>
-    </a>
+  <div class="kanban-board-box profile-note" aria-label="项目经历看板">
+    <div class="kanban-board" id="project-grid">
 
-    <a class="repo-card is-featured" href="projects/ragflow.html" data-kind="project" data-sort="2026071" data-search="ragflow rag deepdoc agentic deepread graphrag mcp sandbox hybrid retrieval 知识库 文档解析 检索">
-      <div class="repo-head">
-        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
-        <div>
-          <div class="repo-title">RAGFlow</div>
-          <div class="repo-owner">刘俊言</div>
+      <!-- Track 1: Agentic 检索与推理 -->
+      <div class="kanban-col" data-track="search-rag">
+        <div class="kanban-col-head">
+          <div class="kanban-col-title-group">
+            <span class="kanban-col-dot dot-cyan"></span>
+            <span class="kanban-col-title">Agentic 检索与推理</span>
+          </div>
+          <span class="kanban-count-pill" id="count-search-rag">3</span>
         </div>
-        <span class="repo-badge">项目</span>
-      </div>
-      <p>企业级 RAG 平台工程拆解，把 DeepDoc 文档解析、异步索引、混合检索、引用归因、Agentic DeepRead、GraphRAG 和 MCP 接成闭环。</p>
-      <div class="repo-meta">
-        <span>RAG Platform / Agentic RAG / DeepDoc</span>
-        <span>2026.07</span>
-      </div>
-    </a>
+        <p class="kanban-col-desc">RAG / RL 搜索 / 证据契约评测</p>
+        <div class="kanban-cards-stack">
 
-    <a class="repo-card" href="projects/afac2026.html" data-kind="project" data-sort="202607" data-search="afac2026 金融长文本证据推理 评测 harness agent">
-      <div class="repo-head">
-        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
-        <div>
-          <div class="repo-title">AFAC2026</div>
-          <div class="repo-owner">刘俊言</div>
-        </div>
-        <span class="repo-badge">项目</span>
-      </div>
-      <p>金融长文本证据推理与评测 Harness，把证据契约、题型分流和回归评测做成闭环。</p>
-      <div class="repo-meta">
-        <span>Agent Harness / 金融推理</span>
-        <span>2026.06 - 2026.07</span>
-      </div>
-    </a>
+          <a class="trello-card repo-card is-featured" href="projects/ragflow.html" data-kind="project" data-sort="2026071" data-search="ragflow rag deepdoc agentic deepread graphrag mcp sandbox hybrid retrieval 知识库 文档解析 检索">
+            <div class="trello-card-head">
+              <span class="trello-card-title">RAGFlow</span>
+              <span class="trello-card-badge featured">精选项目</span>
+            </div>
+            <p class="trello-card-desc">企业级 RAG 平台工程拆解，把 DeepDoc 文档解析、异步索引、混合检索、引用归因、Agentic DeepRead、GraphRAG 和 MCP 接成闭环。</p>
+            <div class="trello-card-tags">
+              <span class="trello-tag">RAG Platform</span>
+              <span class="trello-tag">DeepDoc</span>
+              <span class="trello-tag">GraphRAG</span>
+              <span class="trello-tag">MCP</span>
+            </div>
+            <div class="trello-card-footer">
+              <span><i class="bi bi-calendar3"></i> 2026.07</span>
+              <span class="trello-arrow">详情 <i class="bi bi-chevron-right"></i></span>
+            </div>
+          </a>
 
-    <a class="repo-card is-featured" href="projects/mr-search.html" data-kind="project" data-sort="202606" data-search="mr-search agentic rl 搜索智能体 运维 saas 复杂问答">
-      <div class="repo-head">
-        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
-        <div>
-          <div class="repo-title">MR-Search</div>
-          <div class="repo-owner">刘俊言</div>
-        </div>
-        <span class="repo-badge">项目</span>
-      </div>
-      <p>面向运维 SaaS 复杂问答的 Agentic RL 搜索智能体，把行为链训练、诊断和评测收拢到同一条链路。</p>
-      <div class="repo-meta">
-        <span>Agentic RL / RAG</span>
-        <span>2026.05 - 2026.06</span>
-      </div>
-    </a>
+          <a class="trello-card repo-card is-featured" href="projects/mr-search.html" data-kind="project" data-sort="202606" data-search="mr-search agentic rl 搜索智能体 运维 saas 复杂问答">
+            <div class="trello-card-head">
+              <span class="trello-card-title">MR-Search</span>
+              <span class="trello-card-badge featured">精选项目</span>
+            </div>
+            <p class="trello-card-desc">面向运维 SaaS 复杂问答的 Agentic RL 搜索智能体，把行为链训练、诊断和评测收拢到同一条链路。</p>
+            <div class="trello-card-tags">
+              <span class="trello-tag">Agentic RL</span>
+              <span class="trello-tag">RL Search</span>
+              <span class="trello-tag">复杂问答</span>
+            </div>
+            <div class="trello-card-footer">
+              <span><i class="bi bi-calendar3"></i> 2026.05 - 2026.06</span>
+              <span class="trello-arrow">详情 <i class="bi bi-chevron-right"></i></span>
+            </div>
+          </a>
 
-    <a class="repo-card" href="projects/nanochat-zh.html" data-kind="project" data-sort="202606" data-search="nanochat zh 中文 babylm tokenizer 预训练 后训练">
-      <div class="repo-head">
-        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
-        <div>
-          <div class="repo-title">NanoChat-zh-d22</div>
-          <div class="repo-owner">刘俊言</div>
-        </div>
-        <span class="repo-badge">项目</span>
-      </div>
-      <p>中文 BabyLM 小模型实验，从 tokenizer 信息密度到预训练、表示层选择和评测闭环。</p>
-      <div class="repo-meta">
-        <span>中文小模型 / 后训练</span>
-        <span>2026.05 - 2026.06</span>
-      </div>
-    </a>
+          <a class="trello-card repo-card" href="projects/afac2026.html" data-kind="project" data-sort="202607" data-search="afac2026 金融长文本证据推理 评测 harness agent 阿里天池">
+            <div class="trello-card-head">
+              <span class="trello-card-title">AFAC2026</span>
+              <span class="trello-card-badge contest">天池 Top 101</span>
+            </div>
+            <p class="trello-card-desc">金融长文本证据推理与评测 Harness，把证据契约、题型分流和回归评测做成闭环。</p>
+            <div class="trello-card-tags">
+              <span class="trello-tag">Agent Harness</span>
+              <span class="trello-tag">金融证据推理</span>
+            </div>
+            <div class="trello-card-footer">
+              <span><i class="bi bi-calendar3"></i> 2026.06 - 2026.07</span>
+              <span class="trello-arrow">详情 <i class="bi bi-chevron-right"></i></span>
+            </div>
+          </a>
 
-    <a class="repo-card" href="projects/xiaohongshu-food.html" data-kind="project" data-sort="202512" data-search="小红书 美食 agent 推荐 poi 多智能体 内容分析">
-      <div class="repo-head">
-        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
-        <div>
-          <div class="repo-title">XHS Food Agent</div>
-          <div class="repo-owner">刘俊言</div>
         </div>
-        <span class="repo-badge">项目</span>
       </div>
-      <p>小红书美食内容分析引擎，围绕可信内容筛选、POI 归一和推荐反馈做多智能体闭环。</p>
-      <div class="repo-meta">
-        <span>Multi-Agent / 推荐</span>
-        <span>2025.11 - 2025.12</span>
-      </div>
-    </a>
 
-    <a class="repo-card" href="projects/medical-recommendation.html" data-kind="project" data-sort="202510" data-search="中文病历 代谢疾病 用药推荐 医疗 nlp llm 微调">
-      <div class="repo-head">
-        <img src="images/junyan-portrait.png" alt="" class="repo-avatar">
-        <div>
-          <div class="repo-title">Medical Recommendation</div>
-          <div class="repo-owner">刘俊言</div>
+      <!-- Track 2: 模型训练与垂直算法 -->
+      <div class="kanban-col" data-track="post-train">
+        <div class="kanban-col-head">
+          <div class="kanban-col-title-group">
+            <span class="kanban-col-dot dot-amber"></span>
+            <span class="kanban-col-title">模型训练与垂直算法</span>
+          </div>
+          <span class="kanban-count-pill" id="count-post-train">2</span>
         </div>
-        <span class="repo-badge">项目</span>
+        <p class="kanban-col-desc">小模型实验 / 垂直领域微调</p>
+        <div class="kanban-cards-stack">
+
+          <a class="trello-card repo-card" href="projects/nanochat-zh.html" data-kind="project" data-sort="202606" data-search="nanochat zh 中文 babylm tokenizer 预训练 后训练">
+            <div class="trello-card-head">
+              <span class="trello-card-title">NanoChat-zh-d22</span>
+              <span class="trello-card-badge">基座实验</span>
+            </div>
+            <p class="trello-card-desc">中文 BabyLM 小模型实验，从 tokenizer 信息密度到预训练、表示层选择和评测闭环。</p>
+            <div class="trello-card-tags">
+              <span class="trello-tag">BabyLM</span>
+              <span class="trello-tag">Tokenizer</span>
+              <span class="trello-tag">后训练</span>
+            </div>
+            <div class="trello-card-footer">
+              <span><i class="bi bi-calendar3"></i> 2026.05 - 2026.06</span>
+              <span class="trello-arrow">详情 <i class="bi bi-chevron-right"></i></span>
+            </div>
+          </a>
+
+          <a class="trello-card repo-card" href="projects/medical-recommendation.html" data-kind="project" data-sort="202510" data-search="中文病历 代谢疾病 用药推荐 医疗 nlp llm 微调">
+            <div class="trello-card-head">
+              <span class="trello-card-title">Medical Recommendation</span>
+              <span class="trello-card-badge">医疗垂直</span>
+            </div>
+            <p class="trello-card-desc">中文病历代谢疾病用药推荐系统，先绑定候选集、证据与安全门，再判断推荐是否成立。</p>
+            <div class="trello-card-tags">
+              <span class="trello-tag">医疗 NLP</span>
+              <span class="trello-tag">LLM 微调</span>
+              <span class="trello-tag">安全门控</span>
+            </div>
+            <div class="trello-card-footer">
+              <span><i class="bi bi-calendar3"></i> 2025.09 - 2025.10</span>
+              <span class="trello-arrow">详情 <i class="bi bi-chevron-right"></i></span>
+            </div>
+          </a>
+
+        </div>
       </div>
-      <p>中文病历代谢疾病用药推荐系统，先绑定候选集、证据与安全门，再判断推荐是否成立。</p>
-      <div class="repo-meta">
-        <span>医疗 NLP / LLM 微调</span>
-        <span>2025.09 - 2025.10</span>
+
+      <!-- Track 3: 多智能体与中台落地 -->
+      <div class="kanban-col" data-track="multi-agent">
+        <div class="kanban-col-head">
+          <div class="kanban-col-title-group">
+            <span class="kanban-col-dot dot-purple"></span>
+            <span class="kanban-col-title">多智能体与中台落地</span>
+          </div>
+          <span class="kanban-count-pill" id="count-multi-agent">2</span>
+        </div>
+        <p class="kanban-col-desc">营销获客中台 / POI 推荐闭环</p>
+        <div class="kanban-cards-stack">
+
+          <a class="trello-card repo-card is-featured" href="projects/ai-market-center.html" data-kind="project" data-sort="2026072" data-search="ai获客通 ai market center 营销获客 中台 小红书 线索 crm feishu next fastapi">
+            <div class="trello-card-head">
+              <span class="trello-card-title">AI 获客通</span>
+              <span class="trello-card-badge featured">精选项目</span>
+            </div>
+            <p class="trello-card-desc">通用 AI 营销获客中台，把内容洞察、AI 文案、半自动发布、线索解析、销售跟进和 BI 复盘接成闭环。</p>
+            <div class="trello-card-tags">
+              <span class="trello-tag">AI SaaS</span>
+              <span class="trello-tag">获客 CRM</span>
+              <span class="trello-tag">Feishu BI</span>
+            </div>
+            <div class="trello-card-footer">
+              <span><i class="bi bi-calendar3"></i> 2026.07</span>
+              <span class="trello-arrow">详情 <i class="bi bi-chevron-right"></i></span>
+            </div>
+          </a>
+
+          <a class="trello-card repo-card" href="projects/xiaohongshu-food.html" data-kind="project" data-sort="202512" data-search="小红书 美食 agent 推荐 poi 多智能体 内容分析">
+            <div class="trello-card-head">
+              <span class="trello-card-title">XHS Food Agent</span>
+              <span class="trello-card-badge">多智能体</span>
+            </div>
+            <p class="trello-card-desc">小红书美食内容分析引擎，围绕可信内容筛选、POI 归一和推荐反馈做多智能体闭环。</p>
+            <div class="trello-card-tags">
+              <span class="trello-tag">Multi-Agent</span>
+              <span class="trello-tag">POI 推荐</span>
+              <span class="trello-tag">内容分析</span>
+            </div>
+            <div class="trello-card-footer">
+              <span><i class="bi bi-calendar3"></i> 2025.11 - 2025.12</span>
+              <span class="trello-arrow">详情 <i class="bi bi-chevron-right"></i></span>
+            </div>
+          </a>
+
+        </div>
       </div>
-    </a>
+
+    </div>
   </div>
 </section>
 </main>
 
 <script>
 (() => {
-  const input = document.getElementById("markdown-cell");
-  const preview = document.getElementById("markdown-preview");
-  const tabs = Array.from(document.querySelectorAll(".cell-tab"));
-
-  if (input && preview) {
-    const escapeHtml = (value) => value
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;");
-
-    const renderMarkdown = (value) => {
-      const lines = escapeHtml(value).split("\n");
-      const html = [];
-      let inList = false;
-
-      for (const line of lines) {
-        if (/^###\s+/.test(line)) {
-          if (inList) html.push("</ul>");
-          inList = false;
-          html.push(`<h3>${line.replace(/^###\s+/, "")}</h3>`);
-        } else if (/^##\s+/.test(line)) {
-          if (inList) html.push("</ul>");
-          inList = false;
-          html.push(`<h2>${line.replace(/^##\s+/, "")}</h2>`);
-        } else if (/^#\s+/.test(line)) {
-          if (inList) html.push("</ul>");
-          inList = false;
-          html.push(`<h1>${line.replace(/^#\s+/, "")}</h1>`);
-        } else if (/^-\s+/.test(line)) {
-          if (!inList) html.push("<ul>");
-          inList = true;
-          html.push(`<li>${line.replace(/^-\s+/, "")}</li>`);
-        } else if (line.trim()) {
-          if (inList) html.push("</ul>");
-          inList = false;
-          html.push(`<p>${line}</p>`);
-        } else if (inList) {
-          html.push("</ul>");
-          inList = false;
-        }
-      }
-
-      if (inList) html.push("</ul>");
-      preview.innerHTML = html.join("");
-    };
-
-    input.value = localStorage.getItem("junyan-markdown-cell") || input.value;
-    input.addEventListener("input", () => {
-      localStorage.setItem("junyan-markdown-cell", input.value);
-      renderMarkdown(input.value);
-    });
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const showPreview = tab.dataset.mode === "preview";
-        input.classList.toggle("is-hidden", showPreview);
-        preview.classList.toggle("is-hidden", !showPreview);
-        tabs.forEach((item) => {
-          const active = item === tab;
-          item.classList.toggle("is-active", active);
-          item.setAttribute("aria-pressed", String(active));
-        });
-        if (showPreview) renderMarkdown(input.value);
-      });
-    });
-    renderMarkdown(input.value);
-  }
-
   const grid = document.getElementById("project-grid");
-  const cards = Array.from(document.querySelectorAll("#project-grid .repo-card"));
   const search = document.getElementById("project-search");
   const sort = document.getElementById("project-sort");
 
   const refreshCards = () => {
     if (!grid) return;
     const query = (search?.value || "").trim().toLowerCase();
-    const sorted = [...cards].sort((a, b) => {
-      const delta = Number(b.dataset.sort || 0) - Number(a.dataset.sort || 0);
-      return sort?.value === "time" ? -delta : delta;
-    });
+    const sortVal = sort?.value || "recent";
 
-    for (const card of sorted) {
-      const matchesQuery = !query || (card.dataset.search || card.textContent || "").toLowerCase().includes(query);
-      card.hidden = !matchesQuery;
-      grid.appendChild(card);
-    }
+    const cols = Array.from(document.querySelectorAll(".kanban-col"));
+    cols.forEach(col => {
+      const colCards = Array.from(col.querySelectorAll(".repo-card"));
+      const stack = col.querySelector(".kanban-cards-stack");
+      const countPill = col.querySelector(".kanban-count-pill");
+
+      const sorted = [...colCards].sort((a, b) => {
+        const delta = Number(b.dataset.sort || 0) - Number(a.dataset.sort || 0);
+        return sortVal === "time" ? -delta : delta;
+      });
+
+      let visibleCount = 0;
+      for (const card of sorted) {
+        const matchesQuery = !query || (card.dataset.search || card.textContent || "").toLowerCase().includes(query);
+        card.style.display = matchesQuery ? "" : "none";
+        if (matchesQuery) visibleCount++;
+        if (stack) stack.appendChild(card);
+      }
+      if (countPill) countPill.textContent = visibleCount;
+    });
   };
 
   [search, sort].forEach((control) => control?.addEventListener("input", refreshCards));
   refreshCards();
 
-  document.getElementById("share-page")?.addEventListener("click", async () => {
-    const url = window.location.href;
-    if (navigator.share) {
-      await navigator.share({ title: document.title, url });
-    } else if (navigator.clipboard) {
-      await navigator.clipboard.writeText(url);
-    }
-  });
+  const shareBtn = document.getElementById("share-page");
+  if (shareBtn) {
+    shareBtn.addEventListener("click", async () => {
+      const url = window.location.href;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: document.title, url });
+          return;
+        } catch (e) {}
+      }
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+        const originalText = shareBtn.innerHTML;
+        shareBtn.innerHTML = '<i class="bi bi-check2"></i> 已复制链接';
+        shareBtn.classList.add("copied");
+        setTimeout(() => {
+          shareBtn.innerHTML = originalText;
+          shareBtn.classList.remove("copied");
+        }, 2000);
+      }
+    });
+  }
 })();
 </script>
 
